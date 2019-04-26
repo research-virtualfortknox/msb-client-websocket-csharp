@@ -38,9 +38,9 @@ Fraunhofer.IPA.MSB.Client.Websocket
 
 ## Communication Principle
 
-1. [Create self-description](##Create-self-description) of your Service (SmartObject or Application)
-2. [Connect `MsbClient`]((#Connect-MSB-client)) to your MSB instance:
-3. [Register self-description via MSB client](#Register-self-description-via-MSB-client)
+1. [Create self-description of your Service (SmartObject or Application)](##Self-description-of-service)
+2. [Connect `MsbClient` to your MSB instance](#Connect-to-MSB)
+3. [Register self-description via MSB client](#Register-self-description)
 4. [Publish events](#Event-publishing) or [receive function calls](#Function-call-handling)
 
 
@@ -243,6 +243,7 @@ myMsbClient.ConnectAsync().Wait();
 ### SSL/TLS connection configuration
 
 To enable `SSL/TLS`, you need to specify `wss://` or `https://` in the URL instead of `ws://` or `http://`. There are several properties to modify certificate validation (by default, these are set to False):
+
 | `Property`                        | `Description`                              |
 |---------------------------------|------------------------------------------|
 | AllowSslCertificateChainErrors  | Allows chain error in SSL certificate    |
@@ -259,6 +260,7 @@ myMsbClient.AllowSslCertificateNameMismatch = true;
 If connection to the MSB websocket interface is broken the client performs a reconnect. After a reconnect the registration at the MSB will be redone automatically by the client and all cached events will be published.
 
 There are several properties to modfiy reconnect heaviour:
+
 | `Property`                          | `Description`                              |
 |-------------------------------------|--------------------------------------------|
 | AutoReconnect                       | If set to true the client will automatically reconnect to MSB if connection is broken |
@@ -324,4 +326,4 @@ return new EventDataBuilder(functionCallInfo.ResponseEvents["ResponseEvent1"])
 
 ## Logging
 
-The library uses [LibLog](https://www.google.de/search?client=opera&q=liblog&sourceid=opera&ie=UTF-8&oe=UTF-8) as logging abstraction. This allows every developer to use his or her preferred logging framework as usual.
+The library uses [LibLog](https://github.com/damianh/LibLog) as logging abstraction. This allows every developer to use his or her preferred logging framework as usual.
