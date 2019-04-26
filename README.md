@@ -7,7 +7,8 @@
 
 # MSB websocket client library for C#
 
-[![Build Status](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-chsharp)
+[![Build Status](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp)
+[![Nuget](https://img.shields.io/nuget/v/Fraunhofer.IPA.MSB.Client.Websocket.svg)](https://www.nuget.org/packages/Fraunhofer.IPA.MSB.Client.Websocket/)
 
 **Compatibility Matrix**
 
