@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>Manufacturing Service Bus Websocket Client Library for .NET</Product>
+    <Description>MSB websocket client library for C#</Description>
+    <PackageTags>MSB, Manufacturing Service Bus, VFK, Virtual Fort Knox, Websocket</PackageTags>
+    <RepositoryUrl>https://github.com/research-virtualfortknox/msb-client-websocket-csharp</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.Websocket\Fraunhofer.IPA.MSB.Client.Websocket.xml</DocumentationFile>
+    <DefineConstants>TRACE;LIBLOG_EXCLUDE_CODE_COVERAGE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DefineConstants>TRACE;LIBLOG_EXCLUDE_CODE_COVERAGE</DefineConstants>
+    <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.Websocket\Fraunhofer.IPA.MSB.Client.Websocket.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">
+    <PackageReference Include="NJsonSchema" Version="9.13.26" />
+    <PackageReference Include="WebSocket4Net" Version="0.15.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Fraunhofer.IPA.MSB.Client.Websocket.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Local": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MSB_SMARTOBJECTMGMT_URL": "http://localhost:8081",
+        "MSB_INTEGRATIONDESIGNMGMT_URL": "http://localhost:8082",
+        "MSB_WEBSOCKET_INTERFACE_URL": "ws://localhost:8085"
+      }
+    },
+    "OpenSourceMsb": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MSB_SMARTOBJECTMGMT_URL": "https://so.15xr.msb.oss.cell.vfk.fraunhofer.de",
+        "MSB_INTEGRATIONDESIGNMGMT_URL": "https://flow.15xr.msb.oss.cell.vfk.fraunhofer.de",
+        "MSB_WEBSOCKET_INTERFACE_URL": "https://ws.15xr.msb.oss.cell.vfk.fraunhofer.de"
+      }
+    }
+  }
+}

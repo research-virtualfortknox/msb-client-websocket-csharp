@@ -1,0 +1,123 @@
+{
+  "@id": 1,
+  "name": "%%%FlowName%%%",
+  "description": "",
+  "organisationId": "%%%OwnerUUID%%%",
+  "transitions": [
+    {
+      "@id": 1,
+      "sources": [],
+      "targets": [],
+      "inputs": [
+        {
+          "@id": 1,
+          "transitionInput": {
+            "@id": 1,
+            "connectionFormat": "JSON",
+            "inputParameters": [
+              1
+            ],
+            "eventId": "TestEvent",
+            "service": {
+              "@id": 1,
+              "uUID": "%%%Service1UUID%%%",
+              "name": "C# Unit Test SmartObject",
+              "type": "SMART_OBJECT",
+              "events": [
+                1
+              ],
+              "endpoints": []
+            },
+            "type": "InputEvent"
+          },
+          "processors": [
+            {
+              "@id": 1,
+              "className": "processor.mapping.datamappingprocessor",
+              "inputs": [
+                1
+              ],
+              "output": {
+                "@id": 2,
+                "transitionOutput": {
+                  "@id": 1,
+                  "connectionFormat": "JSON",
+                  "outputParameters": [
+                    2
+                  ],
+                  "functionId": "ReceiveString",
+                  "httpMethod": null,
+                  "serviceEndpoint": {
+                    "@id": 1,
+                    "endpointUri": "vfk.msb.interface.websocket[127.0.0.1:8084]",
+                    "connectionType": "WEBSOCKET",
+                    "functionCalls": [
+                      1
+                    ],
+                    "service": {
+                      "@id": 2,
+                      "uUID": "%%%Service2UUID%%%",
+                      "name": "C# Unit Test Application",
+                      "type": "APPLICATION_SERVICE",
+                      "events": [],
+                      "endpoints": [
+                        1
+                      ]
+                    }
+                  },
+                  "responseEvent": null,
+                  "type": "FunctionCall"
+                },
+                "processor": 1,
+                "direction": "Output"
+              },
+              "pattern": {
+                "mapping": [
+                  {
+                    "source": [
+                      {
+                        "path": "/dataObject",
+                        "type": "STRING",
+                        "items": {
+                          "path": "",
+                          "template": ""
+                        },
+                        "uniqueEventId": {
+                          "serviceUuid": "%%%Service1UUID%%%",
+                          "eventId": "TestEvent"
+                        }
+                      }
+                    ],
+                    "target": {
+                      "path": "/message",
+                      "type": "STRING",
+                      "items": {
+                        "path": "",
+                        "template": ""
+                      },
+                      "template": "${/dataObject}"
+                    }
+                  }
+                ],
+                "template": "{\n  \"message\" : {\n    \"type\" : \"string\"\n  }\n}"
+              }
+            }
+          ],
+          "direction": "Input"
+        }
+      ],
+      "outputs": [
+        2
+      ],
+      "processors": [
+        1
+      ]
+    }
+  ],
+  "services": [
+    2,
+    1
+  ],
+  "deployed": true,
+  "workflowExecutionControl": false
+}

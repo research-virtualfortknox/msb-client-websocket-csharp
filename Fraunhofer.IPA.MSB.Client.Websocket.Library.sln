@@ -1,0 +1,91 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{648E41A3-84B8-48E9-A9A9-C9365F629E3A}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Directory.Build.props = tests\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{0F4E1380-5977-4D02-A9F9-D3A38B31E762}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Websocket", "src\Fraunhofer.IPA.MSB.Client.Websocket\Fraunhofer.IPA.MSB.Client.Websocket.csproj", "{16C2A720-DAF4-4570-BFD3-9FAA9FC76075}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Websocket.Sample", "samples\Fraunhofer.IPA.MSB.Client.Websocket.Sample\Fraunhofer.IPA.MSB.Client.Websocket.Sample.csproj", "{FFFB5668-BF52-45AA-8832-F8CEB42B512C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.API.Tests.Unit", "tests\Fraunhofer.IPA.MSB.Client.API.Tests.Unit\Fraunhofer.IPA.MSB.Client.API.Tests.Unit.csproj", "{7755A813-3695-461C-A428-C8E04FABC900}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration", "tests\Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration\Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration.csproj", "{F2110CE3-30CF-4126-88A4-5BC1FADD1739}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit", "tests\Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit\Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit.csproj", "{15D4C565-C3EE-4B2E-BD78-5A9D3316610E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Tests.Shared", "tests\Fraunhofer.IPA.MSB.Client.Tests.Shared\Fraunhofer.IPA.MSB.Client.Tests.Shared.csproj", "{E996073D-E631-4ED2-A77E-EC3CEC118608}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.API", "src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj", "{CD861761-2C12-445A-87DC-7D19C1FE7876}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D33891B8-EDCE-4A36-BE43-455C96A900A4}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
+		Directory.Build.props = Directory.Build.props
+		GlobalSuppressions.cs = GlobalSuppressions.cs
+		run-build.bat = run-build.bat
+		run-build.sh = run-build.sh
+		run-tests.bat = run-tests.bat
+		run-tests.sh = run-tests.sh
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16C2A720-DAF4-4570-BFD3-9FAA9FC76075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16C2A720-DAF4-4570-BFD3-9FAA9FC76075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16C2A720-DAF4-4570-BFD3-9FAA9FC76075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16C2A720-DAF4-4570-BFD3-9FAA9FC76075}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFB5668-BF52-45AA-8832-F8CEB42B512C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFB5668-BF52-45AA-8832-F8CEB42B512C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFB5668-BF52-45AA-8832-F8CEB42B512C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFB5668-BF52-45AA-8832-F8CEB42B512C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7755A813-3695-461C-A428-C8E04FABC900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7755A813-3695-461C-A428-C8E04FABC900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7755A813-3695-461C-A428-C8E04FABC900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7755A813-3695-461C-A428-C8E04FABC900}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2110CE3-30CF-4126-88A4-5BC1FADD1739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2110CE3-30CF-4126-88A4-5BC1FADD1739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2110CE3-30CF-4126-88A4-5BC1FADD1739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2110CE3-30CF-4126-88A4-5BC1FADD1739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D4C565-C3EE-4B2E-BD78-5A9D3316610E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D4C565-C3EE-4B2E-BD78-5A9D3316610E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D4C565-C3EE-4B2E-BD78-5A9D3316610E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D4C565-C3EE-4B2E-BD78-5A9D3316610E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E996073D-E631-4ED2-A77E-EC3CEC118608}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E996073D-E631-4ED2-A77E-EC3CEC118608}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E996073D-E631-4ED2-A77E-EC3CEC118608}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E996073D-E631-4ED2-A77E-EC3CEC118608}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD861761-2C12-445A-87DC-7D19C1FE7876}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD861761-2C12-445A-87DC-7D19C1FE7876}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD861761-2C12-445A-87DC-7D19C1FE7876}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD861761-2C12-445A-87DC-7D19C1FE7876}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{16C2A720-DAF4-4570-BFD3-9FAA9FC76075} = {BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}
+		{FFFB5668-BF52-45AA-8832-F8CEB42B512C} = {0F4E1380-5977-4D02-A9F9-D3A38B31E762}
+		{7755A813-3695-461C-A428-C8E04FABC900} = {648E41A3-84B8-48E9-A9A9-C9365F629E3A}
+		{F2110CE3-30CF-4126-88A4-5BC1FADD1739} = {648E41A3-84B8-48E9-A9A9-C9365F629E3A}
+		{15D4C565-C3EE-4B2E-BD78-5A9D3316610E} = {648E41A3-84B8-48E9-A9A9-C9365F629E3A}
+		{E996073D-E631-4ED2-A77E-EC3CEC118608} = {648E41A3-84B8-48E9-A9A9-C9365F629E3A}
+		{CD861761-2C12-445A-87DC-7D19C1FE7876} = {BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2269903A-5F41-4593-84EB-2538BFF14718}
+	EndGlobalSection
+EndGlobal

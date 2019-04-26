@@ -1,0 +1,20 @@
+language: csharp
+mono: none
+os: linux
+dist: bionic
+dotnet: 2.1.502
+script: "./run-tests.sh"
+deploy:
+  skip_cleanup: true
+  provider: script
+  script:
+  - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.API/bin/Release/Fraunhofer.IPA.MSB.Client.API.*.nupkg
+    --api-key $NUGET_API_KEY
+  - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.Websocket/bin/Release/Fraunhofer.IPA.MSB.Client.Websocket.*.nupkg
+    --api-key $NUGET_API_KEY
+  on:
+    tags: true
+    condition: "$TRAVIS_TAG =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+env:
+  global:
+    secure: WIXksET6e3GzpiX4R+J2c1UZ5sdpcvCCeXFdou2Jce1Xq+T7cElX2Ul0Ylg2PN7FXT1dWTMp8JMpOhqL+AaTSnXhz2kboB1s9nhbdHi2Td3AshHpGWYl6XdrWeU4bdoyMVru9vLzJSIVn2EusEODiEDP1Vf0emStAaugehkvtGs4kpvn7N+EAhiGLGzsayH9efBaUoGx+HUw4KEVQtiBeYIsBynDOrTAwf0u93q9G0dYpOX5tNOFet9QlDCBfaXyCsj7+oqfdUKZGgoo3D+1wqvTESnRoByhBZ+O6Ep+oK2MBOk0+NIJP+A2sgzdxt6H7r8wGNhsBZyP4+11BZcUYrZjgHj2KIdsmfiX8lxqyxqnzltzlUI21ALDyAEbBuahNy4xj+iKakt9YAN4myt7UVFB404hwej0CtysWAty9R421+Tx5D73kvMhBHsGWR+bxr46I9Bx8Gh3VvMf+eXrPB6NEsGG4qwhRgoPm2f38+LbOCMTeTg1LC3X4DDOhcDb2ODrMVDVVI4JGyMgwiSHWbdUGdLtPpBh8TsDk7I8gqg1QwZlTIqeQFB7U3S0aLQFt1IbXCp9AKt7UKQTzU1eTSwRyVa3mHQAY/Jo4JYT18O8fEAwN42ntQD2civnlr+yjPoYLWlMYo7q0i8P0YEzI6gJIRMAE+9+AcRLiFIXDX0=

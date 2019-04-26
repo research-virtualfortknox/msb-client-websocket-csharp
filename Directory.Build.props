@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Matthias Schneider</Authors>
+    <Company>Fraunhofer-Institut für Produktionstechnik und Automatisierung IPA</Company>
+    <StyleCopTreatErrorsAsWarnings>True</StyleCopTreatErrorsAsWarnings>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Copyright>2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA</Copyright>
+    <PackageProjectUrl>https://research.virtualfortknox.de/en/</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="LibLog" Version="5.0.6" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+	  <PackageReference Include="StyleCop.Analyzers" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="..\..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+  </ItemGroup>
+
+</Project>

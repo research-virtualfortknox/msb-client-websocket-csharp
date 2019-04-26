@@ -1,0 +1,1475 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Fraunhofer.IPA.MSB.Client.API</name>
+    </assembly>
+    <members>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient">
+            <summary>
+            Interface that must be implemented by an MSB client.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient"/> class.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient"/> class.
+            </summary>
+            <param name="msbUrl">The URL to the MSB interface.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.MsbUrl">
+            <summary>
+            Gets or sets the URL of MSB websocket interface.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.ConnectAsync">
+            <summary>
+            Connect to the MSB.
+            </summary>
+            <returns>True if connection was successfully established.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.Disconnect">
+            <summary>
+            Disconnect from MSB.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.IsConnected">
+            <summary>
+            Returns if connection to MSB has been established.
+            </summary>
+            <returns>True, if client is connected.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.RegisterAsync(Fraunhofer.IPA.MSB.Client.API.Model.Service)">
+            <summary>
+            Registers a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> at the MSB.
+            </summary>
+            <param name="serviceToRegister">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> to be registered</param>
+            <returns>True, if the registration was successful.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient.PublishAsync(Fraunhofer.IPA.MSB.Client.API.Model.Service,Fraunhofer.IPA.MSB.Client.API.Model.EventData)">
+            <summary>
+            Publishes <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> for an <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>.
+            </summary>
+            <param name="service">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> to publish <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> for.</param>
+            <param name="eventData">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> to be published</param>
+            /// <returns>True, if publish was successful.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute">
+            <summary>
+            Marks a method as an MSB function.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute.Id">
+            <summary>Gets or sets the id of the MSB function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute.Name">
+            <summary>Gets or sets the name of the MSB function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute.Description">
+            <summary>Gets or sets the description of the MSB function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute.ResponseEvents">
+            <summary>
+            Gets or sets array of event ids which should be declared as response events of the MSB function. When the function is added to a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionHandlerAttribute">
+            <summary>
+            Marks a class as handler of MSB functions.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionHandlerAttribute.Id">
+            <summary>Gets or sets the id of the handler.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionParameter">
+            <summary>
+            Marks a parameter of a function as parameter for an MSB function call.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionParameter.Name">
+            <summary>Gets or sets name of the parameter used in the MSB data format.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties">
+            <summary>
+            Handles the application.properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Url">
+            <summary>
+            Gets the URL to connect to MSB read from properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.ServiceType">
+            <summary>
+            Gets the type of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> read from properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Uuid">
+            <summary>
+            Gets the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid"/> read from properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Name">
+            <summary>
+            Gets the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Name"/> read from properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Description">
+            <summary>
+            Gets the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Description"/> read from properties file.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Token">
+            <summary>
+            Gets the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token"/> read from properties file.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Configuration.ApplicationProperties.Read">
+            <summary>
+            Read .properties file.
+            </summary>
+            <returns>True, if file was successfully read.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Errors.PublishingError">
+            <summary>
+            Defines error types which can occur during publishing.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.PublishingError.NIO_UNAUTHORIZED_CONNECTION">
+            <summary>
+            Error occurs when <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> are published via unauthorized connection.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.PublishingError.NIO_EVENT_FORWARDING_ERROR">
+            <summary>
+            Error occurs when <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> can't be forwarded.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.PublishingError.NIO_UNEXPECTED_EVENT_FORWARDING_ERROR">
+            <summary>
+            Unexpected error during event publishing.
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Errors.RegistrationError">
+            <summary>
+            Defines error types which can occur during registration.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.RegistrationError.NIO_ALREADY_CONNECTED">
+            <summary>
+            Service already connected to MSB.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.RegistrationError.NIO_REGISTRATION_ERROR">
+            <summary>
+            Self-description of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> invalid or <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token"/> already used by other <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Errors.RegistrationError.NIO_UNEXPECTED_REGISTRATION_ERROR">
+            <summary>
+            Unexpected error during registration.
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs">
+            <summary>
+            Args for event when client received new configuration parameters.
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs.#ctor(Fraunhofer.IPA.MSB.Client.API.Model.Service,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs"/> class.
+            </summary>
+            <param name="service">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs.Service"/> for which the parameters are intended.</param>
+            <param name="value">The configuration parameter values.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs.Service">
+            <summary>Gets the <see cref="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs.Service"/> for which the parameters are intended.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConfigurationParameterReceivedEventArgs.Value">
+            <summary>Gets the values of the new configuration parameters.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs">
+            <summary>
+            Args for event when connection of client closed.
+            </summary>
+            <seealso cref="T:System.EventArgs" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs"/> class.
+            </summary>
+            <param name="code">The code for the close.</param>
+            <param name="reason">The reason for the close.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs.Empty">
+            <summary>
+            Gets the empty <see cref="T:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs"/>.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs.Code">
+            <summary>Gets the code for the close.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.EventArgs.ConnectionClosedEventArgs.Reason">
+            <summary>Gets the reason for the close.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.EventNotExistException">
+            <summary>
+            Exception that is thrown when an operation should be executed for an event of service which wasn't added to the service before.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Exceptions.EventNotExistException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.EventNotExistException"/> class.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.InvalidMsbMethodDefinitionException">
+            <summary>
+            Exception which is thrown when a definition of a MSB <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> is invalid.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Exceptions.InvalidMsbMethodDefinitionException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.InvalidMsbMethodDefinitionException"/> class.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.ResponseEventNotFoundException">
+            <summary>
+            Exception which is thrown when a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> with response <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>s is added, but the defined response event can't be found in the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Exceptions.ResponseEventNotFoundException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.ResponseEventNotFoundException"/> class.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.ServiceNotRegisteredException">
+            <summary>
+            Exception that is thrown when an operation should be executed for a service which wasn't registered before.
+            </summary>
+            <seealso cref="T:System.Exception" />
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Exceptions.ServiceNotRegisteredException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Exceptions.ServiceNotRegisteredException"/> class.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.IConfigurationListener">
+            <summary>
+            Interface which must be implemented to receive callbacks when configuration has changed.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IConfigurationListener.OnConfigurationChanged(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Called when <see cref="N:Fraunhofer.IPA.MSB.Client.API.Configuration"/> has changed.
+            </summary>
+            <param name="configuration">Map with changed configuration parameters.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener">
+            <summary>
+            Interface must be implemented to receive callbacks from a <see cref="T:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnConnected">
+            <summary>
+            Called after connection established.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnConnectionClosed">
+            <summary>
+            Called after connection closed.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.BeforeConnectionTryToReconnecting">
+            <summary>
+            Called before new reconnect try.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnRegistered">
+            <summary>
+            Called after <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> registered.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnRegistrationError(Fraunhofer.IPA.MSB.Client.API.Errors.RegistrationError)">
+            <summary>
+            Called after error at registration occurred.
+            </summary>
+            <param name="registrationError">The occurred registration error.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnEventPublished">
+            <summary>
+            Called after event has been published.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnEventCached">
+            <summary>
+            Called when event has been cached.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.IMsbClientListener.OnEventPublishingError(Fraunhofer.IPA.MSB.Client.API.Errors.PublishingError)">
+            <summary>
+            Called when an publishing error occurred.
+            </summary>
+            <param name="publishingError">The occurred publishing error.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler">
+            <summary>
+            Abstract class to derive an handler for MSB functions.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler.GetParameterIndexFromName(System.Reflection.MethodInfo,System.String)">
+            <summary>
+            Returns the index of the parameter in the parameter list of the method depending on the given name.
+            </summary>
+            <param name="methodInfo">Method used to search for the parameter.</param>
+            <param name="parameterName">Name of the parameter to search for.</param>
+            <returns>Index of the parameter in the parameter list of the method.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.Application">
+            <summary>
+            Represents an MSB Application.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Application.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Application"/> class.
+            </summary>
+            <param name="uuid">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Application"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Application"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Application"/>.</param>
+            <param name="token">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Application"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Application.Class">
+            <summary>Gets definition of MSB type.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.Configuration">
+            <summary>
+            Represents a configuration of a MSB service.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Configuration.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Configuration"/> class.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Configuration.#ctor(System.Collections.Generic.Dictionary{System.String,Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Configuration"/> class.
+            </summary>
+            <param name="parameters">The parameters of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Configuration"/></param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Configuration.Parameters">
+            <summary>Gets or sets the parameters of the configuration.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue">
+            <summary>
+            Represents a parameter of an MSB <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Configuration"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue"/> class.
+            </summary>
+            <param name="value">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue.Value"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue.Value">
+            <summary> Gets or sets value of the parameter.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue.Type">
+            <summary> Gets type of the parameter.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue.Format">
+            <summary> Gets format of the parameter.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.ConnectionType">
+            <summary>
+            Types of MSB connections.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.ConnectionType.WEBSOCKET">
+            <summary>
+            Connection to MSB via web socket.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.ConnectionType.REST">
+            <summary>
+            Connection to MSB via REST.
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.Event">
+            <summary>
+            Event of an MSB <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.Event.dataFormatType">
+            <summary>Gets or sets type on which the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.DataFormat"/>is based.</summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Event.#ctor(System.String,System.String,System.String,System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> class.
+            </summary>
+            <param name="id">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Id"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>.</param>
+            <param name="dataFormatType">The <see cref="F:Fraunhofer.IPA.MSB.Client.API.Model.Event.dataFormatType"/> used to generate <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.DataFormat"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.AtId">
+            <summary>Gets or sets id for referencing in JSON.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Id">
+            <summary>Gets or sets id of the event.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Name">
+            <summary>Gets or sets name of the event.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.Description">
+            <summary>Gets or sets description of the event.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.DataFormat">
+            <summary>Gets or sets data format of the event.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData">
+            <summary>
+            This class is used to define data which should be published to the MSB as an <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventData.#ctor(Fraunhofer.IPA.MSB.Client.API.Model.Event)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> class.
+            </summary>
+            <param name="correspondingEvent">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/> related to this <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event">
+            <summary>Gets or sets related <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/> of the data</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.CorrelationId">
+            <summary>Gets or sets id used for correlation in asynchronous communication.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.EventPriority">
+            <summary>Gets or sets priority with which the event is processed by the MSB.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Value">
+            <summary>Gets or sets value of the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/></summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.PublishingDate">
+            <summary>Gets or sets timestamp when the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/> was published.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.ShouldBeCached">
+            <summary>Gets or sets a value indicating whether the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Event"/> should be cached if there is no connection to MSB.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder">
+            <summary>
+            Builder class to easily create <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.#ctor(Fraunhofer.IPA.MSB.Client.API.Model.Event)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> class.
+            </summary>
+            <param name="correspondingEvent">The corresponding <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> to the instantiated <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.SetValue(System.Object)">
+            <summary>
+            Sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Value"/> of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <param name="value">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.Value"/> to be set.</param>
+            <returns>The same <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> with property set.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.SetPublishingDate(System.DateTime)">
+            <summary>
+            Sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.PublishingDate"/> of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <param name="publishingDate">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.PublishingDate"/> to be set.</param>
+            <returns>The same <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> with property set.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.SetCorrelationId(System.String)">
+            <summary>
+            Sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.CorrelationId"/> of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <param name="correlationId">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.CorrelationId"/> to be set.</param>
+            <returns>The same <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> with property set.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.SetEventPriority(Fraunhofer.IPA.MSB.Client.API.Model.EventPriority)">
+            <summary>
+            Sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.EventPriority"/> of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <param name="eventPriority">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.EventPriority"/> to be set.</param>
+            <returns>The same <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> with property set.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.SetShouldBeCached(System.Boolean)">
+            <summary>
+            Sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.ShouldBeCached"/> of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <param name="shouldBeCached">Value of <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.ShouldBeCached"/> to be set.</param>
+            <returns>The same <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder"/> with property set.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.EventDataBuilder.Build">
+            <summary>
+            Returns the build <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/>.
+            </summary>
+            <returns>The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> that was build.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.EventPriority">
+            <summary>
+            Priority with which the event is processed by the MSB.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.EventPriority.LOW">
+            <summary>
+            Event will be handled with low priority.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.EventPriority.MEDIUM">
+            <summary>
+            Event will be handled with medium priority.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Model.EventPriority.HIGH">
+            <summary>
+            Event will be handled with high priority.
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.Function">
+            <summary>
+            Function of an MSB <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Function.#ctor(System.Reflection.MethodInfo,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> class.
+            </summary>
+            <param name="methodInfo">The info about the method.</param>
+            <param name="callableObjectForMethod">Object of which the method will be called when callback was received.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Function.#ctor(System.String,System.String,System.String,System.Reflection.MethodInfo,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> class.
+            </summary>
+            <param name="id">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Id"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="methodInfo">The info about the method.</param>
+            <param name="callableObjectForMethod">Object of which the method will be called when callback was received.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Function.#ctor(System.String,System.String,System.String,System.String[],System.Reflection.MethodInfo,System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> class.
+            </summary>
+            <param name="id">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Id"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="responseEvents">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.ResponseEventIds"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <param name="methodInfo">The info about the method.</param>
+            <param name="callableObjectForMethod">Object of which the method will be called when callback was received.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Function.#ctor(Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler,System.Reflection.MethodInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/> class.
+            </summary>
+            <param name="functionHandler">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler"/> that contains the method.</param>
+            <param name="methodInfo">The info about the method.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Id">
+            <summary>Gets or sets id of the function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Name">
+            <summary>Gets or sets name of the function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Description">
+            <summary>Gets or sets description of the function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.DataFormat">
+            <summary>Gets or sets data format of the function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.ResponseEventIds">
+            <summary>Gets or sets ids of the response <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/>s.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.ResponseEvents">
+            <summary>Gets or sets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.AtId"/> of the response events. This id is used for referencing in JSON.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.FunctionPointer">
+            <summary>Gets or sets pointer to the function which should be called when an MSB function call is received.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCall">
+            <summary>
+            Represents a function call of the MSB.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCall.ServiceUuid">
+            <summary>Gets or sets uUID of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> which contains the called <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCall.FunctionId">
+            <summary>Gets or sets id of the called <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCall.CorrelationId">
+            <summary>Gets or sets correlation id of the event that initially triggered the function call.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCall.FunctionParameters">
+            <summary>Gets or sets parameters of the function call.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo">
+            <summary>
+            Provides information about an function call to the invoked <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.FunctionPointer"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.#ctor(Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient,System.String,Fraunhofer.IPA.MSB.Client.API.Model.Service,Fraunhofer.IPA.MSB.Client.API.Model.Function,System.Collections.Generic.Dictionary{System.String,Fraunhofer.IPA.MSB.Client.API.Model.Event})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo"/> class.
+            </summary>
+            <param name="msbClient">The MSB client.</param>
+            <param name="correlationId">The correlation identifier.</param>
+            <param name="service">The service.</param>
+            <param name="function">The function.</param>
+            <param name="responseEvents">The response events.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.MsbClient">
+            <summary>Gets MSB client that received the function callback.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.CorrelationId">
+            <summary>Gets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.EventData.CorrelationId"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> that initially triggered the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.Function"/> call.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.Service">
+            <summary>Gets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.Service"/> which contains the called <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.Function"/>.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.Function">
+            <summary>Gets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Id"/> of the called function.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.FunctionCallInfo.ResponseEvents">
+            <summary>Gets <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.Id"/> of the called function.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData">
+            <summary>
+            Represents incoming data for the MSB.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.#ctor(System.String,System.String,Fraunhofer.IPA.MSB.Client.API.Model.EventPriority,System.DateTime,System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData"/> class.
+            </summary>
+            <param name="uuid">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.Uuid"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/></param>
+            <param name="eventId">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.EventId"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/></param>
+            <param name="priority">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.Priority"/> of the data.</param>
+            <param name="postDate">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.PostDate"/> when the data was posted.</param>
+            <param name="dataObject">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.DataObject"/> of the incoming data.</param>
+            <param name="correlationId">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.CorrelationId"/> of the data.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.Uuid">
+            <summary>Gets or sets id of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> that sends the data.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.EventId">
+            <summary>Gets or sets id of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> that sends the data.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.Priority">
+            <summary>Gets or sets priority the data should be processed with.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.PostDate">
+            <summary>Gets or sets timestamp when the data was published.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.CorrelationId">
+            <summary>Gets or sets correlation id of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> that sends the data.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.IncomingData.DataObject">
+            <summary>Gets or sets the data which are send.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.Service">
+            <summary>
+            Represents an MSB service.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> class.
+            </summary>
+            <param name="uuid">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.</param>
+            <param name="token">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Name">
+            <summary>Gets or sets name of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Description">
+            <summary>Gets or sets description of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token">
+            <summary>Gets or sets token to verify the service in the MSB GUI.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid">
+            <summary>Gets or sets UUID of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Configuration">
+            <summary>Gets or sets configuration of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Events">
+            <summary>Gets or sets events of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Functions">
+            <summary>Gets or sets functions of the service.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Class">
+            <summary>Gets the class type of the service.</summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.AddEvent(Fraunhofer.IPA.MSB.Client.API.Model.Event)">
+            <summary>
+            Adds an event to the service.
+            </summary>
+            <param name="eventToAdd">Event that should be added.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.RemoveEvent(Fraunhofer.IPA.MSB.Client.API.Model.Event)">
+            <summary>
+            Removes an event from the service.
+            </summary>
+            <param name="eventToRemove">Event that should be removed.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.AddEventRaw(System.String)">
+            <summary>
+            Adds a event using JSON.
+            </summary>
+            <param name="eventDescription">The event description as JSON.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.AddFunction(Fraunhofer.IPA.MSB.Client.API.Model.Function)">
+            <summary>
+            Adds a function the service.
+            </summary>
+            <param name="function">Function that should be added.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.RemoveFunction(Fraunhofer.IPA.MSB.Client.API.Model.Function)">
+            <summary>
+            Removes a function from the service.
+            </summary>
+            <param name="functionToRemove">Function that should be removed.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.AddFunctionHandler(Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler)">
+            <summary>
+            Adds the function handler to the service. All methods defined as MSB function via <see cref="T:Fraunhofer.IPA.MSB.Client.API.Attributes.MsbFunctionAttribute"/> will be added as <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>s.
+            </summary>
+            <param name="functionHandler">Function handler that should be added.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.RemoveFunctionHandler(Fraunhofer.IPA.MSB.Client.API.Model.AbstractFunctionHandler)">
+            <summary>
+            Removes the function handler to the service. All MSB function that belong to this function handler will be removed.
+            </summary>
+            <param name="functionHandler">The function handler.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.AddConfigurationParameter(System.String,Fraunhofer.IPA.MSB.Client.API.Model.ConfigurationParameterValue)">
+            <summary>
+            Adds a configuration parameter to the service.
+            </summary>
+            <param name="name">Name of the added configuration parameter.</param>
+            <param name="value">Value of the added configuration parameter.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.RemoveConfigurationParameter(System.String)">
+            <summary>
+            Removes a configuration parameter from the service.
+            </summary>
+            <param name="name">Name of configuration parameter that should be removed.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.GenerateAtIds">
+            <summary>
+            Generates the <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Event.AtId"/>s of the events and uses them as references in <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Function.ResponseEvents"/> in all <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>s of this service.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.GetEventById(System.String)">
+            <summary>
+            Gets an event by id.
+            </summary>
+            <param name="eventId">The id of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/></param>
+            <returns>The event found for the id.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.GetFunctionById(System.String)">
+            <summary>
+            Gets a function by id.
+            </summary>
+            <param name="functionId">The id of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.</param>
+            <returns>The function found for the id.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.Service.ToJson">
+            <summary>
+            Converts to Object JSON string.
+            </summary>
+            <returns>Object as JSON string.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject">
+            <summary>
+            Represents an MSB SmartObject.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject"/> class.
+            </summary>
+            <param name="uuid">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject"/>.</param>
+            <param name="name">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Name"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject"/>.</param>
+            <param name="description">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Description"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject"/>.</param>
+            <param name="token">The <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Token"/> of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject"/>.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Model.SmartObject.Class">
+            <summary>Gets definition of MSB type.</summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.OpenApi.OpenApiMapper">
+            <summary>
+            Mapper to convert .NET types to OpenAPI schema.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.OpenApi.OpenApiMapper.IsPrimitiveDataType(System.Type)">
+            <summary>
+            Checks if a type is primitive.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>True, if type is primitive.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.OpenApi.OpenApiMapper.GetJsonSchemaOfType(System.Type)">
+            <summary>
+            Converts a type to a JSON schema in OpenAPI format.
+            </summary>
+            <param name="type">The type to be converted.</param>
+            <returns>The type as JSON schema in OpenAPI format.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog">
+            <summary>
+                Simple interface that represent a logger.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.ILog.Log(Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel,System.Func{System.String},System.Exception,System.Object[])">
+            <summary>
+                Log a message the specified log level.
+            </summary>
+            <param name="logLevel">The log level.</param>
+            <param name="messageFunc">The message function.</param>
+            <param name="exception">An optional exception.</param>
+            <param name="formatParameters">Optional format parameters for the message generated by the messagefunc. </param>
+            <returns>true if the message was logged. Otherwise false.</returns>
+            <remarks>
+                Note to implementers: the message func should not be called if the loglevel is not enabled
+                so as not to incur performance penalties.
+                To check IsEnabled call Log with only LogLevel and check the return value, no event will be written.
+            </remarks>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider">
+            <summary>
+            Represents a way to get a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/>
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions">
+            <summary>
+                Extension methods for the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> interface.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsDebugEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsErrorEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsFatalEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsInfoEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsTraceEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.IsWarnEnabled(Fraunhofer.IPA.MSB.Client.API.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.DebugFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.DebugException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception)">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.DebugException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.ErrorFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.ErrorException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.FatalFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.FatalException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.InfoFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.InfoException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.TraceFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.TraceException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.WarnFormat(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogExtensions.WarnException(Fraunhofer.IPA.MSB.Client.API.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel">
+            <summary>
+                The log level.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Trace">
+            <summary>
+            Trace
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Debug">
+            <summary>
+            Debug
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Info">
+            <summary>
+            Info
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Warn">
+            <summary>
+            Warn
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Error">
+            <summary>
+            Error
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogLevel.Fatal">
+            <summary>
+            Fatal
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider">
+            <summary>
+            Provides a mechanism to create instances of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog" /> objects.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.SetCurrentLogProvider(Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider)">
+            <summary>
+            Sets the current log provider.
+            </summary>
+            <param name="logProvider">The log provider.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.IsDisabled">
+            <summary>
+            Gets or sets a value indicating whether this is logging is disabled.
+            </summary>
+            <value>
+            <c>true</c> if logging is disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.OnCurrentLogProviderSet">
+            <summary>
+            Sets an action that is invoked when a consumer of your library has called SetCurrentLogProvider. It is 
+            important that hook into this if you are using child libraries (especially ilmerged ones) that are using
+            LibLog (or other logging abstraction) so you adapt and delegate to them.
+            <see cref="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.SetCurrentLogProvider(Fraunhofer.IPA.MSB.Client.API.Logging.ILogProvider)"/> 
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.For``1">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <typeparam name="T">The type whose name will be used for the logger.</typeparam>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.GetCurrentClassLogger">
+            <summary>
+            Gets a logger for the current class.
+            </summary>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.GetLogger(System.Type,System.String)">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <param name="type">The type whose name will be used for the logger.</param>
+            <param name="fallbackTypeName">If the type is null then this name will be used as the log name instead</param>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.GetLogger(System.String)">
+            <summary>
+            Gets a logger with the specified name.
+            </summary>
+            <param name="name">The name.</param>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context.
+            </summary>
+            <param name="message">A message.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">A optional paramater to indicate message should be destructured.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LibLogException">
+            <summary>
+            Exception thrown by LibLog.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LibLogException.#ctor(System.String)">
+            <summary>
+            Initializes a new LibLogException with the specified message.
+            </summary>
+            <param name="message">The message</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LibLogException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new LibLogException with the specified message and inner exception.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogMessageFormatter.SimulateStructuredLogging(System.Func{System.String},System.Object[])">
+            <summary>
+                Some logging frameworks support structured logging, such as serilog. This will allow you to add names to structured
+                data in a format string:
+                For example: Log("Log message to {user}", user). This only works with serilog, but as the user of LibLog, you don't
+                know if serilog is actually
+                used. So, this class simulates that. it will replace any text in {curly braces} with an index number.
+                "Log {message} to {user}" would turn into => "Log {0} to {1}". Then the format parameters are handled using regular
+                .net string.Format.
+            </summary>
+            <param name="messageBuilder">The message builder.</param>
+            <param name="formatParameters">The format parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase">
+            <summary>
+                Base class for specific log providers.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.ErrorInitializingProvider">
+            <summary>
+                Error message should initializing the log provider fail.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.#ctor">
+            <summary>
+                Initialize an instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase"/> class by initializing the references
+                to the nested and mapped diagnostics context-obtaining functions.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.GetOpenNdcMethod">
+            <summary>
+                Returns the provider-specific method to open a nested diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a nested diagnostics context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.GetOpenMdcMethod">
+            <summary>
+                Returns the provider-specific method to open a mapped diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a mapped diagnostics context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.OpenNdc">
+            <summary>
+                Delegate defining the signature of the method opening a nested diagnostics context.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LogProviderBase.OpenMdc">
+            <summary>
+                Delegate defining the signature of the method opening a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LoupeLogProvider.WriteDelegate">
+            <summary>
+                The form of the Loupe Log.Write method we're using
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.API.Logging.LogProviders.LoupeLogProvider.ProviderIsAvailableOverride">
+            <summary>
+                Gets or sets a value indicating whether [provider is available override]. Used in tests.
+            </summary>
+            <value>
+                <c>true</c> if [provider is available override]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.API.Logging.Logger">
+            <summary>
+            Logger delegate.
+            </summary>
+            <param name="logLevel">The log level</param>
+            <param name="messageFunc">The message function</param>
+            <param name="exception">The exception</param>
+            <param name="formatParameters">The format parameters</param>
+            <returns>A boolean.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Model.DataFormat">
+            <summary>
+            Defines the data format of an MSB <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> or <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Function"/>.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Model.DataFormat.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Model.DataFormat"/> class.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Model.DataFormat.#ctor(System.String,System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Model.DataFormat"/> class.
+            </summary>
+            <param name="rootNodeName">Name of the root node.</param>
+            <param name="type">Type to convert to data format.</param>
+        </member>
+    </members>
+</doc>

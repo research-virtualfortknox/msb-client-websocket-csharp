@@ -1,0 +1,806 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Fraunhofer.IPA.MSB.Client.Websocket</name>
+    </assembly>
+    <members>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient">
+            <summary>
+            Client to connect to MSB via Websocket.
+            </summary>
+            <seealso cref="T:Fraunhofer.IPA.MSB.Client.API.AbstractMsbClient" />
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.MinAutoReconnectIntervalInMilliseconds">
+            <summary>The minimum automatic reconnect interval in milliseconds.</summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient"/> class.
+            </summary>
+            <param name="msbWebsocketUrl">URL of MSB.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.#ctor(System.String,System.UInt32,System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient"/> class
+            </summary>
+            <param name="msbWebsocketAddress">Adress of MSB (Hostname or IP).</param>
+            <param name="msbWebsocketPort">Port ob MSB Websocket interface.</param>
+            <param name="useSSL">Definines if SSL should be used.</param>
+            <param name="msbWebsocketPath">Path to MSB Websocket interface.</param>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.Connected">
+            <summary>Occurs when the client has connected.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.Disconnected">
+            <summary>Occurs when the client has disconnected.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.ConnectionClosed">
+            <summary>Occurs when the client connection has closed.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.ConnectionFailed">
+            <summary>Occurs when a client connection attempt failed.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.Registered">
+            <summary>Occurs when the client has registered a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.RegistrationFailed">
+            <summary>Occurs when a registration attempt of the client for a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> failed.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventPublished">
+            <summary>Occurs when the client has published an event.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventCached">
+            <summary>Occurs when the client has cached an event.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventPublishingFailed">
+            <summary>Occurs when a publish attempt of the client for a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Event"/> failed.</summary>
+        </member>
+        <member name="E:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.ConfigurationParameterReceived">
+            <summary>Occurs when the client has received new configuration parameters.</summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.UseSockJs">
+            <summary>
+            Gets or sets a value indicating whether SockJS is used.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.IsSslEnabled">
+            <summary>
+            Gets a value indicating whether SSL is enalbed for connecting to MSB.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.AllowSslCertificateNameMismatch">
+            <summary>
+            Gets or sets a value indicating whether the hostname of certificate is verified.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.AllowSslCertificateChainErrors">
+            <summary>
+            Gets or sets a value indicating whether chain errors in certificate are allowed.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.AllowSslUnstrustedCertificate">
+            <summary>
+            Gets or sets a value indicating whether untrusted certificates are allowed.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.HeatbeatIntervalInMilliseconds">
+            <summary>
+            Gets or sets the interval for sending a websocket heartbeat.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.AutoReconnect">
+            <summary>
+            Gets or sets a value indicating whether the websocket connection reconnects automatically.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.AutoReconnectIntervalInMilliseconds">
+            <summary>
+            Gets or sets the interval to reconnect automatically to MSB if connection is lost.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventCache">
+            <summary>
+            Gets the cached events of all services as Dictionary with <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> as key and a List of cached <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> as value.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.RegisteredServices">
+            <summary>
+            Gets a Dictionary of all registered <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>s with <see cref="P:Fraunhofer.IPA.MSB.Client.API.Model.Service.Uuid"/> as key and the <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> as value.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventCacheSizePerService">
+            <summary>
+            Gets or sets the size of the <see cref="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.EventCache"/> per <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.WaitForConnectedInMilliseconds">
+            <summary>
+            Gets or sets the timeout to wait for connection response of MSB.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.WaitForRegistrationInMilliseconds">
+            <summary>
+            Gets or sets the timeout to wait for registration response of MSB.
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.WaitForPublishInMilliseconds">
+            <summary>
+            Gets or sets the timeout to wait for registration response of MSB.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.ConnectAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.Disconnect">
+            <inheritdoc/>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.IsConnected">
+            <inheritdoc/>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.RegisterAsync(Fraunhofer.IPA.MSB.Client.API.Model.Service)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.MsbClient.PublishAsync(Fraunhofer.IPA.MSB.Client.API.Model.Service,Fraunhofer.IPA.MSB.Client.API.Model.EventData)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageGenerator">
+            <summary>
+            Generates Web socket messages.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageGenerator.GenerateRegistrationMessage(Fraunhofer.IPA.MSB.Client.API.Model.Service)">
+            <summary>
+            Generates a registration message for a <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/>
+            </summary>
+            <param name="serviceToRegister">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> to generate registration message for.</param>
+            <returns>The registration message as JSON string.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageGenerator.GenerateEventMessage(Fraunhofer.IPA.MSB.Client.API.Model.Service,Fraunhofer.IPA.MSB.Client.API.Model.EventData,System.Boolean)">
+            <summary>
+            Generates the event message.
+            </summary>
+            <param name="service">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.Service"/> to create event message for.</param>
+            <param name="eventData">The <see cref="T:Fraunhofer.IPA.MSB.Client.API.Model.EventData"/> to generate event message for.</param>
+            <param name="useSockJs">Indicates if SockJS should be used.</param>
+            <returns>The event message as JSON string.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageGenerator.GeneratePingAnswerMessage(System.Boolean)">
+            <summary>
+            Generates the ping answer message.
+            </summary>
+            <param name="useSockJs">Indicates if SockJS should be used.</param>
+            <returns>The answer message as string.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageType">
+            <summary>
+            Defines the messages types that are send by the MSB via Websocket.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Protocol.MessageType.GetTypeOfMessage(System.String)">
+            <summary>
+            Returns the type of a message.
+            </summary>
+            <param name="message">The message for which the type is determined.</param>
+            <returns>Type of the message as String.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog">
+            <summary>
+                Simple interface that represent a logger.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog.Log(Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel,System.Func{System.String},System.Exception,System.Object[])">
+            <summary>
+                Log a message the specified log level.
+            </summary>
+            <param name="logLevel">The log level.</param>
+            <param name="messageFunc">The message function.</param>
+            <param name="exception">An optional exception.</param>
+            <param name="formatParameters">Optional format parameters for the message generated by the messagefunc. </param>
+            <returns>true if the message was logged. Otherwise false.</returns>
+            <remarks>
+                Note to implementers: the message func should not be called if the loglevel is not enabled
+                so as not to incur performance penalties.
+                To check IsEnabled call Log with only LogLevel and check the return value, no event will be written.
+            </remarks>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider">
+            <summary>
+            Represents a way to get a <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/>
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions">
+            <summary>
+                Extension methods for the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> interface.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsDebugEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsErrorEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsFatalEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsInfoEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsTraceEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.IsWarnEnabled(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Debug(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.DebugFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.DebugException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception)">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.DebugException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Error(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.ErrorFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.ErrorException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Fatal(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.FatalFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.FatalException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Info(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.InfoFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.InfoException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Trace(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.TraceFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.TraceException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.Warn(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.WarnFormat(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogExtensions.WarnException(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel">
+            <summary>
+                The log level.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Trace">
+            <summary>
+            Trace
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Debug">
+            <summary>
+            Debug
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Info">
+            <summary>
+            Info
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Warn">
+            <summary>
+            Warn
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Error">
+            <summary>
+            Error
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogLevel.Fatal">
+            <summary>
+            Fatal
+            </summary>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider">
+            <summary>
+            Provides a mechanism to create instances of <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog" /> objects.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.SetCurrentLogProvider(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider)">
+            <summary>
+            Sets the current log provider.
+            </summary>
+            <param name="logProvider">The log provider.</param>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.IsDisabled">
+            <summary>
+            Gets or sets a value indicating whether this is logging is disabled.
+            </summary>
+            <value>
+            <c>true</c> if logging is disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.OnCurrentLogProviderSet">
+            <summary>
+            Sets an action that is invoked when a consumer of your library has called SetCurrentLogProvider. It is 
+            important that hook into this if you are using child libraries (especially ilmerged ones) that are using
+            LibLog (or other logging abstraction) so you adapt and delegate to them.
+            <see cref="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.SetCurrentLogProvider(Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILogProvider)"/> 
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.For``1">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <typeparam name="T">The type whose name will be used for the logger.</typeparam>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.GetCurrentClassLogger">
+            <summary>
+            Gets a logger for the current class.
+            </summary>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.GetLogger(System.Type,System.String)">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <param name="type">The type whose name will be used for the logger.</param>
+            <param name="fallbackTypeName">If the type is null then this name will be used as the log name instead</param>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.GetLogger(System.String)">
+            <summary>
+            Gets a logger with the specified name.
+            </summary>
+            <param name="name">The name.</param>
+            <returns>An instance of <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context.
+            </summary>
+            <param name="message">A message.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">A optional paramater to indicate message should be destructured.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LibLogException">
+            <summary>
+            Exception thrown by LibLog.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LibLogException.#ctor(System.String)">
+            <summary>
+            Initializes a new LibLogException with the specified message.
+            </summary>
+            <param name="message">The message</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LibLogException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new LibLogException with the specified message and inner exception.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogMessageFormatter.SimulateStructuredLogging(System.Func{System.String},System.Object[])">
+            <summary>
+                Some logging frameworks support structured logging, such as serilog. This will allow you to add names to structured
+                data in a format string:
+                For example: Log("Log message to {user}", user). This only works with serilog, but as the user of LibLog, you don't
+                know if serilog is actually
+                used. So, this class simulates that. it will replace any text in {curly braces} with an index number.
+                "Log {message} to {user}" would turn into => "Log {0} to {1}". Then the format parameters are handled using regular
+                .net string.Format.
+            </summary>
+            <param name="messageBuilder">The message builder.</param>
+            <param name="formatParameters">The format parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase">
+            <summary>
+                Base class for specific log providers.
+            </summary>
+        </member>
+        <member name="F:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.ErrorInitializingProvider">
+            <summary>
+                Error message should initializing the log provider fail.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.#ctor">
+            <summary>
+                Initialize an instance of the <see cref="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase"/> class by initializing the references
+                to the nested and mapped diagnostics context-obtaining functions.
+            </summary>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.GetOpenNdcMethod">
+            <summary>
+                Returns the provider-specific method to open a nested diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a nested diagnostics context.</returns>
+        </member>
+        <member name="M:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.GetOpenMdcMethod">
+            <summary>
+                Returns the provider-specific method to open a mapped diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a mapped diagnostics context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.OpenNdc">
+            <summary>
+                Delegate defining the signature of the method opening a nested diagnostics context.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LogProviderBase.OpenMdc">
+            <summary>
+                Delegate defining the signature of the method opening a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LoupeLogProvider.WriteDelegate">
+            <summary>
+                The form of the Loupe Log.Write method we're using
+            </summary>
+        </member>
+        <member name="P:Fraunhofer.IPA.MSB.Client.Websocket.Logging.LogProviders.LoupeLogProvider.ProviderIsAvailableOverride">
+            <summary>
+                Gets or sets a value indicating whether [provider is available override]. Used in tests.
+            </summary>
+            <value>
+                <c>true</c> if [provider is available override]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Fraunhofer.IPA.MSB.Client.Websocket.Logging.Logger">
+            <summary>
+            Logger delegate.
+            </summary>
+            <param name="logLevel">The log level</param>
+            <param name="messageFunc">The message function</param>
+            <param name="exception">The exception</param>
+            <param name="formatParameters">The format parameters</param>
+            <returns>A boolean.</returns>
+        </member>
+    </members>
+</doc>

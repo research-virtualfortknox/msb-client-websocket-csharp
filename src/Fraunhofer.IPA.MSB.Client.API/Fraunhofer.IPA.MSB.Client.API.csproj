@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Product>Manufacturing Service Bus API Library for .NET</Product>
+    <Description>Library with API for MSB clients</Description>
+    <PackageTags>MSB, Manufacturing Service Bus, VFK, Virtual Fort Knox</PackageTags>
+    <RepositoryUrl>https://github.com/research-virtualfortknox/msb-client-websocket-csharp</RepositoryUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.xml</DocumentationFile>
+    <OutputPath></OutputPath>
+    <DefineConstants>TRACE;LIBLOG_EXCLUDE_CODE_COVERAGE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <DefineConstants>TRACE;LIBLOG_EXCLUDE_CODE_COVERAGE</DefineConstants>
+    <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">
+    <PackageReference Include="NJsonSchema" Version="9.13.26" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Fraunhofer.IPA.MSB.Client.API.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
