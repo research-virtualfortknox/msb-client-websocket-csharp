@@ -9,6 +9,7 @@
 
 [![Build Status](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp)
 [![Nuget](https://img.shields.io/nuget/v/Fraunhofer.IPA.MSB.Client.Websocket.svg)](https://www.nuget.org/packages/Fraunhofer.IPA.MSB.Client.Websocket/)
+[![Coverage Status](https://coveralls.io/repos/github/research-virtualfortknox/msb-client-websocket-csharp/badge.svg?branch=master)](https://coveralls.io/github/research-virtualfortknox/msb-client-websocket-csharp?branch=master)
 
 **Compatibility Matrix**
 
