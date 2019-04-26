@@ -3,7 +3,27 @@ mono: none
 os: linux
 dist: bionic
 dotnet: 2.1.502
-script: "./run-tests.sh"
+
+before_script:
+- export PATH="$PATH:$HOME/.dotnet/tools"
+
+script:
+- "./run-tests.sh"
+- dotnet tool install -g coveralls.net --version 1.0.0
+- REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
+- REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
+- REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
+- echo $TRAVIS_COMMIT
+- echo $TRAVIS_BRANCH
+- echo $REPO_COMMIT_AUTHOR
+- echo $REPO_COMMIT_AUTHOR_EMAIL
+- echo $REPO_COMMIT_MESSAGE
+- echo $TRAVIS_JOB_ID
+- csmacnz.Coveralls --reportgenerator -i artifacts/coverage/report/ --repoToken $COVERALLS_REPO_TOKEN
+  --commitId $TRAVIS_COMMIT --commitBranch $TRAVIS_BRANCH --commitAuthor "$REPO_COMMIT_AUTHOR"
+  --commitEmail "$REPO_COMMIT_AUTHOR_EMAIL" --commitMessage "$REPO_COMMIT_MESSAGE"
+  --jobId $TRAVIS_JOB_ID --serviceName "travis-ci" --useRelativePaths
+  
 deploy:
   skip_cleanup: true
   provider: script
@@ -15,6 +35,8 @@ deploy:
   on:
     tags: true
     condition: "$TRAVIS_TAG =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+    
 env:
   global:
-    secure: WIXksET6e3GzpiX4R+J2c1UZ5sdpcvCCeXFdou2Jce1Xq+T7cElX2Ul0Ylg2PN7FXT1dWTMp8JMpOhqL+AaTSnXhz2kboB1s9nhbdHi2Td3AshHpGWYl6XdrWeU4bdoyMVru9vLzJSIVn2EusEODiEDP1Vf0emStAaugehkvtGs4kpvn7N+EAhiGLGzsayH9efBaUoGx+HUw4KEVQtiBeYIsBynDOrTAwf0u93q9G0dYpOX5tNOFet9QlDCBfaXyCsj7+oqfdUKZGgoo3D+1wqvTESnRoByhBZ+O6Ep+oK2MBOk0+NIJP+A2sgzdxt6H7r8wGNhsBZyP4+11BZcUYrZjgHj2KIdsmfiX8lxqyxqnzltzlUI21ALDyAEbBuahNy4xj+iKakt9YAN4myt7UVFB404hwej0CtysWAty9R421+Tx5D73kvMhBHsGWR+bxr46I9Bx8Gh3VvMf+eXrPB6NEsGG4qwhRgoPm2f38+LbOCMTeTg1LC3X4DDOhcDb2ODrMVDVVI4JGyMgwiSHWbdUGdLtPpBh8TsDk7I8gqg1QwZlTIqeQFB7U3S0aLQFt1IbXCp9AKt7UKQTzU1eTSwRyVa3mHQAY/Jo4JYT18O8fEAwN42ntQD2civnlr+yjPoYLWlMYo7q0i8P0YEzI6gJIRMAE+9+AcRLiFIXDX0=
+  - secure: WIXksET6e3GzpiX4R+J2c1UZ5sdpcvCCeXFdou2Jce1Xq+T7cElX2Ul0Ylg2PN7FXT1dWTMp8JMpOhqL+AaTSnXhz2kboB1s9nhbdHi2Td3AshHpGWYl6XdrWeU4bdoyMVru9vLzJSIVn2EusEODiEDP1Vf0emStAaugehkvtGs4kpvn7N+EAhiGLGzsayH9efBaUoGx+HUw4KEVQtiBeYIsBynDOrTAwf0u93q9G0dYpOX5tNOFet9QlDCBfaXyCsj7+oqfdUKZGgoo3D+1wqvTESnRoByhBZ+O6Ep+oK2MBOk0+NIJP+A2sgzdxt6H7r8wGNhsBZyP4+11BZcUYrZjgHj2KIdsmfiX8lxqyxqnzltzlUI21ALDyAEbBuahNy4xj+iKakt9YAN4myt7UVFB404hwej0CtysWAty9R421+Tx5D73kvMhBHsGWR+bxr46I9Bx8Gh3VvMf+eXrPB6NEsGG4qwhRgoPm2f38+LbOCMTeTg1LC3X4DDOhcDb2ODrMVDVVI4JGyMgwiSHWbdUGdLtPpBh8TsDk7I8gqg1QwZlTIqeQFB7U3S0aLQFt1IbXCp9AKt7UKQTzU1eTSwRyVa3mHQAY/Jo4JYT18O8fEAwN42ntQD2civnlr+yjPoYLWlMYo7q0i8P0YEzI6gJIRMAE+9+AcRLiFIXDX0=
+  - secure: nhBcmSTdtcIsIslq7eHrb99Af72h4OrPo1eeUEgbkZwXvzdKs4zjqhEdFKQ/ByPWp9ZTQaEtrAvRGWH4Wr21G4yGTdV5UG3nyuWmAQ2Bfsvoxe/7MYkHRA8cl/VRwSqi+93FRdzRPJX1TjAIttvcjqxUzctSmy7tEKG5z2Vp9ivWkLbsozOaY3PoK6rn6yMqu69v2xOBF5Je4wgkS1noaUfRdcOSkOGbXhH4nU/dSCaOK4gBC2eqg487FZ3OMwqrQKlWu1os6ehvLwPmEhbIgowyhRYxDEChXlqa5ac/AMFEPW+5HktuxKVTZNkgEj7dp4TERIIyaGA/6t2QE5aa6E0EaPvFhZ9yyb9QTDpz1aMWtg02FSR1rbERCjYKqwgmtZwOGU2h2HB5Ij5JTcb2514VeSR+yFgsvJJvQ+vKYStGc3Pk1ROsaVtdKaVtzDcdSOo6bPtqwkGDmQbw+RCkMMuSazobOzRZoffKoVB9ijmVN1sIW1RXeT215TR72cBxzxD4HQfC+0mFhI2PGoncz4UZCQyaLIxoW0zvueZ13qm3Zm4qtLIDVVV6C4V8OL2r1bYVPiDdVUiQKT5uyS5K8ttvE7edC5607a9BHM2H+ZuCdxHrfHuugLFpAdp+v3yEdjNqjCsxkPRfqFchQSw/qYkG9SUmP+QW/3VkY9AFmm0=
