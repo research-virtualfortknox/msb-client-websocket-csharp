@@ -23,6 +23,6 @@ Client version compatibility to MSB versions:
 
 - If you want to `contribute`, please read the [Contribution Guidelines](.github/CONTRIBUTING.md).
 
-- If you want to `test this client` see the sample projects in the `samples` directory.
+- If you want to `test this client`, see the sample projects in the `samples` directory.
 
-- If you want to know `how to use` this client in your own project read [how to use](docs/HOW_TO_USE.md).
+- If you want to know `how to use` this client in your own project, read [how to use](docs/HOW_TO_USE.md).

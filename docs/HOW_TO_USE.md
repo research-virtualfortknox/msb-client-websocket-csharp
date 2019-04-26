@@ -30,9 +30,6 @@ Namespaces of library
 
 ```cs
 Fraunhofer.IPA.MSB.Client.API
-```
-
-```cs
 Fraunhofer.IPA.MSB.Client.Websocket
 ```
 
@@ -46,7 +43,7 @@ Fraunhofer.IPA.MSB.Client.Websocket
 
 ## Self-description of service
 
-The figure below shows a minimal required `self-description model` of a SmartObject / Application. A SmartObject / Application is a classification of a Service and dervies from it. Each service needs an UUID and a token. The uuid is competent for identification and the token is used to verify the Application / SmartObject for its owner on the MSB side. Generate uuids and tokens e.g. by a tool like https://www.uuidgenerator.net/.
+The figure below shows a minimal required `self-description model` of an Application / SmartObject. An  Application / SmartObject is a classification of a Service and dervies from it. Each service needs an UUID and a token. The UUID is competent for identification and the token is used to verify the Application / SmartObject for its owner on the MSB side. Generate uuids and tokens e.g. by a tool like https://www.uuidgenerator.net/.
 
 ![Self Description](images/SelfDescription.png)
 
@@ -54,7 +51,7 @@ The figure below shows a minimal required `self-description model` of a SmartObj
 
 #### Alternative 1 - By application.properties
 
-Add the main description by adding an `application.poperties` file to the root of your project:
+Add the main description by adding an `application.properties` file to the root of your project:
 
 ```sh
 msb.uuid=76499d88-34cf-4836-8cc1-7e0d9c54dacx
