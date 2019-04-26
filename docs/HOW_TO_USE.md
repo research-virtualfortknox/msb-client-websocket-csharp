@@ -38,7 +38,7 @@ Fraunhofer.IPA.MSB.Client.Websocket
 
 ## Communication Principle
 
-1. [Create self-description of your Service (SmartObject or Application)](##Self-description-of-service)
+1. [Create self-description of your Service (SmartObject or Application)](#Self-description-of-service)
 2. [Connect `MsbClient` to your MSB instance](#Connect-to-MSB)
 3. [Register self-description via MSB client](#Register-self-description)
 4. [Publish events](#Event-publishing) or [receive function calls](#Function-call-handling)
