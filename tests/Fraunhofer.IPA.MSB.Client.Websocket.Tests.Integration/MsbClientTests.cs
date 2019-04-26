@@ -596,8 +596,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 testSmartobject.AddEvent(testEvent);
                 Assert.True(this.testMsbClient.ConnectAsync().Result);
                 Assert.True(this.testMsbClient.RegisterAsync(testSmartobject).Result);
-                this.mockWebsocketInterface.Stop();
-                Thread.Sleep(100);
+                this.testMsbClient.Disconnect();
 
                 var raisedEvent = Assert.RaisesAnyAsync<EventArgs>(
                     h => this.testMsbClient.EventCached += h,
