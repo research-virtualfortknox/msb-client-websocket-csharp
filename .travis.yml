@@ -8,7 +8,15 @@ before_script:
 - export PATH="$PATH:$HOME/.dotnet/tools"
 
 script:
-- "./run-tests.sh"
+# Build
+- dotnet restore
+- dotnet build -c Release
+# Tests
+- dotnet test -c Release tests/Fraunhofer.IPA.MSB.Client.API.Tests.Unit/ /p:CoverletOutput=../../artifacts/coverage/Fraunhofer.IPA.MSB.Client.API.Tests.Unit/ @coverage.config
+- dotnet test -c Release tests/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit/ /p:CoverletOutput=../../artifacts/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit/ @coverage.config
+- dotnet test -c Release tests/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration/ /p:CoverletOutput=../../artifacts/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration/ @coverage.config
+- dotnet ~/.nuget/packages/reportgenerator/4.1.2/tools/netcoreapp2.0/ReportGenerator.dll "-reports:./artifacts/coverage/Fraunhofer.IPA.MSB.Client.API.Tests.Unit/coverage.opencover.xml;./artifacts/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit/coverage.opencover.xml;./artifacts/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration/coverage.opencover.xml" "-reporttypes:HtmlSummary;xml" "-targetdir:./artifacts/coverage/report"
+# Coveralls
 - dotnet tool install -g coveralls.net --version 1.0.0
 - REPO_COMMIT_AUTHOR=$(git show -s --pretty=format:"%cn")
 - REPO_COMMIT_AUTHOR_EMAIL=$(git show -s --pretty=format:"%ce")
@@ -28,6 +36,7 @@ deploy:
   skip_cleanup: true
   provider: script
   script:
+  # Nuget
   - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.API/bin/Release/Fraunhofer.IPA.MSB.Client.API.*.nupkg
     --api-key $NUGET_API_KEY
   - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.Websocket/bin/Release/Fraunhofer.IPA.MSB.Client.Websocket.*.nupkg
