@@ -17,7 +17,7 @@
 ## Prerequisites
 
 * [.NET](https://dotnet.microsoft.com/download) installed
-    *  If you are using .NET Framework make sure the .csproj is in the [new format](https://docs.microsoft.com/en-gb/dotnet/core/tools/csproj). Else you won't be able to install the nuget package in projects that use the old.csproj format. See [Nate McMaster's blog](https://natemcmaster.com/blog/2017/03/09/vs2015-to-vs2017-upgrade/) for upgrade information.
+    *  If you are using .NET Framework make sure the .csproj is in the [new format](https://docs.microsoft.com/en-gb/dotnet/core/tools/csproj), else you won't be able to install the nuget package in projects that use the old .csproj format. See [Nate McMaster's blog](https://natemcmaster.com/blog/2017/03/09/vs2015-to-vs2017-upgrade/) for upgrade information.
 * MSB client api package as package reference in your solution
 * MSB websocket client nuget package as package reference in your solution
 
