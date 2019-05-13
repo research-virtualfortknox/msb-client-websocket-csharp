@@ -324,3 +324,21 @@ return new EventDataBuilder(functionCallInfo.ResponseEvents["ResponseEvent1"])
 ## Logging
 
 The library uses [LibLog](https://github.com/damianh/LibLog) as logging abstraction. This allows every developer to use his or her preferred logging framework as usual.
+
+### Example: Logging with Serilog to Console
+
+Install nuget packages for [Serilog](https://serilog.net):
+```csharp
+nuget install Serilog
+nuget install Serilog.Sinks.Console
+```
+
+Configure Logger in your program code:
+```csharp
+Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Debug()
+                    .WriteTo.Console(outputTemplate:
+                        "[{Timestamp:yyyy-MM-dd - HH:mm:ss}] [{SourceContext:s}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+                    .CreateLogger();
+Log.Information("Sample log entry");
+```
