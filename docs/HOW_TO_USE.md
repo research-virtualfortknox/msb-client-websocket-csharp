@@ -68,7 +68,7 @@ You can read the file in your application using the `ApplicationProperties` clas
 Now you can access the properties defined in the file as properties of the `myApplicationProperties` object:
 
 ```csharp
-SmartObject mySmartobject = new SmartObject(
+SmartObject mySmartObject = new SmartObject(
                 myApplicationProperties.Uuid,
                 myApplicationProperties.Name,
                 myApplicationProperties.Description,
@@ -81,7 +81,7 @@ If you do not provide an application.properties file, use the constructor
 to define the basic self description.
 
 ```csharp
-SmartObject mySmartobject = new SmartObject(
+SmartObject mySmartObject = new SmartObject(
                 "f9f57cc2-00af-408f-9ba7-5b127e5a4822",
                 "C# Sample SmartObject",
                 "Description of C# Sample SmartObject",
@@ -103,7 +103,7 @@ Event myEvent = new Event(
                 "Description of my simple event",
                 typeof(string));
 // Add object to self-description of SmartObject
-mySmartobject.AddEvent(myEvent);
+mySmartObject.AddEvent(myEvent);
 ```
 
 #### Add event with complex data type
