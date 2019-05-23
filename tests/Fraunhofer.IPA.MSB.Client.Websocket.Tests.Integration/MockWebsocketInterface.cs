@@ -21,6 +21,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     using System.Net.Sockets;
     using Fleck;
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
+    using Serilog;
 
     public class MockWebsocketInterface
     {
@@ -49,11 +50,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 };
                 socket.OnClose = () =>
                 {
-                    Console.WriteLine("Close!");
+                    Log.Information("Close!");
                 };
                 socket.OnMessage = message =>
                 {
-                    Console.WriteLine($"Received message: {message}");
+                    Log.Information($"Received message: {message}");
                     string data = message.Substring(2, message.Length - 5);
                     data = data.Replace("\\\"", "\"");
 

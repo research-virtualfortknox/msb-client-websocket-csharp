@@ -301,6 +301,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
                 this.webSocket.Close("Normal");
                 this.receivedIOConnected = false;
+                this.webSocket = null;
             }
 
             this.Disconnected?.Invoke(this, EventArgs.Empty);
