@@ -21,6 +21,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     using System.Linq;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using Serilog;
 
     public class TestConfiguration
     {
@@ -35,20 +36,29 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
         static TestConfiguration()
         {
-            using (var file = File.OpenText("Properties/launchSettings.json"))
+            var envVars = Environment.GetEnvironmentVariables();
+            if (envVars.Contains(MsbWebsocketInterfaceUrlEnvName) && envVars.Contains(MsbSmartObjectMgmtUrlEnvName) && envVars.Contains(MsbIntegrationDesignMgmtUrlEnvKey))
             {
-                var reader = new JsonTextReader(file);
-                var jObject = JObject.Load(reader);
-
-                var variables = jObject["profiles"]
-                    .Value<JObject>()[Profile]
-                    .Value<JObject>()["environmentVariables"]
-                    .Children<JProperty>()
-                    .ToList();
-
-                foreach (var variable in variables)
+                Log.Information("Environment variables for MSB URLs are not set -> Using values of launchSettings.json");
+            }
+            else
+            {
+                Log.Information("Environment variables for MSB URLs are set -> Using values of environment variables");
+                using (var file = File.OpenText("Properties/launchSettings.json"))
                 {
-                    Environment.SetEnvironmentVariable(variable.Name, variable.Value.ToString());
+                    var reader = new JsonTextReader(file);
+                    var jObject = JObject.Load(reader);
+
+                    var variables = jObject["profiles"]
+                        .Value<JObject>()[Profile]
+                        .Value<JObject>()["environmentVariables"]
+                        .Children<JProperty>()
+                        .ToList();
+
+                    foreach (var variable in variables)
+                    {
+                        Environment.SetEnvironmentVariable(variable.Name, variable.Value.ToString());
+                    }
                 }
             }
 
