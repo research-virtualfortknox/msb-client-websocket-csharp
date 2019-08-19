@@ -43,7 +43,7 @@ deploy:
   - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.Websocket/bin/Release/Fraunhofer.IPA.MSB.Client.Websocket.*.nupkg
     --api-key $NUGET_API_KEY
   on:
-    condition: "$TRAVIS_TAGS =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+    condition: "$TRAVIS_BRANCH =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
     
 env:
   global:
