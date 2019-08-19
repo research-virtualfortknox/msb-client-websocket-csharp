@@ -716,6 +716,51 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     })).Result;
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
             }
+
+            private bool TestFunctionCallReceived = false;
+
+            [Fact]
+            public void FunctionCallback_PrimtiveFunctionParameterConversion_Integers()
+            {
+                var mockWebsocketInterface = new MockWebsocketInterface();
+                mockWebsocketInterface.Start();
+                var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
+                var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
+                var testFunction = new Function(this.GetType().GetRuntimeMethod("TestFunction", new Type[] { typeof(int), typeof(FunctionCallInfo) }), this);
+                testSmartObject.AddFunction(testFunction);
+
+                Assert.True(testMsbClient.ConnectAsync().Result);
+                Assert.True(testMsbClient.RegisterAsync(testSmartObject).Result);
+                string functionCallJson = $@"{MessageType.FUNCTION_CALLBACK} {{
+                    ""uuid"" : ""{testSmartObject.Uuid}"",
+                    ""correlationId"" : ""{Guid.NewGuid().ToString()}"",
+                    ""functionId"" : ""TestFunction"",
+                    ""functionParameters"" : {{
+                        ""testParameter"" : 1234
+                    }}
+                }}";
+
+                mockWebsocketInterface.SendMessageOfType(functionCallJson);
+                Thread.Sleep(50);
+                Assert.True(this.TestFunctionCallReceived);
+            }
+
+            [MsbFunction(
+                Id = "TestFunction",
+                Name = "Test Function")]
+            public void TestFunction(
+                [MsbFunctionParameter(Name = "testParameter")] int testParameter,
+                FunctionCallInfo functionCallInfo)
+            {
+                if (testParameter.GetType().Equals(typeof(int)))
+                {
+                    this.TestFunctionCallReceived = true;
+                }
+                else
+                {
+                    Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
+                }
+            }
         }
     }
 }

@@ -614,7 +614,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                         object deserializedParameter = null;
                         if (OpenApiMapper.IsPrimitiveDataType(currentParameterCallType))
                         {
-                            deserializedParameter = functionCallParameter.Value;
+                            deserializedParameter = Convert.ChangeType(functionCallParameter.Value, currentParameterCallType);
                         }
                         else
                         {
@@ -634,21 +634,28 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
                     var functionCallInfo = new FunctionCallInfo(this, functionCall.CorrelationId, serviceOfFunctionCall, calledFunction, responseEvents);
                     parameterArrayForInvoke[parameterArrayForInvoke.Length - 1] = functionCallInfo;
-                    var returnValue = functionOfService.FunctionPointer.DynamicInvoke(parameterArrayForInvoke);
-                    if (returnValue != null)
+                    try
                     {
-                        EventData responseEventData = (EventData)returnValue;
-                        if (calledFunction.ResponseEventIds.Contains(responseEventData.Event.Id))
+                        var returnValue = functionOfService.FunctionPointer.DynamicInvoke(parameterArrayForInvoke);
+                        if (returnValue != null)
                         {
-                            responseEventData.CorrelationId = functionCall.CorrelationId;
-                            #pragma warning disable CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
-                            this.PublishAsync(serviceOfFunctionCall, (EventData)responseEventData);
-                            #pragma warning restore CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                            EventData responseEventData = (EventData)returnValue;
+                            if (calledFunction.ResponseEventIds.Contains(responseEventData.Event.Id))
+                            {
+                                responseEventData.CorrelationId = functionCall.CorrelationId;
+                                #pragma warning disable CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                                this.PublishAsync(serviceOfFunctionCall, (EventData)responseEventData);
+                                #pragma warning restore CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                            }
+                            else
+                            {
+                                Log.Error($"Response event not published, because event '{responseEventData.Event.Id}' wasn't defined as response event of function '{calledFunction.Id}'");
+                            }
                         }
-                        else
-                        {
-                            Log.Error($"Response event not published, because event '{responseEventData.Event.Id}' wasn't defined as response event of function '{calledFunction.Id}'");
-                        }
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Log.Error($"Failed to invoke function with received parameters: {e}");
                     }
                 }
                 else
