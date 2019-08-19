@@ -43,7 +43,7 @@ deploy:
     --api-key $NUGET_API_KEY
   on:
     tags: true
-    condition: "$TRAVIS_TAG =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+    condition: "$TRAVIS_BRANCH =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
     
 env:
   global:
