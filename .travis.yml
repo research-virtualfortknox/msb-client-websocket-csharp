@@ -44,7 +44,7 @@ deploy:
     --api-key $NUGET_API_KEY
   on:
     all_branches: true
-    condition: "$TRAVIS_BRANCH =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+    condition: "env(TRAVIS_BRANCH) =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
     
 env:
   global:
