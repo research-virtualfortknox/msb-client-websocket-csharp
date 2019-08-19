@@ -7,6 +7,7 @@
     <Description>Library with API for MSB clients</Description>
     <PackageTags>MSB, Manufacturing Service Bus, VFK, Virtual Fort Knox</PackageTags>
     <RepositoryUrl>https://github.com/research-virtualfortknox/msb-client-websocket-csharp</RepositoryUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.xml</DocumentationFile>
