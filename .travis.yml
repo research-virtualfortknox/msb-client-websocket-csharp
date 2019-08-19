@@ -23,6 +23,7 @@ script:
 - REPO_COMMIT_MESSAGE=$(git show -s --pretty=format:"%s")
 - echo $TRAVIS_COMMIT
 - echo $TRAVIS_BRANCH
+- echo $TRAVIS_TAGS
 - echo $REPO_COMMIT_AUTHOR
 - echo $REPO_COMMIT_AUTHOR_EMAIL
 - echo $REPO_COMMIT_MESSAGE
@@ -42,8 +43,7 @@ deploy:
   - dotnet nuget push src/Fraunhofer.IPA.MSB.Client.Websocket/bin/Release/Fraunhofer.IPA.MSB.Client.Websocket.*.nupkg
     --api-key $NUGET_API_KEY
   on:
-    tags: true
-    condition: "$TRAVIS_BRANCH =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
+    condition: "$TRAVIS_TAGS =~ ^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$"
     
 env:
   global:
