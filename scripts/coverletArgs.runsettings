@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>opencover</Format>
+          <Exclude>[Fraunhofer.IPA.MSB.Client.API.Tests*]*,[Fraunhofer.IPA.MSB.Client.Websocket.Tests*]*,[xunit*]*</Exclude>
+          <Include>[Fraunhofer.IPA.MSB.Client.API*]*,[Fraunhofer.IPA.MSB.Client.Websocket*]*</Include>
+          <SingleHit>false</SingleHit>
+          <UseSourceLink>true</UseSourceLink>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

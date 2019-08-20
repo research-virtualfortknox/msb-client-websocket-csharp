@@ -717,7 +717,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
             }
 
-            private bool TestFunctionCallReceived = false;
+            private bool testFunctionCallReceived = false;
 
             [Fact]
             public void FunctionCallback_PrimtiveFunctionParameterConversion_Integers()
@@ -742,9 +742,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
                 mockWebsocketInterface.SendMessageOfType(functionCallJson);
                 Thread.Sleep(50);
-                Assert.True(this.TestFunctionCallReceived);
+                Assert.True(this.testFunctionCallReceived);
             }
 
+            #pragma warning disable xUnit1013 // Public method should be marked as test
             [MsbFunction(
                 Id = "TestFunction",
                 Name = "Test Function")]
@@ -754,13 +755,14 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             {
                 if (testParameter.GetType().Equals(typeof(int)))
                 {
-                    this.TestFunctionCallReceived = true;
+                    this.testFunctionCallReceived = true;
                 }
                 else
                 {
-                    Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
+                    this.Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
                 }
             }
+            #pragma warning restore xUnit1013 // Public method should be marked as test
         }
     }
 }

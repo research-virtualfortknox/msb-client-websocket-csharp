@@ -1,21 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fleck" Version="1.1.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="xunit" Version="2.4.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <ProjectReference Include="..\..\src\Fraunhofer.IPA.MSB.Client.Websocket\Fraunhofer.IPA.MSB.Client.Websocket.csproj" />
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.Tests.Shared\Fraunhofer.IPA.MSB.Client.Tests.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Fraunhofer.IPA.MSB.Client.Websocket\Fraunhofer.IPA.MSB.Client.Websocket.csproj" />
-    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.Tests.Shared\Fraunhofer.IPA.MSB.Client.Tests.Shared.csproj" />
+    <PackageReference Include="Fleck" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
