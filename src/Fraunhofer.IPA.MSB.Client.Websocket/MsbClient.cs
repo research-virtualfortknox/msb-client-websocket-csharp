@@ -643,7 +643,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                             if (responseEventData.Event.Id.Equals(EventData.NoResponseEvent.Event.Id))
                             {
                                 Log.Info("No response event sent because result of function exuction was 'EventData.NoResponseEvent'");
-                                this.PublishAsync(serviceOfFunctionCall, (EventData)responseEventData);
                             }
                             else
                             {
