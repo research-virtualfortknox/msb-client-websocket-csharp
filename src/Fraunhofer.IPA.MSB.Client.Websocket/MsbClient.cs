@@ -640,16 +640,24 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                         if (returnValue != null)
                         {
                             EventData responseEventData = (EventData)returnValue;
-                            if (calledFunction.ResponseEventIds.Contains(responseEventData.Event.Id))
+                            if (responseEventData.Event.Id.Equals(EventData.NoResponseEvent.Event.Id))
                             {
-                                responseEventData.CorrelationId = functionCall.CorrelationId;
-                                #pragma warning disable CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                                Log.Info("No response event sent because result of function exuction was 'EventData.NoResponseEvent'");
                                 this.PublishAsync(serviceOfFunctionCall, (EventData)responseEventData);
-                                #pragma warning restore CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
                             }
                             else
                             {
-                                Log.Error($"Response event not published, because event '{responseEventData.Event.Id}' wasn't defined as response event of function '{calledFunction.Id}'");
+                                if (calledFunction.ResponseEventIds.Contains(responseEventData.Event.Id))
+                                {
+                                    responseEventData.CorrelationId = functionCall.CorrelationId;
+                                    #pragma warning disable CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                                    this.PublishAsync(serviceOfFunctionCall, (EventData)responseEventData);
+                                    #pragma warning restore CS4014 // Da dieser Aufruf nicht abgewartet wird, wird die Ausführung der aktuellen Methode fortgesetzt, bevor der Aufruf abgeschlossen ist
+                                }
+                                else
+                                {
+                                    Log.Error($"Response event not published, because event '{responseEventData.Event.Id}' wasn't defined as response event of function '{calledFunction.Id}'");
+                                }
                             }
                         }
                     }

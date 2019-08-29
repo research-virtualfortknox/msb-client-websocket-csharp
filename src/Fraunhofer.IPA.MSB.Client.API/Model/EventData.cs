@@ -33,6 +33,9 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             this.Event = correspondingEvent;
         }
 
+        /// <summary>Gets EventData which can be returned if no response event should be send for a MSB function call.</summary>
+        public static EventData NoResponseEvent { get; } = new EventData(new Event("noresponseevent", "noresponseevent", "noresponseevent", null));
+
         /// <summary>Gets or sets related <see cref="Event"/> of the data</summary>
         public Event Event { get; set; }
 

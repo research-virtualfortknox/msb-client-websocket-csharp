@@ -700,69 +700,137 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 this.testSmartObject = new SmartObject("55d9de0f-618e-4051-99c1-76d7f8d92876", "Name", "Description", "0cd8e806-aaf8-4d97-b399-baaa1535c1ae");
             }
 
-            [Fact]
-            public void TestPingPong()
+            public class PingPong : OnWebsocketMessageReceived
             {
-                Assert.True(this.firstMsbClient.ConnectAsync().Result);
-                Assert.True(this.firstMsbClient.RegisterAsync(this.testSmartObject).Result);
-                Assert.True(this.secondMsbClient.ConnectAsync().Result);
-                var raisedEvent = Assert.RaisesAnyAsync<EventArgs>(
-                    h => this.secondMsbClient.ConnectionFailed += h,
-                    h => this.secondMsbClient.ConnectionFailed -= h,
-                    () => Task.Run(() =>
+
+                public PingPong(ITestOutputHelper output)
+                     : base(output)
+                {
+                }
+
+                [Fact]
+                public void TestPingPong()
+                {
+                    Assert.True(this.firstMsbClient.ConnectAsync().Result);
+                    Assert.True(this.firstMsbClient.RegisterAsync(this.testSmartObject).Result);
+                    Assert.True(this.secondMsbClient.ConnectAsync().Result);
+                    var raisedEvent = Assert.RaisesAnyAsync<EventArgs>(
+                        h => this.secondMsbClient.ConnectionFailed += h,
+                        h => this.secondMsbClient.ConnectionFailed -= h,
+                        () => Task.Run(() =>
+                        {
+                            Assert.False(this.secondMsbClient.RegisterAsync(this.testSmartObject).Result);
+                            Thread.Sleep(100);
+                        })).Result;
+                    Assert.IsType<EventArgs>(raisedEvent.Arguments);
+                }
+            }
+
+            public class FunctionCall : OnWebsocketMessageReceived
+            {
+
+                public FunctionCall(ITestOutputHelper output)
+                     : base(output)
+                {
+                }
+
+                private bool testFunctionCallReceived = false;
+
+                [Fact]
+                public void PrimtiveFunctionParameterConversion_Integers()
+                {
+                    var mockWebsocketInterface = new MockWebsocketInterface();
+                    mockWebsocketInterface.Start();
+                    var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
+                    var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
+                    var testFunction = new Function(this.GetType().GetRuntimeMethod("TestFunction", new Type[] { typeof(int), typeof(FunctionCallInfo) }), this);
+                    testSmartObject.AddFunction(testFunction);
+
+                    Assert.True(testMsbClient.ConnectAsync().Result);
+                    Assert.True(testMsbClient.RegisterAsync(testSmartObject).Result);
+                    string functionCallJson = $@"{MessageType.FUNCTION_CALLBACK} {{
+                        ""uuid"" : ""{testSmartObject.Uuid}"",
+                        ""correlationId"" : ""{Guid.NewGuid().ToString()}"",
+                        ""functionId"" : ""TestFunction"",
+                        ""functionParameters"" : {{
+                            ""testParameter"" : 1234
+                        }}
+                    }}";
+
+                    mockWebsocketInterface.SendMessageOfType(functionCallJson);
+                    Thread.Sleep(50);
+                    Assert.True(this.testFunctionCallReceived);
+                }
+
+                #pragma warning disable xUnit1013 // Public method should be marked as test
+                [MsbFunction(
+                    Id = "TestFunction",
+                    Name = "Test Function")]
+                public void TestFunction(
+                    [MsbFunctionParameter(Name = "testParameter")] int testParameter,
+                    FunctionCallInfo functionCallInfo)
+                {
+                    if (testParameter.GetType().Equals(typeof(int)))
                     {
-                        Assert.False(this.secondMsbClient.RegisterAsync(this.testSmartObject).Result);
-                        Thread.Sleep(100);
-                    })).Result;
-                Assert.IsType<EventArgs>(raisedEvent.Arguments);
-            }
-
-            private bool testFunctionCallReceived = false;
-
-            [Fact]
-            public void FunctionCallback_PrimtiveFunctionParameterConversion_Integers()
-            {
-                var mockWebsocketInterface = new MockWebsocketInterface();
-                mockWebsocketInterface.Start();
-                var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
-                var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
-                var testFunction = new Function(this.GetType().GetRuntimeMethod("TestFunction", new Type[] { typeof(int), typeof(FunctionCallInfo) }), this);
-                testSmartObject.AddFunction(testFunction);
-
-                Assert.True(testMsbClient.ConnectAsync().Result);
-                Assert.True(testMsbClient.RegisterAsync(testSmartObject).Result);
-                string functionCallJson = $@"{MessageType.FUNCTION_CALLBACK} {{
-                    ""uuid"" : ""{testSmartObject.Uuid}"",
-                    ""correlationId"" : ""{Guid.NewGuid().ToString()}"",
-                    ""functionId"" : ""TestFunction"",
-                    ""functionParameters"" : {{
-                        ""testParameter"" : 1234
-                    }}
-                }}";
-
-                mockWebsocketInterface.SendMessageOfType(functionCallJson);
-                Thread.Sleep(50);
-                Assert.True(this.testFunctionCallReceived);
-            }
-
-            #pragma warning disable xUnit1013 // Public method should be marked as test
-            [MsbFunction(
-                Id = "TestFunction",
-                Name = "Test Function")]
-            public void TestFunction(
-                [MsbFunctionParameter(Name = "testParameter")] int testParameter,
-                FunctionCallInfo functionCallInfo)
-            {
-                if (testParameter.GetType().Equals(typeof(int)))
-                {
-                    this.testFunctionCallReceived = true;
+                        this.testFunctionCallReceived = true;
+                    }
+                    else
+                    {
+                        this.Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
+                    }
                 }
-                else
+                #pragma warning restore xUnit1013 // Public method should be marked as test
+
+                [Fact]
+                public void NoResponseEventShouldBeSendForFunctionCall()
                 {
-                    this.Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
+                    var mockWebsocketInterface = new MockWebsocketInterface();
+                    mockWebsocketInterface.Start();
+                    var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
+                    var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
+                    var responseEventWhichShouldNotBeSend = new Event("ResponseEventWhichShouldNotBeSend", "", "", null);
+                    testSmartObject.AddEvent(responseEventWhichShouldNotBeSend);
+                    var testFunction = new Function(this.GetType().GetRuntimeMethod("NoResponseEventShouldBeSendForFunctionCallMsbFunction", new Type[] { typeof(FunctionCallInfo) }), this);
+                    testSmartObject.AddFunction(testFunction);
+
+                    Assert.True(testMsbClient.ConnectAsync().Result);
+                    Assert.True(testMsbClient.RegisterAsync(testSmartObject).Result);
+                    string functionCallJson = $@"{MessageType.FUNCTION_CALLBACK} {{
+                        ""uuid"" : ""{testSmartObject.Uuid}"",
+                        ""correlationId"" : ""{Guid.NewGuid().ToString()}"",
+                        ""functionId"" : ""NoResponseEventShouldBeSendForFunctionCallMsbFunction"",
+                        ""functionParameters"" : {{ }}
+                    }}";
+
+                    try
+                    {
+                        var raisedEvent = Assert.RaisesAnyAsync<EventArgs>(
+                        h => testMsbClient.EventPublished += h,
+                        h => testMsbClient.EventPublished -= h,
+                        () => Task.Run(() =>
+                        {
+                            mockWebsocketInterface.SendMessageOfType(functionCallJson);
+                            Thread.Sleep(50);
+                        })).Result;
+                    }
+                    catch (AggregateException e)
+                    {
+                        Assert.Contains("No event was raised", e.InnerException.Message);
+                    }
                 }
+
+                #pragma warning disable xUnit1013 // Public method should be marked as test
+                [MsbFunction(
+                    Id = "NoResponseEventShouldBeSendForFunctionCallMsbFunction",
+                    Name = "NoResponseEventShouldBeSendForFunctionCallMsbFunction",
+                    ResponseEvents = new string[] { "ResponseEventWhichShouldNotBeSend" })]
+                public EventData NoResponseEventShouldBeSendForFunctionCallMsbFunction(
+                    FunctionCallInfo functionCallInfo)
+                {
+                    return EventData.NoResponseEvent;
+                }
+                #pragma warning restore xUnit1013 // Public method should be marked as test
             }
-            #pragma warning restore xUnit1013 // Public method should be marked as test
         }
     }
 }

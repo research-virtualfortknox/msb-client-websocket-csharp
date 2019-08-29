@@ -43,29 +43,36 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Model
         /// <param name="type">Type to convert to data format.</param>
         public DataFormat(string rootNodeName, Type type)
         {
-            var deserializedSchema = OpenApiMapper.GetJsonSchemaOfType(type);
-
-            if (OpenApiMapper.IsPrimitiveDataType(type) || (type.IsArray && OpenApiMapper.IsPrimitiveDataType(type.GetElementType())))
+            if (type == null)
             {
-                this.Add(rootNodeName, deserializedSchema.ToObject<Dictionary<string, object>>());
+                this.Add(rootNodeName, new Dictionary<string, object>());
             }
             else
             {
-                string mainTypeName = type.Name.Replace("[]", string.Empty);
-                this.Add(rootNodeName, new Dictionary<string, string>() { { "$ref", $"#/definitions/{mainTypeName}" } });
+                var deserializedSchema = OpenApiMapper.GetJsonSchemaOfType(type);
 
-                // Move definitions to root level
-                if (deserializedSchema["definitions"] != null)
+                if (OpenApiMapper.IsPrimitiveDataType(type) || (type.IsArray && OpenApiMapper.IsPrimitiveDataType(type.GetElementType())))
                 {
-                    foreach (var defintion in deserializedSchema["definitions"].ToObject<Dictionary<string, JObject>>())
-                    {
-                        (defintion.Value as JObject).Remove("additionalProperties");
-                        this.Add(defintion.Key, defintion.Value as JObject);
-                    }
+                    this.Add(rootNodeName, deserializedSchema.ToObject<Dictionary<string, object>>());
                 }
+                else
+                {
+                    string mainTypeName = type.Name.Replace("[]", string.Empty);
+                    this.Add(rootNodeName, new Dictionary<string, string>() { { "$ref", $"#/definitions/{mainTypeName}" } });
 
-                deserializedSchema.Remove("definitions");
-                this.Add(mainTypeName, deserializedSchema.ToObject<Dictionary<string, object>>());
+                    // Move definitions to root level
+                    if (deserializedSchema["definitions"] != null)
+                    {
+                        foreach (var defintion in deserializedSchema["definitions"].ToObject<Dictionary<string, JObject>>())
+                        {
+                            (defintion.Value as JObject).Remove("additionalProperties");
+                            this.Add(defintion.Key, defintion.Value as JObject);
+                        }
+                    }
+
+                    deserializedSchema.Remove("definitions");
+                    this.Add(mainTypeName, deserializedSchema.ToObject<Dictionary<string, object>>());
+                }
             }
         }
     }
