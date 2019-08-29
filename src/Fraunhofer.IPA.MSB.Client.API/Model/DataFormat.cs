@@ -45,7 +45,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Model
         {
             var deserializedSchema = OpenApiMapper.GetJsonSchemaOfType(type);
 
-            if (OpenApiMapper.IsPrimitiveDataType(type))
+            if (OpenApiMapper.IsPrimitiveDataType(type) || (type.IsArray && OpenApiMapper.IsPrimitiveDataType(type.GetElementType())))
             {
                 this.Add(rootNodeName, deserializedSchema.ToObject<Dictionary<string, object>>());
             }
