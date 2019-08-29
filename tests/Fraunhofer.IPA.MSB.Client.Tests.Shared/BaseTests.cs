@@ -39,18 +39,12 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared
         {
             this.Output = output as TestOutputHelper;
 
-            this.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Xunit(output, outputTemplate: LogOutputTemplate)
-                .CreateLogger();
-
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Xunit(output, outputTemplate: LogOutputTemplate)
+                .WriteTo.Console(outputTemplate: LogOutputTemplate)
                 .CreateLogger();
         }
-
-        protected ILogger Logger { get; }
 
         protected TestOutputHelper Output { get; }
     }

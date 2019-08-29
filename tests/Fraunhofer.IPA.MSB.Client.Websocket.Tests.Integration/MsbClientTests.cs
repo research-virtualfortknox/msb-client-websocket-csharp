@@ -34,6 +34,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     using Fraunhofer.IPA.MSB.Client.Tests.Shared.Functions;
     using Fraunhofer.IPA.MSB.Client.Websocket.IntegrationTest.Events;
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
+    using Serilog;
     using Xunit;
     using Xunit.Abstractions;
     using Xunit.Sdk;
@@ -436,6 +437,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         Assert.True(this.testMsbClient.ConnectAsync().Result);
+                        Thread.Sleep(100);
                     })).Result;
 
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
@@ -450,6 +452,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         this.testMsbClient.Disconnect();
+                        Thread.Sleep(100);
                     })).Result;
 
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
@@ -483,6 +486,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         Assert.False(clientToNowhere.ConnectAsync().Result);
+                        Thread.Sleep(100);
                     })).Result;
 
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
@@ -532,6 +536,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         Assert.True(this.testMsbClient.RegisterAsync(testSmartObject).Result);
+                        Thread.Sleep(100);
                     })).Result;
 
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
@@ -583,6 +588,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         Assert.True(this.testMsbClient.PublishAsync(testSmartobject, testEventData).Result);
+                        Thread.Sleep(100);
                     })).Result;
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
             }
@@ -604,6 +610,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     () => Task.Run(() =>
                     {
                         Assert.False(this.testMsbClient.PublishAsync(testSmartobject, testEventData).Result);
+                        Thread.Sleep(100);
                     })).Result;
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
             }
@@ -758,7 +765,19 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     }}";
 
                     mockWebsocketInterface.SendMessageOfType(functionCallJson);
-                    Thread.Sleep(50);
+                    var maxPollTries = 10;
+                    for (int i = 0; i < maxPollTries; i++)
+                    {
+                        if (this.testFunctionCallReceived)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Thread.Sleep(50);
+                        }
+                    }
+
                     Assert.True(this.testFunctionCallReceived);
                 }
 
@@ -776,7 +795,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     }
                     else
                     {
-                        this.Logger.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
+                        Log.Error($"Expected parameter type '{typeof(int)}' but was '{testParameter.GetType()}'");
                     }
                 }
                 #pragma warning restore xUnit1013 // Public method should be marked as test
@@ -810,7 +829,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                         () => Task.Run(() =>
                         {
                             mockWebsocketInterface.SendMessageOfType(functionCallJson);
-                            Thread.Sleep(50);
+                            Thread.Sleep(100);
                         })).Result;
                     }
                     catch (AggregateException e)
