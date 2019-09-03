@@ -26,6 +26,3 @@ Client version compatibility to MSB versions:
 - If you want to `test this client`, see the sample projects in the `samples` directory.
 
 - If you want to know `how to use` this client in your own project, read [how to use](docs/HOW_TO_USE.md).
-
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp?ref=badge_large)
