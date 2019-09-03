@@ -1,4 +1,3 @@
-
 <p align="center">
   <a href="https://research.virtualfortknox.de" target="_blank" rel="noopener noreferrer">
     <img src="https://research.virtualfortknox.de/static/cms/img/vfk_research_logo.png" alt="VFK Research Logo" height="70" >
@@ -10,6 +9,7 @@
 [![Build Status](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp)
 [![Nuget](https://img.shields.io/nuget/v/Fraunhofer.IPA.MSB.Client.Websocket.svg)](https://www.nuget.org/packages/Fraunhofer.IPA.MSB.Client.Websocket/)
 [![Coverage Status](https://coveralls.io/repos/github/research-virtualfortknox/msb-client-websocket-csharp/badge.svg?branch=master&service=github&kill_cache=1)](https://coveralls.io/github/research-virtualfortknox/msb-client-websocket-csharp?branch=master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp?ref=badge_shield)
 
 **Compatibility Matrix**
 
@@ -26,3 +26,6 @@ Client version compatibility to MSB versions:
 - If you want to `test this client`, see the sample projects in the `samples` directory.
 
 - If you want to know `how to use` this client in your own project, read [how to use](docs/HOW_TO_USE.md).
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp?ref=badge_large)
