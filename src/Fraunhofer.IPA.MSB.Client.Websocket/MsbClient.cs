@@ -223,17 +223,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <summary>
         /// Gets or sets the timeout to wait for connection response of MSB.
         /// </summary>
-        private int WaitForConnectedInMilliseconds { get; set; } = 3000;
+        public int WaitForConnectedInMilliseconds { get; set; } = 3000;
 
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
         /// </summary>
-        private int WaitForRegistrationInMilliseconds { get; set; } = 10000;
+        public int WaitForRegistrationInMilliseconds { get; set; } = 10000;
 
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
         /// </summary>
-        private int WaitForPublishInMilliseconds { get; set; } = 10000;
+        public int WaitForPublishInMilliseconds { get; set; } = 10000;
 
         /// <inheritdoc/>
         public override async Task<bool> ConnectAsync()
