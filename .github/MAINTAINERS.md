@@ -1,3 +1,3 @@
 ## Active
 
-* Matthias Schneider [@ipa-maes](https://github.com/ipa-maes)
+* Matthias Schneider [@ma-sch](https://github.com/ma-sch)
