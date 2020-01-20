@@ -38,6 +38,12 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
         static TestConfiguration()
         {
             var envVars = Environment.GetEnvironmentVariables();
+            Log.Debug("Available environment variables");
+            foreach (DictionaryEntry envVar in envVars)
+            {
+                Log.Debug($"{envVar.Key}={envVar.Value}");
+            }
+
             if (envVars.Contains(MsbWebsocketInterfaceUrlEnvName) && envVars.Contains(MsbSmartObjectMgmtUrlEnvName) && envVars.Contains(MsbIntegrationDesignMgmtUrlEnvKey))
             {
                 Log.Information("Environment variables for MSB URLs are set -> Using values of environment variables");
@@ -45,12 +51,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             else
             {
                 Log.Information("Environment variables for MSB URLs are not set  -> Using values of launchSettings.json");
-                Log.Debug("Available environment variables");
-                foreach (DictionaryEntry envVar in envVars)
-                {
-                    Log.Debug($"{envVar.Key}={envVar.Value}");
-                }
-
                 using (var file = File.OpenText("Properties/launchSettings.json"))
                 {
                     var reader = new JsonTextReader(file);
@@ -72,16 +72,19 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             if (Environment.GetEnvironmentVariable(MsbWebsocketInterfaceUrlEnvName) is string websocketInterfaceEnvVarValue)
             {
                 MsbWebsocketInterfaceUrl = websocketInterfaceEnvVarValue;
+                Log.Debug($"{MsbWebsocketInterfaceUrlEnvName}={MsbWebsocketInterfaceUrl}");
             }
 
             if (Environment.GetEnvironmentVariable(MsbSmartObjectMgmtUrlEnvName) is string smartObjectMgmtEnvVarValue)
             {
                 MsbSmartObjectMgmtUrl = smartObjectMgmtEnvVarValue;
+                Log.Debug($"{MsbSmartObjectMgmtUrlEnvName}={MsbSmartObjectMgmtUrl}");
             }
 
             if (Environment.GetEnvironmentVariable(MsbIntegrationDesignMgmtUrlEnvKey) is string integrationDesignMgmtEnvVarValue)
             {
                 MsbIntegrationDesignMgmtUrl = integrationDesignMgmtEnvVarValue;
+                Log.Debug($"{MsbIntegrationDesignMgmtUrlEnvKey}={MsbIntegrationDesignMgmtUrl}");
             }
         }
 
