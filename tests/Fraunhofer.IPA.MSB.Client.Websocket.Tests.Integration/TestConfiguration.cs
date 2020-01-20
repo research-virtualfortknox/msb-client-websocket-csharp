@@ -17,6 +17,7 @@
 namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 {
     using System;
+    using System.Collections;
     using System.IO;
     using System.Linq;
     using Newtonsoft.Json;
@@ -45,11 +46,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             {
                 Log.Information("Environment variables for MSB URLs are not set  -> Using values of launchSettings.json");
                 Log.Debug("Available environment variables");
-                foreach (var envVar in envVars)
+                foreach (DictionaryEntry envVar in envVars)
                 {
-                    Log.Debug($"{envVar}");
+                    Log.Debug($"{envVar.Key}={envVar.Value}");
                 }
-                
+
                 using (var file = File.OpenText("Properties/launchSettings.json"))
                 {
                     var reader = new JsonTextReader(file);
