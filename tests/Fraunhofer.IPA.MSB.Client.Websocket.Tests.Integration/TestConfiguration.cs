@@ -39,11 +39,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             var envVars = Environment.GetEnvironmentVariables();
             if (envVars.Contains(MsbWebsocketInterfaceUrlEnvName) && envVars.Contains(MsbSmartObjectMgmtUrlEnvName) && envVars.Contains(MsbIntegrationDesignMgmtUrlEnvKey))
             {
-                Log.Information("Environment variables for MSB URLs are not set -> Using values of launchSettings.json");
+                Log.Information("Environment variables for MSB URLs are set -> Using values of environment variables");
             }
             else
             {
-                Log.Information("Environment variables for MSB URLs are set -> Using values of environment variables");
+                Log.Information("Environment variables for MSB URLs are not set  -> Using values of launchSettings.json");
+                Log.Debug("Available environment variables");
+                foreach (var envVar in envVars)
+                {
+                    Log.Debug($"{envVar}");
+                }
+                
                 using (var file = File.OpenText("Properties/launchSettings.json"))
                 {
                     var reader = new JsonTextReader(file);
