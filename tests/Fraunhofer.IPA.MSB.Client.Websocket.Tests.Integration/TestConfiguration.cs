@@ -27,7 +27,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     public class TestConfiguration
     {
         // private const string Profile = "Local";
-        private const string Profile = "OpenSourceMsb";
+        private const string Profile = "Local";
 
         private const string MsbWebsocketInterfaceUrlEnvName = "MSB_WEBSOCKET_INTERFACE_URL";
 
