@@ -43,6 +43,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared
                 .MinimumLevel.Debug()
                 .WriteTo.Xunit(output, outputTemplate: LogOutputTemplate)
                 .WriteTo.Console(outputTemplate: LogOutputTemplate)
+                .WriteTo.Debug(outputTemplate: LogOutputTemplate)
                 .CreateLogger();
         }
 
