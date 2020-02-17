@@ -386,8 +386,8 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 this.MySmartObject.AddEvent(this.testEvent);
                 Assert.True(this.MsbClient.ConnectAsync().Result);
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
+                this.MsbClient.AutoReconnect = false;
                 this.MsbClient.Disconnect();
-                Thread.Sleep(100); // Wait until disconnect finished
 
                 Assert.False(this.MsbClient.PublishAsync(this.MySmartObject, this.testEventData).Result);
                 Log.Information($"Cached events: {JsonConvert.SerializeObject(this.MsbClient.EventCache)}");
