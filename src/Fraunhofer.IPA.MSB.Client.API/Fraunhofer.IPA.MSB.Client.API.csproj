@@ -19,7 +19,7 @@
     <DocumentationFile>C:\Dev\VFK\vfk.msb.client.library.websocket.csharp\src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">
-    <PackageReference Include="NJsonSchema" Version="9.13.26" />
+    <PackageReference Include="NJsonSchema" Version="10.1.5" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Fraunhofer.IPA.MSB.Client.API.xml">

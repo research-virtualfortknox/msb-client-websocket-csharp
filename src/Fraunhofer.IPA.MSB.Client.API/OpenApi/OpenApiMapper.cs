@@ -116,7 +116,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.OpenApi
                 }
             };
 
-            var schema = JsonSchema4.FromTypeAsync(type, settings).Result;
+            var schema = JsonSchema.FromType(type, settings);
 
             schema.Title = null;
             JObject deserializedSchema = JsonConvert.DeserializeObject(schema.ToJson()) as JObject;
