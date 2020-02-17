@@ -39,6 +39,7 @@ ExecuteTestProject Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
 rm -r $ARTIFACTS_DIRECOTRY/coverage/report
 dotnet ~/.nuget/packages/reportgenerator/4.1.2/tools/netcoreapp2.0/ReportGenerator.dll "-reports:$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.API.Tests.Unit/coverage.opencover.xml;$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit/coverage.opencover.xml;$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration/coverage.opencover.xml" "-reporttypes:HtmlSummary;xml" "-targetdir:$ARTIFACTS_DIRECOTRY/coverage/report"
+dotnet ~/.nuget/packages/reportgenerator/4.4.7/tools/netcoreapp2.0/ReportGenerator.dll "-reports:$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.API.Tests.Unit/coverage.opencover.xml;$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Unit/coverage.opencover.xml;$ARTIFACTS_DIRECOTRY/coverage/Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration/coverage.opencover.xml" "-reporttypes:HtmlSummary;xml" "-targetdir:$ARTIFACTS_DIRECOTRY/coverage/report"
 
 echo "Script exited with code: $RETURN_CODE"
 
