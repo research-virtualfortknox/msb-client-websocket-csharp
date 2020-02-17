@@ -713,7 +713,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
             public class PingPong : OnWebsocketMessageReceived
             {
-
                 public PingPong(ITestOutputHelper output)
                      : base(output)
                 {
@@ -739,13 +738,12 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
             public class FunctionCall : OnWebsocketMessageReceived
             {
+                private bool testFunctionCallReceived = false;
 
                 public FunctionCall(ITestOutputHelper output)
                      : base(output)
                 {
                 }
-
-                private bool testFunctionCallReceived = false;
 
                 [Fact]
                 public void PrimtiveFunctionParameterConversion_Integers()
@@ -811,7 +809,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     mockWebsocketInterface.Start();
                     var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
                     var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
-                    var responseEventWhichShouldNotBeSend = new Event("ResponseEventWhichShouldNotBeSend", "", "", null);
+                    var responseEventWhichShouldNotBeSend = new Event("ResponseEventWhichShouldNotBeSend", string.Empty, string.Empty, null);
                     testSmartObject.AddEvent(responseEventWhichShouldNotBeSend);
                     var testFunction = new Function(this.GetType().GetRuntimeMethod("NoResponseEventShouldBeSendForFunctionCallMsbFunction", new Type[] { typeof(FunctionCallInfo) }), this);
                     testSmartObject.AddFunction(testFunction);
