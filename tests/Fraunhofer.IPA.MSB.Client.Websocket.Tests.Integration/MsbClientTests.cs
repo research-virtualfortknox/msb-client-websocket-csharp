@@ -34,6 +34,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     using Fraunhofer.IPA.MSB.Client.Tests.Shared.Functions;
     using Fraunhofer.IPA.MSB.Client.Websocket.IntegrationTest.Events;
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
+    using Newtonsoft.Json;
     using Serilog;
     using Xunit;
     using Xunit.Abstractions;
@@ -386,12 +387,15 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 Assert.True(this.MsbClient.ConnectAsync().Result);
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
                 this.MsbClient.Disconnect();
+                Thread.Sleep(100); // Wait until disconnect finished
 
                 Assert.False(this.MsbClient.PublishAsync(this.MySmartObject, this.testEventData).Result);
+                Log.Information($"Cached events: {JsonConvert.SerializeObject(this.MsbClient.EventCache)}");
                 this.MsbClient.EventCache.Should().ContainKey(this.MySmartObject);
                 this.MsbClient.EventCache[this.MySmartObject].Should().Contain(this.testEventData);
 
                 Assert.False(this.MsbClient.PublishAsync(this.MySmartObject, this.testEventData).Result);
+                Log.Information($"Cached events: {JsonConvert.SerializeObject(this.MsbClient.EventCache)}");
                 this.MsbClient.EventCache.Should().ContainKey(this.MySmartObject);
                 this.MsbClient.EventCache[this.MySmartObject].Should().HaveCount(2);
 
