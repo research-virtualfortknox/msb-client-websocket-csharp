@@ -409,6 +409,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 this.MySmartObject.AddEvent(this.testEvent);
                 Assert.True(this.MsbClient.ConnectAsync().Result);
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
+                this.MsbClient.AutoReconnect = false;
                 this.MsbClient.Disconnect();
 
                 Assert.False(this.MsbClient.PublishAsync(this.MySmartObject, this.testEventData).Result);
@@ -606,6 +607,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 testSmartobject.AddEvent(testEvent);
                 Assert.True(this.testMsbClient.ConnectAsync().Result);
                 Assert.True(this.testMsbClient.RegisterAsync(testSmartobject).Result);
+                this.MsbClient.AutoReconnect = false;
                 this.testMsbClient.Disconnect();
 
                 var raisedEvent = Assert.RaisesAnyAsync<EventArgs>(
