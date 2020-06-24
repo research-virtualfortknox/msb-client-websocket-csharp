@@ -17,7 +17,6 @@
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System.Collections.Generic;
-    using Fraunhofer.IPA.MSB.Client.API.Logging;
     using Newtonsoft.Json;
 
     /// <summary>
@@ -39,6 +38,62 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         public Configuration(Dictionary<string, ConfigurationParameterValue> parameters)
         {
             this.Parameters = parameters;
+        }
+
+        /*/// <summary>
+        /// Returns a new instance of the <see cref="Configuration"/> class based on parsing a file.
+        /// </summary>
+        /// <param name="path">The file to parse.</param>
+        /// <returns>The parsed configuration.</returns>
+        public static Configuration FromFile(string path)
+        {
+            Configuration r = null;
+
+            try
+            {
+                var file = System.IO.File.ReadAllText(path);
+                r = JsonConvert.DeserializeObject<Configuration>(file);
+            }
+            catch
+            {
+            }
+
+            return r;
+        }*/
+
+        /// <summary>
+        /// Returns a new instance of the <see cref="Configuration"/> class based on parsing a file.
+        /// </summary>
+        /// <param name="path">The file to parse.</param>
+        public void FromFile(string path)
+        {
+            try
+            {
+                var file = System.IO.File.ReadAllText(path);
+                var r = Newtonsoft.Json.Linq.JToken.Parse(file);
+
+                this.Parameters = r["parameters"].ToObject<Dictionary<string, ConfigurationParameterValue>>();
+            }
+            catch
+            {
+            }
+        }
+
+        /// <summary>
+        /// Writes a serialised description of the <see cref="Configuration"/> object into a file.
+        /// </summary>
+        /// <param name="path">The target path.</param>
+        public void ToFile(string path)
+        {
+            var s = JsonConvert.SerializeObject(this);
+
+            try
+            {
+                System.IO.File.WriteAllText(path, s);
+            }
+            catch
+            {
+            }
         }
 
         /// <summary>Gets or sets the parameters of the configuration.</summary>

@@ -85,6 +85,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
             myMsbSmartObject.AddConfigurationParameter("sampleParameter1", new ConfigurationParameterValue(1337));
             myMsbSmartObject.AddConfigurationParameter("sampleParameter2", new ConfigurationParameterValue("SampleValue"));
 
+            myMsbSmartObject.Configuration.ToFile("cp_config");
+            myMsbSmartObject.RemoveConfigurationParameter("sampleParameter1");
+            myMsbSmartObject.Configuration.FromFile("cp_config");
+
             // Add events
             Event simpleEvent = new Event("SimpleEventId", "Name of simple event", "Event with simple data format", typeof(string));
             Event flatEvent = new Event("FlatEventId", "Name of flat event", "Event with flat data format", typeof(Events.SimpleEvent));
