@@ -279,7 +279,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 }
             });
 
-            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default(CancellationToken))) == connectTask)
+            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default)) == connectTask)
             {
                 await connectTask;
                 return true;
@@ -351,7 +351,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     }
                 });
 
-                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default(CancellationToken))) == registerTask)
+                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default)) == registerTask)
                 {
                     await registerTask;
                     this.receivedIORegistered = false;
@@ -395,7 +395,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     }
                 });
 
-                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default(CancellationToken))) == publishTask)
+                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default)) == publishTask)
                 {
                     await publishTask;
                     this.receivedIOPublished = false;
@@ -446,8 +446,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
             else
             {
-                List<EventData> cachedEvents = new List<EventData>();
-                cachedEvents.Add(eventData);
+                List<EventData> cachedEvents = new List<EventData>
+                {
+                    eventData
+                };
                 this.EventCache.Add(service, cachedEvents);
             }
 
