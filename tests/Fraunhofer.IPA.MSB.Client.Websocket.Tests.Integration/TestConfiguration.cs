@@ -38,11 +38,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
         static TestConfiguration()
         {
             var envVars = Environment.GetEnvironmentVariables();
-            Log.Debug("Available environment variables");
-            foreach (DictionaryEntry envVar in envVars)
-            {
-                Log.Debug($"{envVar.Key}={envVar.Value}");
-            }
 
             if (envVars.Contains(MsbWebsocketInterfaceUrlEnvName) && envVars.Contains(MsbSmartObjectMgmtUrlEnvName) && envVars.Contains(MsbIntegrationDesignMgmtUrlEnvKey))
             {
