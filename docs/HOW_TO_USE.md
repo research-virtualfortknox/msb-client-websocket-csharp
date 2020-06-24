@@ -55,6 +55,7 @@ The figure below shows a minimal required `self-description model` of an Applica
 Add the main description by adding an `application.properties` file to the root of your project:
 
 ```sh
+msb.url=ws://localhost:8085
 msb.uuid=76499d88-34cf-4836-8cc1-7e0d9c54dacx
 msb.name=YourSmartObjectName
 msb.description=YourSmartObjectDesc

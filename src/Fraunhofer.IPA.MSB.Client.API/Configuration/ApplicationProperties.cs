@@ -20,6 +20,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Model;
 
     /// <summary>
@@ -79,15 +80,22 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
                 readProperties.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
             }
 
-            var applicationProperties = new ApplicationProperties(
-                readProperties["msb.url"],
-                readProperties["msb.type"],
-                readProperties["msb.uuid"],
-                readProperties["msb.name"],
-                readProperties["msb.description"],
-                readProperties["msb.token"]);
+            try
+            {
+                var applicationProperties = new ApplicationProperties(
+                    readProperties["msb.url"],
+                    readProperties["msb.type"],
+                    readProperties["msb.uuid"],
+                    readProperties["msb.name"],
+                    readProperties["msb.description"],
+                    readProperties["msb.token"]);
 
-            return applicationProperties;
+                return applicationProperties;
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new ApplicationPropertiesException($"At least one entry is missing in application.properties file: {e.Message}");
+            }
         }
     }
 }
