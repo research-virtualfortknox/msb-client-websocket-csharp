@@ -84,10 +84,16 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
             // Add configuration parameters
             myMsbSmartObject.AddConfigurationParameter("sampleParameter1", new ConfigurationParameterValue(1337));
             myMsbSmartObject.AddConfigurationParameter("sampleParameter2", new ConfigurationParameterValue("SampleValue"));
+            myMsbApplication.AddConfigurationParameter("sampleParameter1", new ConfigurationParameterValue(4.5f));
 
-            myMsbSmartObject.Configuration.SaveToFile("MyApplicationConfiguration.config");
-            myMsbSmartObject.RemoveConfigurationParameter("sampleParameter1");
-            myMsbSmartObject.Configuration.LoadFromFile("MyApplicationConfiguration.config");
+            // Let the library automatically persist the configuration of a service
+            myMsbSmartObject.AutoPersistConfiguration = true;
+            myMsbApplication.AutoPersistConfiguration = true;
+
+            // Load or save configuration of a service manually
+            // myMsbSmartObject.Configuration.SaveToFile("MyApplicationConfiguration.config");
+            // myMsbSmartObject.RemoveConfigurationParameter("sampleParameter1");
+            // myMsbSmartObject.Configuration.LoadFromFile("MyApplicationConfiguration.config");
 
             // Add events
             Event simpleEvent = new Event("SimpleEventId", "Name of simple event", "Event with simple data format", typeof(string));

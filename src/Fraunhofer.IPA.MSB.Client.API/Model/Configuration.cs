@@ -18,6 +18,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
     using Newtonsoft.Json;
@@ -40,7 +41,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
         /// <param name="parameters">The parameters of the <see cref="Configuration"/></param>
-        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters)
+        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters) 
+            : this()
         {
             this.Parameters = parameters;
         }
@@ -58,7 +60,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         {
             try
             {
-                var configurationFile = System.IO.File.ReadAllText(path);
+                var configurationFile = File.ReadAllText(path);
                 var loadedConfiguration = JsonConvert.DeserializeObject<Configuration>(configurationFile);
 
                 return loadedConfiguration;
@@ -78,7 +80,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         {
             try
             {
-                var configurationFile = System.IO.File.ReadAllText(path);
+                var configurationFile = File.ReadAllText(path);
                 var loadedConfiguration = Newtonsoft.Json.Linq.JToken.Parse(configurationFile);
 
                 this.Parameters = loadedConfiguration["parameters"].ToObject<Dictionary<string, ConfigurationParameterValue>>();
@@ -100,7 +102,9 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
             try
             {
-                System.IO.File.WriteAllText(path, configurationAsJsonString);
+                var configFileDirectory = Path.GetDirectoryName(path);
+                Directory.CreateDirectory(configFileDirectory);
+                File.WriteAllText(path, configurationAsJsonString);
             }
             catch (Exception e)
             {

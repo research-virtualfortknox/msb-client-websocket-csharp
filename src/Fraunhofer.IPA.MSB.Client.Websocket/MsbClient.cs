@@ -19,6 +19,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using Fraunhofer.IPA.MSB.Client.API;
@@ -570,8 +571,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     {
                         var service = this.RegisteredServices[serviceUuid];
                         var configParameters = ((JObject)configMessage["params"]).ToObject<Dictionary<string, object>>();
+                        foreach (var configParameter in configParameters)
+                        {
+                            service.Configuration.Parameters[configParameter.Key] = new ConfigurationParameterValue(configParameter.Value);
+                        }
+
                         ConfigurationParameterReceivedEventArgs eventArgs = new ConfigurationParameterReceivedEventArgs(service, configParameters);
                         this.ConfigurationParameterReceived?.Invoke(this, eventArgs);
+                        if (service.AutoPersistConfiguration)
+                        {
+                            service.Configuration.SaveToFile(service.ConfigurationPersistencePath);
+                        }
                     }
                     else
                     {
@@ -611,6 +621,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     {
                         functionCall.FunctionParameters = new Dictionary<string, object>();
                     }
+
                     var parameterArrayForInvoke = new object[parameters.Length];
                     foreach (var functionCallParameter in functionCall.FunctionParameters)
                     {
