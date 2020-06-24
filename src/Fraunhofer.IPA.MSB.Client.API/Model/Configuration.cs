@@ -16,7 +16,10 @@
 
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
+    using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
     using Newtonsoft.Json;
 
@@ -25,6 +28,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     /// </summary>
     public class Configuration
     {
+        private static readonly ILog Log = LogProvider.For<Configuration>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
@@ -36,7 +41,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
         /// <param name="parameters">The parameters of the <see cref="Configuration"/></param>
-        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters)
+        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters) 
+            : this()
         {
             this.Parameters = parameters;
         }
@@ -44,5 +50,67 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>Gets or sets the parameters of the configuration.</summary>
         [JsonProperty("parameters")]
         public Dictionary<string, ConfigurationParameterValue> Parameters { get; set; } = new Dictionary<string, ConfigurationParameterValue>();
+
+        /// <summary>
+        /// Returns a new instance of the <see cref="Configuration"/> parsing a file.
+        /// </summary>
+        /// <param name="path">The file to parse.</param>
+        /// <returns>The parsed configuration.</returns>
+        public static Configuration FromFile(string path)
+        {
+            try
+            {
+                var configurationFile = File.ReadAllText(path);
+                var loadedConfiguration = JsonConvert.DeserializeObject<Configuration>(configurationFile);
+
+                return loadedConfiguration;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to create configuration from file: {e.Message}");
+                throw new ConfigurationPersistException($"Failed to create configuration from file: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Loads the <see cref="Configuration.Parameters"/> parsing a file.
+        /// </summary>
+        /// <param name="path">The file to parse.</param>
+        public void LoadFromFile(string path)
+        {
+            try
+            {
+                var configurationFile = File.ReadAllText(path);
+                var loadedConfiguration = Newtonsoft.Json.Linq.JToken.Parse(configurationFile);
+
+                this.Parameters = loadedConfiguration["parameters"].ToObject<Dictionary<string, ConfigurationParameterValue>>();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to load configuration from file: {e.Message}");
+                throw new ConfigurationPersistException($"Failed to load configuration from file: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Writes the <see cref="Configuration"/> serialized into a file.
+        /// </summary>
+        /// <param name="path">The target path.</param>
+        public void SaveToFile(string path)
+        {
+            var configurationAsJsonString = JsonConvert.SerializeObject(this);
+
+            try
+            {
+                var configFileDirectory = Path.GetDirectoryName(path);
+                Directory.CreateDirectory(configFileDirectory);
+                File.WriteAllText(path, configurationAsJsonString);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to save configuration to file: {e.Message}");
+                throw new ConfigurationPersistException($"Failed to save configuration to file: {e.Message}");
+            }
+        }
     }
 }

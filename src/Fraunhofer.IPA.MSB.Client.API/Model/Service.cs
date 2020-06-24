@@ -18,9 +18,9 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Reflection;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
-    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
     using Newtonsoft.Json;
@@ -33,6 +33,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         private static readonly ILog Log = LogProvider.For<Service>();
 
         private Dictionary<AbstractFunctionHandler, List<Function>> registeredFunctionHandlerAndRelatedFunctions = new Dictionary<AbstractFunctionHandler, List<Function>>();
+
+        private bool autoPersistConfiguration = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Service"/> class.
@@ -47,6 +49,20 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             this.Description = description;
             this.Uuid = uuid;
             this.Token = token;
+
+            this.ConfigurationPersistencePath = $"config/{this.Uuid}.config";
+
+            if (this.AutoPersistConfiguration)
+            {
+                if (File.Exists(this.ConfigurationPersistencePath))
+                {
+                    this.Configuration.LoadFromFile(this.ConfigurationPersistencePath);
+                }
+                else
+                {
+                    Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
+                }
+            }
         }
 
         /// <summary>Gets or sets name of the service.</summary>
@@ -68,6 +84,35 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>Gets or sets configuration of the service.</summary>
         [JsonProperty("configuration")]
         public Configuration Configuration { get; protected set; } = new Configuration();
+
+        /// <summary>Gets or sets a value indicating whether the configuration of services is automatically persisted into a file.</summary>
+        [JsonIgnore]
+        public bool AutoPersistConfiguration {
+            get
+            {
+                return this.autoPersistConfiguration;
+            }
+
+            set
+            {
+                this.autoPersistConfiguration = value;
+                if (this.autoPersistConfiguration)
+                {
+                    if (File.Exists(this.ConfigurationPersistencePath))
+                    {
+                        this.Configuration.LoadFromFile(this.ConfigurationPersistencePath);
+                    }
+                    else
+                    {
+                        Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
+                    }
+                }
+            }
+        }
+
+        /// <summary>Gets or sets the path where the service configurations are saved to.</summary>
+        [JsonIgnore]
+        public string ConfigurationPersistencePath { get; set; }
 
         /// <summary>Gets or sets events of the service.</summary>
         [JsonProperty("events")]

@@ -1,4 +1,4 @@
-﻿// <copyright file="ServiceNotRegisteredException.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
+﻿// <copyright file="ConfigurationPersistException.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
 // Copyright 2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,16 +19,16 @@ namespace Fraunhofer.IPA.MSB.Client.API.Exceptions
     using System;
 
     /// <summary>
-    /// Exception that is thrown when an operation should be executed for a service which wasn't registered before.
+    /// Exception that is thrown when an problem with persistence of configuration occurs.
     /// </summary>
     /// <seealso cref="System.Exception" />
-    public class ServiceNotRegisteredException : Exception
+    public class ConfigurationPersistException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceNotRegisteredException"/> class.
+        /// Initializes a new instance of the <see cref="ConfigurationPersistException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public ServiceNotRegisteredException(string message)
+        public ConfigurationPersistException(string message)
             : base(message)
         {
         }

@@ -57,14 +57,13 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             get
             {
                 var jsonSchemaOfParameterType = OpenApiMapper.GetJsonSchemaOfType(this.Value.GetType());
-                try
+
+                if (jsonSchemaOfParameterType.ContainsKey("format"))
                 {
                     return jsonSchemaOfParameterType.GetValue("format").ToString();
                 }
-                catch (NullReferenceException)
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
     }

@@ -19,6 +19,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using Fraunhofer.IPA.MSB.Client.API;
@@ -279,7 +280,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 }
             });
 
-            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default(CancellationToken))) == connectTask)
+            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default)) == connectTask)
             {
                 await connectTask;
                 return true;
@@ -351,7 +352,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     }
                 });
 
-                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default(CancellationToken))) == registerTask)
+                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default)) == registerTask)
                 {
                     await registerTask;
                     this.receivedIORegistered = false;
@@ -395,7 +396,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     }
                 });
 
-                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default(CancellationToken))) == publishTask)
+                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default)) == publishTask)
                 {
                     await publishTask;
                     this.receivedIOPublished = false;
@@ -446,8 +447,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
             else
             {
-                List<EventData> cachedEvents = new List<EventData>();
-                cachedEvents.Add(eventData);
+                List<EventData> cachedEvents = new List<EventData>
+                {
+                    eventData
+                };
                 this.EventCache.Add(service, cachedEvents);
             }
 
@@ -568,8 +571,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     {
                         var service = this.RegisteredServices[serviceUuid];
                         var configParameters = ((JObject)configMessage["params"]).ToObject<Dictionary<string, object>>();
+                        foreach (var configParameter in configParameters)
+                        {
+                            service.Configuration.Parameters[configParameter.Key] = new ConfigurationParameterValue(configParameter.Value);
+                        }
+
                         ConfigurationParameterReceivedEventArgs eventArgs = new ConfigurationParameterReceivedEventArgs(service, configParameters);
                         this.ConfigurationParameterReceived?.Invoke(this, eventArgs);
+                        if (service.AutoPersistConfiguration)
+                        {
+                            service.Configuration.SaveToFile(service.ConfigurationPersistencePath);
+                        }
                     }
                     else
                     {
@@ -604,6 +616,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 {
                     var pointer = functionOfService.FunctionPointer;
                     var parameters = functionOfService.FunctionPointer.Method.GetParameters();
+
+                    if (functionCall.FunctionParameters is null)
+                    {
+                        functionCall.FunctionParameters = new Dictionary<string, object>();
+                    }
 
                     var parameterArrayForInvoke = new object[parameters.Length];
                     foreach (var functionCallParameter in functionCall.FunctionParameters)
