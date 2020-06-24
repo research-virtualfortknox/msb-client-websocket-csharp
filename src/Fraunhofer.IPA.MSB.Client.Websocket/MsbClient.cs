@@ -607,6 +607,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     var pointer = functionOfService.FunctionPointer;
                     var parameters = functionOfService.FunctionPointer.Method.GetParameters();
 
+                    if (functionCall.FunctionParameters is null)
+                    {
+                        functionCall.FunctionParameters = new Dictionary<string, object>();
+                    }
                     var parameterArrayForInvoke = new object[parameters.Length];
                     foreach (var functionCallParameter in functionCall.FunctionParameters)
                     {
