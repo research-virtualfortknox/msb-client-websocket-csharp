@@ -16,6 +16,7 @@
 
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
+    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
 
     /// <summary>
@@ -32,6 +33,15 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <param name="token">The <see cref="Service.Token"/> of the <see cref="SmartObject"/>.</param>
         public SmartObject(string uuid, string name, string description, string token)
             : base(uuid, name, description, token)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartObject"/> class.
+        /// </summary>
+        /// <param name="msbProperties">MSB properties to use for creation of the <see cref="SmartObject"/>.</param>
+        public SmartObject(MsbProperties msbProperties)
+            : base(msbProperties.Uuid, msbProperties.Name, msbProperties.Description, msbProperties.Token)
         {
         }
 

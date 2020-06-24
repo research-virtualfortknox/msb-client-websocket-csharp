@@ -48,7 +48,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
             this.myMsbClient.AutoReconnectIntervalInMilliseconds = 30000;
 
             // Sample
-            this.GenerateServiceFromApplicationPropertiesFile();
+            this.GenerateServiceFromProperties();
             this.AddEventWithPrimtiveTypeToSelfDescription();
             this.AddEventWithComplexTypeToSelfDescription();
             this.AddFunctionToSelfDescription();
@@ -132,14 +132,15 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
             }
         }
 
-        private void GenerateServiceFromApplicationPropertiesFile()
+        private void GenerateServiceFromProperties()
         {
-            ApplicationProperties myApplicationProperties = ApplicationProperties.Read();
-            this.mySmartobject = new SmartObject(
-                myApplicationProperties.Uuid,
-                myApplicationProperties.Name,
-                myApplicationProperties.Description,
-                myApplicationProperties.Token);
+            // Read MSB properties from application.properties file
+            var myMsbProperties = MsbProperties.ReadFromPropertiesFile("application.properties");
+            this.mySmartobject = new SmartObject(myMsbProperties);
+
+            // Read MSB properties from environment variables
+            // var myMsbProperties= MsbProperties.ReadFromEnvironmentVariables();
+            // this.mySmartobject = new SmartObject(myMsbProperties);
         }
 
         private void GenerateServiceWithoutApplicationPropertiesFile()

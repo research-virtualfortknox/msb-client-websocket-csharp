@@ -63,21 +63,56 @@ msb.token=5e0d9c54dacx
 msb.type=SmartObject
 ```
 
-You can read the file in your application using the `ApplicationProperties` class.
+You can read the file in your application using the `MsbProperties` class.
 ```csharp
- ApplicationProperties myApplicationProperties = ApplicationProperties.Read();
+ MsbProperties myMsbProperties = MsbProperties.ReadFromPropertiesFile("application.properties");
 ```
-Now you can access the properties defined in the file as properties of the `myApplicationProperties` object:
+Now you can access the properties defined in the file as properties of the `myMsbProperties` object:
 
 ```csharp
 SmartObject mySmartObject = new SmartObject(
-                myApplicationProperties.Uuid,
-                myApplicationProperties.Name,
-                myApplicationProperties.Description,
-                myApplicationProperties.Token);
+                myMsbProperties.Uuid,
+                myMsbProperties.Name,
+                myMsbProperties.Description,
+                myMsbProperties.Token);
+```
+or by passing the whole MsbProperties object to the constructor:
+```csharp
+SmartObject mySmartObject = new SmartObject(myMsbProperties);
 ```
 
-#### Alternative 2 - By constructor
+#### Alternative 2 - By environment variables
+
+Add the main description by defining environment variables:
+
+```sh
+MSB_URL=ws://localhost:8085
+MSB_UUID=76499d88-34cf-4836-8cc1-7e0d9c54dacx
+MSB_NAME=YourSmartObjectName
+MSB_DESCRIPTION=YourSmartObjectDesc
+MSB_TOKEN=5e0d9c54dacx
+MSB_TYPE=SmartObject
+```
+
+You can read the environment variables in your application using the `MsbProperties` class.
+```csharp
+ MsbProperties myMsbProperties = MsbProperties.ReadFromEnvironmentVariables();
+```
+Now you can access the properties defined in the environment variables as properties of the `myMsbProperties` object:
+
+```csharp
+SmartObject mySmartObject = new SmartObject(
+                myMsbProperties.Uuid,
+                myMsbProperties.Name,
+                myMsbProperties.Description,
+                myMsbProperties.Token);
+```
+or by passing the whole MsbProperties object to the constructor:
+```csharp
+SmartObject mySmartObject = new SmartObject(myMsbProperties);
+```
+
+#### Alternative 3 - By constructor
 
 If you do not provide an application.properties file, use the constructor 
 to define the basic self description.

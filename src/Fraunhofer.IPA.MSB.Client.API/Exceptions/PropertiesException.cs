@@ -22,13 +22,13 @@ namespace Fraunhofer.IPA.MSB.Client.API.Exceptions
     /// Exception that is thrown when an problem with persistence of configuration occurs.
     /// </summary>
     /// <seealso cref="System.Exception" />
-    public class ApplicationPropertiesException : Exception
+    public class PropertiesException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigurationPersistException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public ApplicationPropertiesException(string message)
+        public PropertiesException(string message)
             : base(message)
         {
         }

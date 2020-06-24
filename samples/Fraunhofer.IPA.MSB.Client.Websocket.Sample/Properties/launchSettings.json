@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Fraunhofer.IPA.MSB.Client.Websocket.Sample": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MSB_DESCRIPTION": "Description of C# Sample Client",
+        "MSB_TYPE": "SmartObject",
+        "MSB_NAME": "C# Sample Client",
+        "MSB_UUID": "ca29e25e-fdf4-4c6d-9cd4-f7ed33e61cfb",
+        "MSB_URL": "ws://localhost:8085",
+        "MSB_TOKEN": "7796538d-c6c3-4467-821e-94fabc3c904b"
+      }
+    }
+  }
+}

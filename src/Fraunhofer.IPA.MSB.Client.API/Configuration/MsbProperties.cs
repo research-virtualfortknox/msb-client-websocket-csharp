@@ -24,11 +24,11 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
     using Fraunhofer.IPA.MSB.Client.API.Model;
 
     /// <summary>
-    /// Handles the application.properties file.
+    /// Handles the MSB properties.
     /// </summary>
-    public class ApplicationProperties
+    public class MsbProperties
     {
-        private ApplicationProperties(string url, string classType, string uuid, string name, string description, string token)
+        private MsbProperties(string url, string classType, string uuid, string name, string description, string token)
         {
             this.Url = url;
             this.ServiceType = classType;
@@ -71,18 +71,18 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
         /// <summary>
         /// Read .properties file.
         /// </summary>
-        /// <returns>True, if file was successfully read.</returns>
-        public static ApplicationProperties Read()
+        /// <returns>The read MSB properties.</returns>
+        public static MsbProperties ReadFromPropertiesFile(string path)
         {
             var readProperties = new Dictionary<string, string>();
-            foreach (var row in File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "application.properties")))
+            foreach (var row in File.ReadAllLines(path))
             {
                 readProperties.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
             }
 
             try
             {
-                var applicationProperties = new ApplicationProperties(
+                var msbProperties = new MsbProperties(
                     readProperties["msb.url"],
                     readProperties["msb.type"],
                     readProperties["msb.uuid"],
@@ -90,12 +90,38 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
                     readProperties["msb.description"],
                     readProperties["msb.token"]);
 
-                return applicationProperties;
+                return msbProperties;
             }
             catch (KeyNotFoundException e)
             {
-                throw new ApplicationPropertiesException($"At least one entry is missing in application.properties file: {e.Message}");
+                throw new PropertiesException($"At least one entry is missing in application.properties file: {e.Message}");
             }
+        }
+
+        /// <summary>
+        /// Read MSB properties from environment variables.
+        /// </summary>
+        /// <returns>The read MSB properties.</returns>
+        public static MsbProperties ReadFromEnvironmentVariables()
+        {
+            var readProperties = new Dictionary<string, string>();
+
+            var msbUrl = Environment.GetEnvironmentVariable("MSB_URL") ?? throw new PropertiesException($"Environment variable 'MSB_URL' is missing");
+            var msbType = Environment.GetEnvironmentVariable("MSB_TYPE") ?? throw new PropertiesException($"Environment variable 'MSB_TYPE' is missing");
+            var msbUuid = Environment.GetEnvironmentVariable("MSB_UUID") ?? throw new PropertiesException($"Environment variable 'MSB_UUID' is missing");
+            var msbName = Environment.GetEnvironmentVariable("MSB_NAME") ?? throw new PropertiesException($"Environment variable 'MSB_NAME' is missing");
+            var msbDescription = Environment.GetEnvironmentVariable("MSB_DESCRIPTION") ?? throw new PropertiesException($"Environment variable 'MSB_DESCRIPTION' is missing");
+            var msbToken = Environment.GetEnvironmentVariable("MSB_TOKEN") ?? throw new PropertiesException($"Environment variable 'MSB_TOKEN' is missing");
+
+            var msbProperties = new MsbProperties(
+                msbUrl,
+                msbType,
+                msbUuid,
+                msbName,
+                msbDescription,
+                msbToken);
+
+            return msbProperties;
         }
     }
 }
