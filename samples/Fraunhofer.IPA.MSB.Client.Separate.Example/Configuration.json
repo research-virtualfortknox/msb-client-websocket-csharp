@@ -1,31 +1,35 @@
 ﻿{
+  "parameters": {
     "interfaces": {
+      "value": {
         "mqttInterface1": {
-            "interfaceIdent": "MQTT",
-            "instruction": {
-                "subscriptions": {
-                    "sub1": {
-                        "EventId": "event1",
-                        "FunctionId": "function1",
-                        "IntegrationFlows": {
-                            "flow1": {
-                                "Parametermapping": {
-                                    "data1": "data2"
-                                }
-                            }
-                        },
-                        "Ip": "127.0.0.1",
-                        "Port": 1883
-                    }                    
-                },
-                "publications": {
-                    "pub1": {
-                        "EventId": "event1",
-                        "Ip": "127.0.0.1",
-                        "Port": 1883
+          "interfaceIdent": "MQTT",
+          "instruction": {
+            "subscriptions": {
+              "sub1": {
+                "EventId": "event1",
+                "IntegrationFlows": {
+                  "flow1": {
+                    "FunctionId": "function1",
+                    "Parametermapping": {
+                      "data1": "data2"
                     }
-                }
+                  }
+                },
+                "Ip": "127.0.0.1",
+                "Port": 1883
+              }
+            },
+            "publications": {
+              "pub1": {
+                "EventId": "event1",
+                "Ip": "127.0.0.1",
+                "Port": 1883
+              }
             }
+          }
         }
+      }
     }
+  }
 }

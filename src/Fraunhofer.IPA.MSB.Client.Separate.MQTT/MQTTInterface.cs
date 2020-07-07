@@ -160,6 +160,11 @@
 
                 this.mqttClient.ApplicationMessageReceivedHandler = new MQTTnet.Client.Receiving.MqttApplicationMessageReceivedHandlerDelegate(e =>
                 {
+                    if (e.ApplicationMessage.Payload == null)
+                    {
+                        return;
+                    }
+
                     string msg = System.Text.Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
                     var deserializedData = JsonConvert.DeserializeObject<EventData>(msg);

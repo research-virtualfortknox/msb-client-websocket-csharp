@@ -11,9 +11,9 @@
     class Program
     {
         public class funktionen {
-            public void Funktion1(string data1)
+            public void Funktion1(string data1, FunctionCallInfo info)
             {
-
+                Console.WriteLine(data1);
             }
         }
 
@@ -38,6 +38,7 @@
 
             var f = new funktionen();
             Function f1 = new Function("function1", "Funktion 1", "Funktion 1", typeof(funktionen).GetMethod("Funktion1"), f);
+            myMsbSmartObject.AddFunction(f1);
 
             // Register stuff internally
             myMsbClient.RegisterAsync(myMsbSmartObject).Wait();
@@ -48,7 +49,6 @@
             // Publish events
             while (true)
             {
-
                 Thread.Sleep(3000);
             }
         }

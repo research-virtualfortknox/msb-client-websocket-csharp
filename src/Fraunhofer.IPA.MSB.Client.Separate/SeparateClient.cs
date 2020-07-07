@@ -61,7 +61,16 @@
         {
             if (serviceToRegister.Configuration.Parameters.ContainsKey("interfaces"))
             {
-                var o = (Dictionary<string, InterfaceInstruction>)serviceToRegister.Configuration.Parameters["interfaces"].Value;
+                Dictionary<string, InterfaceInstruction> o;
+
+                if (serviceToRegister.Configuration.Parameters["interfaces"].Value.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
+                {
+                    o = ((Newtonsoft.Json.Linq.JObject)serviceToRegister.Configuration.Parameters["interfaces"].Value).ToObject<Dictionary<string, InterfaceInstruction>>();
+                }
+                else
+                {
+                    o = (Dictionary<string, InterfaceInstruction>)serviceToRegister.Configuration.Parameters["interfaces"].Value;
+                }
 
                 Dictionary<string, Function> functionRegister = new Dictionary<string, Function>();
                 foreach (var f in serviceToRegister.Functions)
@@ -77,7 +86,17 @@
                     {
                         case "MQTT":
                             {
-                                var config = (Fraunhofer.IPA.MSB.Client.Separate.MQTT.MQTTConfiguration)v.instruction;
+                                Fraunhofer.IPA.MSB.Client.Separate.MQTT.MQTTConfiguration config;
+
+                                if (v.instruction.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
+                                {
+                                    config = ((Newtonsoft.Json.Linq.JObject)v.instruction).ToObject<Fraunhofer.IPA.MSB.Client.Separate.MQTT.MQTTConfiguration>();
+                                }
+                                else
+                                {
+                                    config = (Fraunhofer.IPA.MSB.Client.Separate.MQTT.MQTTConfiguration)v.instruction;
+                                }
+
                                 this.interfaces.Add(o_.Key, new MQTT.MQTTInterface(config));
 
                                 foreach (var sub in config.subscriptions)
