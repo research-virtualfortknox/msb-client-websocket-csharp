@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Fraunhofer.IPA.MSB.Client.Separate\Fraunhofer.IPA.MSB.Client.Separate.csproj" />
+    <ProjectReference Include="..\..\src\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Configuration.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

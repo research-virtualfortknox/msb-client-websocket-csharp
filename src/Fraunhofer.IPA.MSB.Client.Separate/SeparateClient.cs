@@ -24,6 +24,7 @@
     public class SeparateClient : AbstractMsbClient
     {
         Dictionary<string, Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces.IBaseInterface> interfaces;
+        Dictionary<string, MSB.Client.API.Model.Function> functions;
 
         public SeparateClient()
         {
@@ -62,6 +63,12 @@
             {
                 var o = (Dictionary<string, InterfaceInstruction>)serviceToRegister.Configuration.Parameters["interfaces"].Value;
 
+                Dictionary<string, Function> functionRegister = new Dictionary<string, Function>();
+                foreach (var f in serviceToRegister.Functions)
+                {
+                    functionRegister.Add(f.Id, f);
+                }
+
                 foreach (var o_ in o)
                 {
                     var v = o_.Value;
@@ -72,6 +79,15 @@
                             {
                                 var config = (Fraunhofer.IPA.MSB.Client.Separate.MQTT.MQTTConfiguration)v.instruction;
                                 this.interfaces.Add(o_.Key, new MQTT.MQTTInterface(config));
+
+                                foreach (var sub in config.subscriptions)
+                                {
+                                    foreach (var intf in sub.Value.IntegrationFlows)
+                                    {
+                                        intf.Value.FunctionPointer = functionRegister[intf.Value.FunctionId].FunctionPointer;
+                                    }
+                                }
+
                                 break;
                             }
 

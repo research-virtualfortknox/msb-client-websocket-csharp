@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj" />
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.Separate.MQTT\Fraunhofer.IPA.MSB.Client.Separate.MQTT.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -5,15 +5,16 @@ namespace Fraunhofer.IPA.MSB.Client.Separate.Common
 {
     public class IntegrationFlow
     {
+        public string FunctionId;
         public Delegate FunctionPointer;
-        public Dictionary<String, String> Parametermapping;
+        public Dictionary<string, string> Parametermapping;
 
-        public void Invoke(Dictionary<String, Object> data)
+        public void Invoke(Dictionary<string, object> data)
         {
-            var parameters = FunctionPointer.Method.GetParameters();
+            var parameters = this.FunctionPointer.Method.GetParameters();
             var parameterArrayForInvoke = new object[parameters.Length];
 
-            foreach (var eintrag in Parametermapping)
+            foreach (var eintrag in this.Parametermapping)
             {
                 int currentParameterCallIndex = 0;
                 for (; currentParameterCallIndex < parameters.Length; currentParameterCallIndex++)
@@ -24,14 +25,14 @@ namespace Fraunhofer.IPA.MSB.Client.Separate.Common
                     }
                 }
 
-                Object deserializedParameter = null;
+                object deserializedParameter = null;
 
                 if (data.ContainsKey(eintrag.Value)) deserializedParameter = data[eintrag.Value];
 
                 parameterArrayForInvoke[currentParameterCallIndex] = deserializedParameter;
             }
 
-            FunctionPointer.DynamicInvoke(parameterArrayForInvoke);
+            this.FunctionPointer.DynamicInvoke(parameterArrayForInvoke);
         }
     }
 }
