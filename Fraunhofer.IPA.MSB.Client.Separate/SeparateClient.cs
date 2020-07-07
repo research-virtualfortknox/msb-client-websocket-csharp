@@ -15,7 +15,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
-    public class interfaceInstruction
+    public class InterfaceInstruction
     {
         public string interfaceIdent;
         public object instruction;
@@ -23,23 +23,25 @@
 
     public class SeparateClient : AbstractMsbClient
     {
-        Dictionary<String, Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces.IBaseInterface> interfaces;
+        Dictionary<string, Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces.IBaseInterface> interfaces;
 
         public SeparateClient()
         {
             this.interfaces = new Dictionary<string, Common.Interfaces.IBaseInterface>();
         }
 
-        public override Task<bool> ConnectAsync()
+        public override async Task<bool> ConnectAsync()
         {
             foreach (var i in this.interfaces)
             {
                 i.Value.Start();
             }
+
+            return true;
         }
 
         /// <summary>
-        /// Disconnect from MSB.
+        /// Disconnect interfaces.
         /// </summary>
         public override void Disconnect()
         {
@@ -58,7 +60,7 @@
         {
             if (serviceToRegister.Configuration.Parameters.ContainsKey("interfaces"))
             {
-                var o = (Dictionary<string, interfaceInstruction>)serviceToRegister.Configuration.Parameters["interfaces"].Value;
+                var o = (Dictionary<string, InterfaceInstruction>)serviceToRegister.Configuration.Parameters["interfaces"].Value;
 
                 foreach (var o_ in o)
                 {
