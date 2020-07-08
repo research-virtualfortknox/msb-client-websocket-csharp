@@ -18,6 +18,33 @@
                 },
                 "Ip": "127.0.0.1",
                 "Port": 1883
+              },
+              "sub2": {
+                "EventId": "event2",
+                "IntegrationFlows": {
+                  "flow1": {
+                    "FunctionId": "function2",
+                    "Parametermapping": {
+                      "data1": "dataObject.MyString",
+                      "MyInteger": "dataObject.MyInteger"
+                    }
+                  }
+                },
+                "Ip": "127.0.0.1",
+                "Port": 1883
+              },
+              "sub3": {
+                "EventId": "event2",
+                "IntegrationFlows": {
+                  "flow1": {
+                    "FunctionId": "function3",
+                    "Parametermapping": {
+                      "ev": "dataObject"
+                    }
+                  }
+                },
+                "Ip": "127.0.0.1",
+                "Port": 1883
               }
             },
             "publications": {
@@ -25,12 +52,17 @@
                 "EventId": "event1",
                 "Ip": "127.0.0.1",
                 "Port": 1883
+              },
+              "pub2": {
+                "EventId": "event2",
+                "Ip": "127.0.0.1",
+                "Port": 1883
               }
             }
           }
         },
         "tcpInterface1": {
-          "interfaceIdent": "TCP",
+          "interfaceIdent": "TCPA",
           "instruction": {
             "subscriptions": {
               "sub1": {

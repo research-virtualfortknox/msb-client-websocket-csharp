@@ -139,6 +139,7 @@
 
         private readonly string Ip;
         private readonly UInt16 Port;
+
         private Dictionary<string, SubscriptionInstruction> Subscriptions;
 
         public MQTTPubSub(string brokerIp, UInt16 brokerPort, Dictionary<string, SubscriptionInstruction> subs = null)
@@ -146,7 +147,10 @@
             this.Ip = brokerIp;
             this.Port = brokerPort;
 
-            if (subs != null) this.Subscriptions = subs;
+            if (subs != null)
+            {
+                this.Subscriptions = subs;
+            }
         }
 
         public bool Connect()
