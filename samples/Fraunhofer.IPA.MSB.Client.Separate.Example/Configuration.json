@@ -62,7 +62,7 @@
           }
         },
         "tcpInterface1": {
-          "interfaceIdent": "TCPA",
+          "interfaceIdent": "TCP",
           "instruction": {
             "subscriptions": {
               "sub1": {
