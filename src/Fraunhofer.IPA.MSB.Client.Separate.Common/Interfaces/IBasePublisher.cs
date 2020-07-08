@@ -2,6 +2,6 @@
 {
     public interface IBasePublisher
     {
-        bool PublishEvent(EventData eventToPublish);
+        bool PublishEvent(string eventId, string data);
     }
 }

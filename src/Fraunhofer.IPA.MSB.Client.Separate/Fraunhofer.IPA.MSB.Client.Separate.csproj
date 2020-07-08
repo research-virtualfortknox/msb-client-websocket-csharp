@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj" />
     <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.Separate.MQTT\Fraunhofer.IPA.MSB.Client.Separate.MQTT.csproj" />
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.Separate.TCP\Fraunhofer.IPA.MSB.Client.Separate.TCP.csproj" />
   </ItemGroup>
 
 </Project>

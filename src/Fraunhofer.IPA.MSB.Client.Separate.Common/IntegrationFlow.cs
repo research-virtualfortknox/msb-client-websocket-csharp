@@ -9,8 +9,11 @@ namespace Fraunhofer.IPA.MSB.Client.Separate.Common
         public Delegate FunctionPointer;
         public Dictionary<string, string> Parametermapping;
 
-        public void Invoke(Dictionary<string, object> data)
+        public void Invoke(object data)
         {
+            var obj = new Newtonsoft.Json.Linq.JObject();
+            obj.Add("dataObject", Newtonsoft.Json.Linq.JToken.FromObject(data));
+
             var parameters = this.FunctionPointer.Method.GetParameters();
             var parameterArrayForInvoke = new object[parameters.Length];
 
@@ -25,9 +28,17 @@ namespace Fraunhofer.IPA.MSB.Client.Separate.Common
                     }
                 }
 
+                if (currentParameterCallIndex == parameters.Length)
+                {
+                    continue;
+                }
+
                 object deserializedParameter = null;
 
-                if (data.ContainsKey(eintrag.Value)) deserializedParameter = data[eintrag.Value];
+                if (obj.SelectToken(eintrag.Value) != null)
+                {
+                    deserializedParameter = obj.SelectToken(eintrag.Value).ToObject(parameters[currentParameterCallIndex].ParameterType);
+                }
 
                 parameterArrayForInvoke[currentParameterCallIndex] = deserializedParameter;
             }

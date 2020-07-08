@@ -10,7 +10,7 @@
 
         public void Stop();
 
-        public void PublishEvent(EventData eventToPublish);
+        public void PublishEvent(string eventId, string data);
     }
 
     public class BaseInterfaceUtils

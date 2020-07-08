@@ -112,6 +112,27 @@
 
                         case "TCP":
                             {
+                                Fraunhofer.IPA.MSB.Client.Separate.TCP.TCPConfiguration config;
+
+                                if (v.instruction.GetType() == typeof(Newtonsoft.Json.Linq.JObject))
+                                {
+                                    config = ((Newtonsoft.Json.Linq.JObject)v.instruction).ToObject<Fraunhofer.IPA.MSB.Client.Separate.TCP.TCPConfiguration>();
+                                }
+                                else
+                                {
+                                    config = (Fraunhofer.IPA.MSB.Client.Separate.TCP.TCPConfiguration)v.instruction;
+                                }
+
+                                this.interfaces.Add(o_.Key, new TCP.TCPInterface(config));
+
+                                foreach (var sub in config.subscriptions)
+                                {
+                                    foreach (var intf in sub.Value.IntegrationFlows)
+                                    {
+                                        intf.Value.FunctionPointer = functionRegister[intf.Value.FunctionId].FunctionPointer;
+                                    }
+                                }
+
                                 break;
                             }
 
@@ -125,20 +146,12 @@
 
         public override async Task<bool> PublishAsync(Service service, EventData eventData)
         {
-            Common.EventData data = new Common.EventData();
-            data.Id = eventData.Event.Id;
-            data.Data = new Dictionary<string, object>();
-
-            var p = eventData.Value.GetType().GetProperties();
-
-            foreach (var p_ in p)
-            {
-                data.Data.Add(p_.Name, p_.GetValue(eventData.Value));
-            }
+            IncomingData incomingData = new IncomingData(service.Uuid, eventData.Event.Id, eventData.EventPriority, eventData.PublishingDate, eventData.Value, eventData.CorrelationId);
+            string data = Newtonsoft.Json.JsonConvert.SerializeObject(incomingData);
 
             foreach (var i in this.interfaces)
             {
-                i.Value.PublishEvent(data);
+                i.Value.PublishEvent(eventData.Event.Id, data);
             }
 
             return true;

@@ -42,9 +42,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Separate.MQTT", "src\Fraunhofer.IPA.MSB.Client.Separate.MQTT\Fraunhofer.IPA.MSB.Client.Separate.MQTT.csproj", "{EE8CA123-D2BB-4F3F-B47B-C09FC8BEE219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fraunhofer.IPA.MSB.Client.Separate", "src\Fraunhofer.IPA.MSB.Client.Separate\Fraunhofer.IPA.MSB.Client.Separate.csproj", "{B3DD8390-5212-4E1E-8A0C-729C5ABC5D29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Separate", "src\Fraunhofer.IPA.MSB.Client.Separate\Fraunhofer.IPA.MSB.Client.Separate.csproj", "{B3DD8390-5212-4E1E-8A0C-729C5ABC5D29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fraunhofer.IPA.MSB.Client.Separate.Example", "samples\Fraunhofer.IPA.MSB.Client.Separate.Example\Fraunhofer.IPA.MSB.Client.Separate.Example.csproj", "{443EA8AD-986D-41FA-A20D-A7FA3379FF8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Separate.Example", "samples\Fraunhofer.IPA.MSB.Client.Separate.Example\Fraunhofer.IPA.MSB.Client.Separate.Example.csproj", "{443EA8AD-986D-41FA-A20D-A7FA3379FF8C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fraunhofer.IPA.MSB.Client.Separate.TCP", "src\Fraunhofer.IPA.MSB.Client.Separate.TCP\Fraunhofer.IPA.MSB.Client.Separate.TCP.csproj", "{8B511039-7C22-42DE-9C61-AF8A602C7EE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{443EA8AD-986D-41FA-A20D-A7FA3379FF8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{443EA8AD-986D-41FA-A20D-A7FA3379FF8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{443EA8AD-986D-41FA-A20D-A7FA3379FF8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B511039-7C22-42DE-9C61-AF8A602C7EE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B511039-7C22-42DE-9C61-AF8A602C7EE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B511039-7C22-42DE-9C61-AF8A602C7EE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B511039-7C22-42DE-9C61-AF8A602C7EE5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{EE8CA123-D2BB-4F3F-B47B-C09FC8BEE219} = {BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}
 		{B3DD8390-5212-4E1E-8A0C-729C5ABC5D29} = {BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}
 		{443EA8AD-986D-41FA-A20D-A7FA3379FF8C} = {0F4E1380-5977-4D02-A9F9-D3A38B31E762}
+		{8B511039-7C22-42DE-9C61-AF8A602C7EE5} = {BA4F68E8-D462-4D7C-9A0B-7C672FABF87A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2269903A-5F41-4593-84EB-2538BFF14718}

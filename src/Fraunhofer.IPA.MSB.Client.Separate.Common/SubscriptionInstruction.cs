@@ -8,7 +8,7 @@
         public string EventId;
         public Dictionary<string, IntegrationFlow> IntegrationFlows;
 
-        public void Invoke(Dictionary<string, object> data)
+        public void Invoke(object data)
         {
             foreach (var integrationFlow in this.IntegrationFlows)
             {

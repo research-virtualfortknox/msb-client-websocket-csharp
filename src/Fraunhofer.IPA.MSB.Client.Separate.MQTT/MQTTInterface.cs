@@ -92,17 +92,26 @@
 
         public void Start()
         {
-            foreach (var s in this.subInterfaces) s.Connect();
+            foreach (var s in this.subInterfaces)
+            {
+                s.Connect();
+            }
         }
 
         public void Stop()
         {
-            foreach (var s in this.subInterfaces) s.Disconnect();
+            foreach (var s in this.subInterfaces)
+            {
+                s.Disconnect();
+            }
         }
 
-        public void PublishEvent(EventData eventToPublish)
+        public void PublishEvent(string eventId, string data)
         {
-            foreach (var p in this.relevantClientsForPublishing[eventToPublish.Id]) p.PublishEvent(eventToPublish);
+            foreach (var p in this.relevantClientsForPublishing[eventId])
+            {
+                p.PublishEvent(eventId, data);
+            }
         }
     }
 
@@ -167,14 +176,14 @@
 
                     string msg = System.Text.Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
-                    var deserializedData = JsonConvert.DeserializeObject<EventData>(msg);
-                    deserializedData.Id = e.ApplicationMessage.Topic;
+                    var deserializedData = JsonConvert.DeserializeObject<Fraunhofer.IPA.MSB.Client.API.Model.IncomingData>(msg);
+                    deserializedData.EventId = e.ApplicationMessage.Topic;
 
                     foreach (var s in this.Subscriptions)
                     {
-                        if (s.Value.EventId == deserializedData.Id)
+                        if (s.Value.EventId == deserializedData.EventId)
                         {
-                            s.Value.Invoke(deserializedData.Data);
+                            s.Value.Invoke(deserializedData.DataObject);
                         }
                     }
                 });
@@ -210,15 +219,16 @@
             }
         }
 
-        public bool PublishEvent(EventData eventToPublish)
+        public bool PublishEvent(string eventId, string data)
         {
-            if (!this.mqttClient.IsConnected) return false;
-
-            var s = Newtonsoft.Json.JsonConvert.SerializeObject(eventToPublish);
+            if (!this.mqttClient.IsConnected)
+            {
+                return false;
+            }
 
             var applicationMessage = new MQTTnet.MqttApplicationMessageBuilder()
-                        .WithTopic(eventToPublish.Id)
-                        .WithPayload(s)
+                        .WithTopic(eventId)
+                        .WithPayload(data)
                         .Build();
 
             this.mqttClient.PublishAsync(applicationMessage, System.Threading.CancellationToken.None);

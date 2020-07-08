@@ -50,6 +50,9 @@
             while (true)
             {
                 Thread.Sleep(3000);
+                EventData eventData_SimpleEvent = new EventDataBuilder(e1).SetValue("TestString").Build();
+
+                myMsbClient.PublishAsync(myMsbSmartObject, eventData_SimpleEvent).Wait();
             }
         }
     }

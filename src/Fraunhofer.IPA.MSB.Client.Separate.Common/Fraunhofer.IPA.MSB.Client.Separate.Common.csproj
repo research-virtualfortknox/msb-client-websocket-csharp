@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fraunhofer.IPA.MSB.Client.API\Fraunhofer.IPA.MSB.Client.API.csproj" />
+  </ItemGroup>
+
 </Project>
