@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Fraunhofer.IPA.MSB.Client.Separate.Common
+namespace Fraunhofer.IPA.MSB.Client.Separate.Common.Configuration
 {
     public class IntegrationFlow
     {
         public string FunctionId;
         public Delegate FunctionPointer;
-        public Dictionary<string, string> Parametermapping;
+        private Dictionary<string, string> parametermapping;
 
         public void Invoke(object data)
         {
@@ -17,7 +17,7 @@ namespace Fraunhofer.IPA.MSB.Client.Separate.Common
             var parameters = this.FunctionPointer.Method.GetParameters();
             var parameterArrayForInvoke = new object[parameters.Length];
 
-            foreach (var eintrag in this.Parametermapping)
+            foreach (var eintrag in this.parametermapping)
             {
                 int currentParameterCallIndex = 0;
                 for (; currentParameterCallIndex < parameters.Length; currentParameterCallIndex++)

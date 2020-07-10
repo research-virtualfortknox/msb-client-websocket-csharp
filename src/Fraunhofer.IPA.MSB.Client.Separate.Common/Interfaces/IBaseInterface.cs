@@ -32,7 +32,8 @@
             return methodInfo.CreateDelegate(delgateType, callableObjectForMethod);
         }
 
-        public static T CreateType<T>() where T : new()
+        public static T CreateType<T>()
+        where T : new()
         {
             return new T();
         }

@@ -1,19 +1,9 @@
 ﻿namespace Fraunhofer.IPA.MSB.Client.Separate
 {
-    using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
-    using System.Threading;
     using System.Threading.Tasks;
     using Fraunhofer.IPA.MSB.Client.API;
-    using Fraunhofer.IPA.MSB.Client.API.EventArgs;
-    using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Model;
-    using Fraunhofer.IPA.MSB.Client.API.OpenApi;
-    using MQTTnet.Client.Disconnecting;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
 
     public class InterfaceInstruction
     {
@@ -24,7 +14,6 @@
     public class SeparateClient : AbstractMsbClient
     {
         Dictionary<string, Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces.IBaseInterface> interfaces;
-        Dictionary<string, MSB.Client.API.Model.Function> functions;
 
         public SeparateClient()
         {
@@ -99,7 +88,7 @@
 
                                 this.interfaces.Add(o_.Key, new MQTT.MQTTInterface(config));
 
-                                foreach (var sub in config.subscriptions)
+                                foreach (var sub in config.Subscriptions)
                                 {
                                     foreach (var intf in sub.Value.IntegrationFlows)
                                     {
@@ -125,7 +114,7 @@
 
                                 this.interfaces.Add(o_.Key, new TCP.TCPInterface(config));
 
-                                foreach (var sub in config.subscriptions)
+                                foreach (var sub in config.Subscriptions)
                                 {
                                     foreach (var intf in sub.Value.IntegrationFlows)
                                     {

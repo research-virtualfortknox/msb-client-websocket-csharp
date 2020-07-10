@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Fraunhofer.IPA.MSB.Client.Separate.Common
+namespace Fraunhofer.IPA.MSB.Client.Separate.Common.Configuration
 {
     public class PublicationInstruction
     {

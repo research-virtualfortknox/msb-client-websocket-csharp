@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fraunhofer.IPA.MSB.Client.Separate.Common;
+    using Fraunhofer.IPA.MSB.Client.Separate.Common.Configuration;
     using Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces;
     using Newtonsoft.Json;
 
@@ -23,7 +23,7 @@
             "}" +
         "}";
 
-        private MQTTConfiguration Configuration;
+        private MQTTConfiguration configuration;
 
         private List<MQTTPubSub> subInterfaces;
 
@@ -31,14 +31,17 @@
 
         public MQTTInterface(MQTTConfiguration config)
         {
-            this.Configuration = config;
+            this.configuration = config;
 
             List<string> events = new List<string>();
-            foreach (var p in config.publications) events.Add(p.Value.EventId);
+            foreach (var p in config.Publications)
+            {
+                events.Add(p.Value.EventId);
+            }
 
             List<KeyValuePair<string, UInt16>> connections = new List<KeyValuePair<string, ushort>>();
 
-            foreach (var s in config.subscriptions)
+            foreach (var s in config.Subscriptions)
             {
                 if (!connections.Exists(e => e.Key == s.Value.Ip))
                 {
@@ -46,11 +49,14 @@
                 }
             }
 
-            relevantClientsForPublishing = new Dictionary<string, List<MQTTPubSub>>();
+            this.relevantClientsForPublishing = new Dictionary<string, List<MQTTPubSub>>();
 
-            foreach (var s in config.publications)
+            foreach (var s in config.Publications)
             {
-                if (!this.relevantClientsForPublishing.ContainsKey(s.Value.EventId)) this.relevantClientsForPublishing.Add(s.Value.EventId, new List<MQTTPubSub>());
+                if (!this.relevantClientsForPublishing.ContainsKey(s.Value.EventId))
+                {
+                    this.relevantClientsForPublishing.Add(s.Value.EventId, new List<MQTTPubSub>());
+                }
 
                 if (!connections.Exists(e => e.Key == s.Value.Ip))
                 {
@@ -66,8 +72,9 @@
                 {
                     // var pubs = config.publications.Where(e => e.Value.Ip == p.Key && e.Value.Port == p.Value); //funktioniert nicht?
                     Dictionary<string, SubscriptionInstruction> eventList = new Dictionary<string, SubscriptionInstruction>();
+
                     // foreach (var p_ in pubs) eventList.Add(p_.Value.EventId);
-                    foreach (var e_ in config.subscriptions)
+                    foreach (var e_ in config.Subscriptions)
                     {
                         if (e_.Value.Ip == s.Key && e_.Value.Port == s.Value)
                         {
@@ -77,7 +84,7 @@
 
                     var sub = new MQTTPubSub(s.Key, s.Value, eventList);
 
-                    foreach (var e_ in config.publications)
+                    foreach (var e_ in config.Publications)
                     {
                         if (e_.Value.Ip == s.Key && e_.Value.Port == s.Value)
                         {
@@ -117,6 +124,9 @@
 
     public class MQTTConfiguration
     {
+        public Dictionary<string, MQTTSubscriptionInstruction> Subscriptions;
+        public Dictionary<string, MQTTPublicationInstruction> Publications;
+
         public class MQTTSubscriptionInstruction : SubscriptionInstruction
         {
             public string Ip;
@@ -128,24 +138,21 @@
             public string Ip;
             public UInt16 Port;
         }
-
-        public Dictionary<string, MQTTSubscriptionInstruction> subscriptions;
-        public Dictionary<string, MQTTPublicationInstruction> publications;
     }
 
     public class MQTTPubSub : IBaseSubscriber, IBasePublisher
     {
-        private MQTTnet.Client.IMqttClient mqttClient;
+        private readonly string ip;
+        private readonly UInt16 port;
 
-        private readonly string Ip;
-        private readonly UInt16 Port;
+        private MQTTnet.Client.IMqttClient mqttClient;
 
         private Dictionary<string, SubscriptionInstruction> Subscriptions;
 
         public MQTTPubSub(string brokerIp, UInt16 brokerPort, Dictionary<string, SubscriptionInstruction> subs = null)
         {
-            this.Ip = brokerIp;
-            this.Port = brokerPort;
+            this.ip = brokerIp;
+            this.port = brokerPort;
 
             if (subs != null)
             {
@@ -161,14 +168,17 @@
                 this.mqttClient = factory.CreateMqttClient();
 
                 var options = new MQTTnet.Client.Options.MqttClientOptionsBuilder()
-                    .WithTcpServer(this.Ip, this.Port)
+                    .WithTcpServer(this.ip, this.port)
                     .Build();
 
                 this.mqttClient.ConnectAsync(options, System.Threading.CancellationToken.None);
 
                 this.mqttClient.ConnectedHandler = new MQTTnet.Client.Connecting.MqttClientConnectedHandlerDelegate(e =>
                 {
-                    if (this.Subscriptions != null) MakeSubscriptions();
+                    if (this.Subscriptions != null)
+                    {
+                        this.MakeSubscriptions();
+                    }
                 });
 
                 this.mqttClient.ApplicationMessageReceivedHandler = new MQTTnet.Client.Receiving.MqttApplicationMessageReceivedHandlerDelegate(e =>
@@ -208,7 +218,9 @@
         public bool AddSubscription(string id, SubscriptionInstruction instr)
         {
             if (this.Subscriptions.ContainsKey(id))
+            {
                 return false;
+            }
 
             this.Subscriptions.Add(id, instr);
 

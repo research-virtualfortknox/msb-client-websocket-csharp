@@ -1,4 +1,4 @@
-﻿namespace Fraunhofer.IPA.MSB.Client.Separate.Common
+﻿namespace Fraunhofer.IPA.MSB.Client.Separate.Common.Configuration
 {
     using System;
     using System.Collections.Generic;

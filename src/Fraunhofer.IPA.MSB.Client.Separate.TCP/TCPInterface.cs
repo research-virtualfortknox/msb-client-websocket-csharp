@@ -6,7 +6,7 @@
     using System.Net;
     using System.Net.Sockets;
     using System.Text;
-    using Fraunhofer.IPA.MSB.Client.Separate.Common;
+    using Fraunhofer.IPA.MSB.Client.Separate.Common.Configuration;
     using Fraunhofer.IPA.MSB.Client.Separate.Common.Interfaces;
     using Newtonsoft.Json;
 
@@ -27,24 +27,24 @@
             "}" +
         "}";
 
-        private TCPConfiguration Configuration;
+        private TCPConfiguration configuration;
 
         private List<TCPSubscriber> subscriber;
         private List<TCPPublisher> publisher;
 
         public TCPInterface(TCPConfiguration config)
         {
-            this.Configuration = config;
+            this.configuration = config;
 
             List<string> events = new List<string>();
-            foreach (var p in config.publications)
+            foreach (var p in config.Publications)
             {
                 events.Add(p.Value.EventId);
             }
 
             List<KeyValuePair<string, UInt16>> subscriptions = new List<KeyValuePair<string, ushort>>();
 
-            foreach (var s in config.subscriptions)
+            foreach (var s in config.Subscriptions)
             {
                 if (!subscriptions.Exists(e => e.Key == s.Value.Ip))
                 {
@@ -58,7 +58,7 @@
                 foreach (var s in subscriptions)
                 {
                     var sub = new TCPSubscriber(s.Key, s.Value);
-                    var subs = config.subscriptions.Where(e => e.Value.Ip == s.Key && e.Value.Port == s.Value);
+                    var subs = config.Subscriptions.Where(e => e.Value.Ip == s.Key && e.Value.Port == s.Value);
 
                     foreach (var s_ in subs)
                     {
@@ -71,7 +71,7 @@
 
             List<KeyValuePair<string, UInt16>> publications = new List<KeyValuePair<string, ushort>>();
 
-            foreach (var s in config.publications)
+            foreach (var s in config.Publications)
             {
                 if (!publications.Exists(e => e.Key == s.Value.Ip))
                 {
@@ -89,7 +89,7 @@
                     List<string> eventList = new List<string>();
 
                     // foreach (var p_ in pubs) eventList.Add(p_.Value.EventId);
-                    foreach (var e_ in config.publications)
+                    foreach (var e_ in config.Publications)
                     {
                         if (e_.Value.Ip == p.Key && e_.Value.Port == p.Value)
                         {
@@ -152,6 +152,9 @@
 
     public class TCPConfiguration
     {
+        public Dictionary<string, TCPSubscriptionInstruction> Subscriptions;
+        public Dictionary<string, TCPPublicationInstruction> Publications;
+
         public class TCPSubscriptionInstruction : SubscriptionInstruction
         {
             public string Ip;
@@ -163,34 +166,32 @@
             public string Ip;
             public UInt16 Port;
         }
-
-        public Dictionary<string, TCPSubscriptionInstruction> subscriptions;
-        public Dictionary<string, TCPPublicationInstruction> publications;
     }
 
     public class TCPSubscriber : IBaseSubscriber
     {
+        private readonly string ip;
+        private readonly UInt16 port;
+
         private TcpClient tcpClient;
 
-        private readonly string Ip;
-        private readonly UInt16 Port;
-        private Dictionary<string, SubscriptionInstruction> Subscriptions;
+        private Dictionary<string, SubscriptionInstruction> subscriptions;
 
         private byte[] buffer = new byte[1024];
 
         public TCPSubscriber(string localIp, UInt16 localPort)
         {
-            this.Ip = localIp;
-            this.Port = localPort;
+            this.ip = localIp;
+            this.port = localPort;
 
-            this.Subscriptions = new Dictionary<string, SubscriptionInstruction>();
+            this.subscriptions = new Dictionary<string, SubscriptionInstruction>();
         }
 
         public bool Connect()
         {
             this.tcpClient = new TcpClient();
 
-            this.tcpClient.BeginConnect(this.Ip, this.Port, this.ConnectCallback, null);
+            this.tcpClient.BeginConnect(this.ip, this.port, this.ConnectCallback, null);
 
             return true;
         }
@@ -219,19 +220,19 @@
 
         public bool AddSubscription(string id, SubscriptionInstruction instr)
         {
-            if (this.Subscriptions.ContainsKey(id))
+            if (this.subscriptions.ContainsKey(id))
             {
                 return false;
             }
 
-            this.Subscriptions.Add(id, instr);
+            this.subscriptions.Add(id, instr);
 
             return true;
         }
 
         public void MakeSubscriptions()
         {
-            foreach (var s in this.Subscriptions)
+            foreach (var s in this.subscriptions)
             {
                 var d = new SubscriptionInstruction() { EventId = s.Value.EventId };
                 var j = Newtonsoft.Json.JsonConvert.SerializeObject(d);
@@ -257,7 +258,7 @@
 
                 var deserializedData = JsonConvert.DeserializeObject<Fraunhofer.IPA.MSB.Client.API.Model.IncomingData>(messageBufferAsUnicode);
 
-                foreach (var s in this.Subscriptions)
+                foreach (var s in this.subscriptions)
                 {
                     if (s.Value.EventId == deserializedData.EventId)
                     {
@@ -273,26 +274,26 @@
 
     public class TCPPublisher : IBasePublisher
     {
+        private readonly string ip;
+        private readonly UInt16 port;
+
         private TcpListener tcpListener;
 
-        private readonly string Ip;
-        private readonly UInt16 Port;
-
-        private List<TcpClient> Subscribers;
-        private Dictionary<TcpClient, byte[]> SubscriberBuffer;
-        private Dictionary<string, List<TcpClient>> TopicSubscriberlist;
+        private List<TcpClient> subscribers;
+        private Dictionary<TcpClient, byte[]> subscriberBuffer;
+        private Dictionary<string, List<TcpClient>> topicSubscriberlist;
 
         public TCPPublisher(string localIp, UInt16 localPort, List<string> topics)
         {
-            this.Ip = localIp;
-            this.Port = localPort;
-            this.Subscribers = new List<TcpClient>();
-            this.SubscriberBuffer = new Dictionary<TcpClient, byte[]>();
-            this.TopicSubscriberlist = new Dictionary<string, List<TcpClient>>();
+            this.ip = localIp;
+            this.port = localPort;
+            this.subscribers = new List<TcpClient>();
+            this.subscriberBuffer = new Dictionary<TcpClient, byte[]>();
+            this.topicSubscriberlist = new Dictionary<string, List<TcpClient>>();
 
             foreach (var t in topics)
             {
-                this.TopicSubscriberlist.Add(t, new List<TcpClient>());
+                this.topicSubscriberlist.Add(t, new List<TcpClient>());
             }
         }
 
@@ -300,7 +301,7 @@
         {
             try
             {
-                this.tcpListener = new TcpListener(IPAddress.Parse(this.Ip), this.Port);
+                this.tcpListener = new TcpListener(IPAddress.Parse(this.ip), this.port);
                 this.tcpListener.Start();
 
                 this.tcpListener.BeginAcceptTcpClient(new AsyncCallback(this.DoAcceptTcpClientCallback), this.tcpListener);
@@ -317,9 +318,9 @@
                 this.tcpListener.Stop();
             }
 
-            this.Subscribers.Clear();
-            this.SubscriberBuffer.Clear();
-            foreach (var t in this.TopicSubscriberlist)
+            this.subscribers.Clear();
+            this.subscriberBuffer.Clear();
+            foreach (var t in this.topicSubscriberlist)
             {
                 t.Value.Clear();
             }
@@ -331,10 +332,10 @@
 
             var cl = listener.EndAcceptTcpClient(result);
 
-            this.Subscribers.Add(cl);
-            this.SubscriberBuffer.Add(cl, new byte[1024]);
+            this.subscribers.Add(cl);
+            this.subscriberBuffer.Add(cl, new byte[1024]);
 
-            cl.GetStream().BeginRead(this.SubscriberBuffer[cl], 0, this.SubscriberBuffer[cl].Length, this.ServerReadCallback, cl);
+            cl.GetStream().BeginRead(this.subscriberBuffer[cl], 0, this.subscriberBuffer[cl].Length, this.ServerReadCallback, cl);
         }
 
         private void ServerReadCallback(IAsyncResult result)
@@ -342,24 +343,24 @@
             try
             {
                 var cl = (TcpClient)result.AsyncState;
-                var b = this.SubscriberBuffer[cl];
+                var b = this.subscriberBuffer[cl];
 
                 string messageBuffer = Encoding.ASCII.GetString(b);
                 messageBuffer = messageBuffer.Trim('\0');
 
-                cl.GetStream().BeginRead(this.SubscriberBuffer[cl], 0, this.SubscriberBuffer[cl].Length, this.ServerReadCallback, this.SubscriberBuffer[cl]);
+                cl.GetStream().BeginRead(this.subscriberBuffer[cl], 0, this.subscriberBuffer[cl].Length, this.ServerReadCallback, this.subscriberBuffer[cl]);
 
                 try
                 {
                     var deserializedData = JsonConvert.DeserializeObject<SubscriptionInstruction>(messageBuffer);
 
-                    if (!this.TopicSubscriberlist.ContainsKey(deserializedData.EventId))
+                    if (!this.topicSubscriberlist.ContainsKey(deserializedData.EventId))
                     {
                         return;
                     }
                     else
                     {
-                        this.TopicSubscriberlist[deserializedData.EventId].Add(cl);
+                        this.topicSubscriberlist[deserializedData.EventId].Add(cl);
                     }
                 }
                 catch
@@ -373,9 +374,9 @@
 
         public bool PublishEvent(string eventId, string data)
         {
-            if (this.TopicSubscriberlist.ContainsKey(eventId))
+            if (this.topicSubscriberlist.ContainsKey(eventId))
             {
-                var c_liste = this.TopicSubscriberlist[eventId];
+                var c_liste = this.topicSubscriberlist[eventId];
                 foreach (var c in c_liste)
                 {
                     var b = System.Text.ASCIIEncoding.ASCII.GetBytes(data);
