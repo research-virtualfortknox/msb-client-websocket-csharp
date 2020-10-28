@@ -17,7 +17,7 @@
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System;
-    using Fraunhofer.IPA.MSB.Client.API.Logging;
+    using Fraunhofer.IPA.MSB.Client.Websocket.Model;
 
     /// <summary>
     /// This class is used to define data which should be published to the MSB as an <see cref="Event"/>.
@@ -34,7 +34,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         }
 
         /// <summary>Gets EventData which can be returned if no response event should be send for a MSB function call.</summary>
-        public static EventData NoResponseEvent { get; } = new EventData(new Event("noresponseevent", "noresponseevent", "noresponseevent", null));
+        public static EventData NoResponseEvent { get; } = new EventData(new Event("noresponseevent", "noresponseevent", "noresponseevent", new DataFormat()));
 
         /// <summary>Gets or sets related <see cref="Event"/> of the data</summary>
         public Event Event { get; set; }

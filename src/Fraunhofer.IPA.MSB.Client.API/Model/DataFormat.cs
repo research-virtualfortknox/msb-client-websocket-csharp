@@ -18,7 +18,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Model
 {
     using System;
     using System.Collections.Generic;
-    using Fraunhofer.IPA.MSB.Client.API.Logging;
     using Fraunhofer.IPA.MSB.Client.API.Model;
     using Fraunhofer.IPA.MSB.Client.API.OpenApi;
     using Newtonsoft.Json;
@@ -34,6 +33,32 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Model
         /// </summary>
         public DataFormat()
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataFormat"/> class.
+        /// </summary>
+        /// <param name="dataFormatAsDictionary">DataFormat represented as Dictionary.</param>
+        public DataFormat(Dictionary<string, object> dataFormatAsDictionary)
+        {
+            foreach (var entry in dataFormatAsDictionary)
+            {
+                this.Add(entry.Key, entry.Value);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataFormat"/> class.
+        /// </summary>
+        /// <param name="dataFormatString">String which should be parsed to DataFormat.</param>
+        public DataFormat(string dataFormatString)
+        {
+            var dataFormatAsDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(dataFormatString);
+
+            foreach (var entry in dataFormatAsDictionary)
+            {
+                this.Add(entry.Key, entry.Value);
+            }
         }
 
         /// <summary>

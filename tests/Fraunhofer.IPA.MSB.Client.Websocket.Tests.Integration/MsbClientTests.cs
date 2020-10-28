@@ -33,6 +33,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     using Fraunhofer.IPA.MSB.Client.Tests.Shared;
     using Fraunhofer.IPA.MSB.Client.Tests.Shared.Functions;
     using Fraunhofer.IPA.MSB.Client.Websocket.IntegrationTest.Events;
+    using Fraunhofer.IPA.MSB.Client.Websocket.Model;
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
     using Newtonsoft.Json;
     using Serilog;
@@ -811,7 +812,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                     mockWebsocketInterface.Start();
                     var testMsbClient = new MsbClient(mockWebsocketInterface.URL);
                     var testSmartObject = new SmartObject(Guid.NewGuid().ToString(), "Name", "Description", Guid.NewGuid().ToString());
-                    var responseEventWhichShouldNotBeSend = new Event("ResponseEventWhichShouldNotBeSend", string.Empty, string.Empty, null);
+                    var responseEventWhichShouldNotBeSend = new Event("ResponseEventWhichShouldNotBeSend", string.Empty, string.Empty, new DataFormat());
                     testSmartObject.AddEvent(responseEventWhichShouldNotBeSend);
                     var testFunction = new Function(this.GetType().GetRuntimeMethod("NoResponseEventShouldBeSendForFunctionCallMsbFunction", new Type[] { typeof(FunctionCallInfo) }), this);
                     testSmartObject.AddFunction(testFunction);
