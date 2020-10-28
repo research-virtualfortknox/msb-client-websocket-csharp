@@ -20,10 +20,14 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
+    using Fraunhofer.IPA.MSB.Client.API.Utils;
+    using Fraunhofer.IPA.MSB.Client.Websocket.Model;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Represents an MSB service.
@@ -157,7 +161,17 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <param name="eventDescription">The event description as JSON.</param>
         public void AddEventRaw(string eventDescription)
         {
-            throw new NotImplementedException();
+            JObject eventAsJson = JObject.Parse(eventDescription);
+
+            var id = eventAsJson.Value<string>("eventId");
+            var name = eventAsJson.Value<string>("name");
+            var description = eventAsJson.Value<string>("description");
+            var eventAsDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventDescription, new DictionaryConverter());
+            var dataFormatDictionary = (Dictionary<string, object>)eventAsDictionary["dataFormat"];
+            var dataFormat = new DataFormat(dataFormatDictionary);
+
+            var newEvent = new Event(id, name, description, dataFormat);
+            this.AddEvent(newEvent);
         }
 
         /// <summary>

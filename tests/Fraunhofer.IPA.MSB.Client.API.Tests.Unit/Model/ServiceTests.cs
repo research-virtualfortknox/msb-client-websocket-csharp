@@ -25,6 +25,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Model;
     using Fraunhofer.IPA.MSB.Client.Tests.Shared;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Xunit;
     using Xunit.Abstractions;
@@ -126,18 +127,35 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             }
 
             [Fact]
+            public void AddEventRaw()
+            {
+                this.TestService = new TestImplementationOfServiceClass(Uuid, Name, Description, Token);
+                Event expectedEvent = new Event("EventId", "EventName", "Description", typeof(string));
+
+                var eventAsJsonString = @"{
+                    'eventId': 'EventId',
+                    'name': 'EventName',
+                    'description': 'Description',
+                    'dataFormat': {
+                        'dataObject': {
+                          'type': 'string'
+                        }
+                    }
+                }";
+                this.TestService.AddEventRaw(eventAsJsonString);
+
+                var actualEventString = JsonConvert.SerializeObject(this.TestService.Events[0]);
+                var expectedEventString = JsonConvert.SerializeObject(expectedEvent);
+
+                Assert.Equal(expectedEventString, actualEventString);
+            }
+
+            [Fact]
             public void RemoveEvent()
             {
                 this.AddEvent();
                 this.TestService.RemoveEvent(this.testEvent);
                 Assert.DoesNotContain(this.testEvent, this.TestService.Events);
-            }
-
-            [Fact]
-            public void AddEventRaw()
-            {
-                this.TestService = new TestImplementationOfServiceClass(Uuid, Name, Description, Token);
-                Exception ex = Assert.Throws<NotImplementedException>(() => this.TestService.AddEventRaw(string.Empty));
             }
         }
 
