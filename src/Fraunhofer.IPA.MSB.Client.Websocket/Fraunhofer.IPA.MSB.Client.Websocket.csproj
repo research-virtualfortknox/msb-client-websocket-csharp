@@ -8,7 +8,7 @@
     <Description>MSB websocket client library for C#</Description>
     <PackageTags>MSB, Manufacturing Service Bus, VFK, Virtual Fort Knox, Websocket</PackageTags>
     <RepositoryUrl>https://github.com/research-virtualfortknox/msb-client-websocket-csharp</RepositoryUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
