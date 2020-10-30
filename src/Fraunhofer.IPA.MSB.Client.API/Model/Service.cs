@@ -36,7 +36,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     {
         private static readonly ILog Log = LogProvider.For<Service>();
 
-        private Dictionary<AbstractFunctionHandler, List<Function>> registeredFunctionHandlerAndRelatedFunctions = new Dictionary<AbstractFunctionHandler, List<Function>>();
+        private readonly Dictionary<AbstractFunctionHandler, List<Function>> registeredFunctionHandlerAndRelatedFunctions = new Dictionary<AbstractFunctionHandler, List<Function>>();
 
         private bool autoPersistConfiguration = false;
 

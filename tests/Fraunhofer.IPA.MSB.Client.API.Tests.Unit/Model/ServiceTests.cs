@@ -21,7 +21,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using FluentAssertions;
     using FluentAssertions.Json;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
-    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Model;
     using Fraunhofer.IPA.MSB.Client.Tests.Shared;
@@ -103,7 +102,19 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             [Fact]
             public void CheckSerialization()
             {
-                JObject expectedJsonObject = JObject.Parse("{\"@class\":\"TestImplementationOfServiceClass\",\"name\":\"Test Application\",\"description\":\"Description of Test Application\",\"token\":\"31f7bcaff-2753-4cd6-811d-30397a45318f\",\"uuid\":\"df00ce10-9443-416f-8a42-e388a7d76dbe\",\"configuration\":{\"parameters\":{}},\"events\":[],\"functions\":[]}");
+                var serviceJson = @"{
+                    '@class':'TestImplementationOfServiceClass',
+                    'name':'Test Application',
+                    'description':'Description of Test Application',
+                    'token':'31f7bcaff-2753-4cd6-811d-30397a45318f',
+                    'uuid':'df00ce10-9443-416f-8a42-e388a7d76dbe',
+                    'configuration':{
+                        'parameters':{}
+                    },
+                    'events':[],
+                    'functions':[]
+                }";
+                JObject expectedJsonObject = JObject.Parse(serviceJson);
                 JObject actualJsonObject = JObject.Parse(this.TestService.ToJson());
                 actualJsonObject.Should().BeEquivalentTo(expectedJsonObject);
             }

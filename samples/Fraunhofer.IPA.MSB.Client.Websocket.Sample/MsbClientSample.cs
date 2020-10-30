@@ -57,6 +57,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
             this.GetConfigurationParmaeters();
             this.ConnectClient();
             this.RegisterService();
+            this.RegisterGateway();
             this.PublishEvent();
         }
 
@@ -234,6 +235,37 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
                 .SetValue(new MyComplexEvent())
                 .Build();
             this.myMsbClient.PublishAsync(this.mySmartobject, eventData).Wait();
+        }
+
+        private void RegisterGateway()
+        {
+            const string MyMsbGatewayUuid = "baf642fa-d3c8-40bf-9c63-780ccd50bf24";
+            const string MyMsbGatewayName = "C# Sample Gateway";
+            const string MyMsbGatewayDescription = "Description of my C# sample Gateway";
+            const string MyMsbGatewayToken = "41da7f7c-a119-4279-b45b-8caad5157016";
+
+            const string MyMsbGatewaySubserviceUuid = "b8132e26-1ac9-11eb-adc1-0242ac120002";
+            const string MyMsbGatewaySubserviceName = "C# Sample Gateway Subservice";
+            const string MyMsbGatewaySubserviceDescription = "Description of my C# sample Gateway Subservice";
+            const string MyMsbGatewaySubserviceToken = "bb516bc0-1ac9-11eb-adc1-0242ac120002";
+
+            Gateway myMsbGateway = new Gateway(MyMsbGatewayUuid, MyMsbGatewayName, MyMsbGatewayDescription, MyMsbGatewayToken);
+            SmartObject myMsbGatewaySubservice = new SmartObject(MyMsbGatewaySubserviceUuid, MyMsbGatewaySubserviceName, MyMsbGatewaySubserviceDescription, MyMsbGatewaySubserviceToken);
+            myMsbGateway.AddService(myMsbGatewaySubservice);
+
+            var simpleEvent = new Event("SimpleStringEvent", "Simple String Event", "Description of Simple String Event", typeof(string));
+            myMsbGatewaySubservice.AddEvent(simpleEvent);
+
+            MethodInfo methodInfo = this.GetType().GetRuntimeMethod("SampleMsbFunction", new Type[] { typeof(string), typeof(int), typeof(FunctionCallInfo) });
+            Function sampleMsbFunction = new Function(methodInfo, this);
+            myMsbGatewaySubservice.AddFunction(sampleMsbFunction);
+
+            this.myMsbClient.RegisterAsync(myMsbGatewaySubservice).Wait();
+
+            EventData newEventData = new EventData(simpleEvent);
+            newEventData.Value = "TestString";
+
+            this.myMsbClient.PublishAsync(myMsbGatewaySubservice, newEventData).Wait();
         }
     }
 

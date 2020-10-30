@@ -326,6 +326,13 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         {
             string messageToSend = MessageGenerator.GenerateRegistrationMessage(serviceToRegister);
             this.RegisteredServices[serviceToRegister.Uuid] = serviceToRegister;
+            if (serviceToRegister.Class.Equals("Gateway"))
+            {
+                foreach (var serviceOfGateway in ((Gateway)serviceToRegister).Services)
+                {
+                    this.RegisteredServices[serviceOfGateway.Uuid] = serviceOfGateway;
+                }
+            }
 
             if (this.UseSockJs)
             {
@@ -608,7 +615,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
         private void HandleFunctionCall(FunctionCall functionCall)
         {
-            Log.Debug($"Callback for function '{functionCall.FunctionId}' of service '{functionCall.ServiceUuid}' received with parameters: {functionCall.FunctionParameters}");
+            Log.Debug($"Callback for function '{functionCall.FunctionId}' of service '{functionCall.ServiceUuid}' received with parameters: {JsonConvert.SerializeObject(functionCall.FunctionParameters)}");
             if (this.RegisteredServices.ContainsKey(functionCall.ServiceUuid))
             {
                 var serviceOfFunctionCall = this.RegisteredServices[functionCall.ServiceUuid];
