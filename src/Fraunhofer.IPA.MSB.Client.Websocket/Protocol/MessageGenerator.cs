@@ -18,6 +18,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Protocol
 {
     using System.Text;
     using Fraunhofer.IPA.MSB.Client.API.Model;
+    using Fraunhofer.IPA.MSB.Client.API.Utils;
     using Fraunhofer.IPA.MSB.Client.Websocket.Logging;
     using Newtonsoft.Json;
 
@@ -88,8 +89,9 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Protocol
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 Formatting = Formatting.None,
-                PreserveReferencesHandling = PreserveReferencesHandling.None
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
             };
+            jsonSerializerSettings.Converters.Add(new CustomIsoDateTimeConverter());
             string jsonString = JsonConvert.SerializeObject(objectToSerialize, Formatting.None, settings: jsonSerializerSettings);
 
             jsonString = jsonString.Replace("$id", "@id");

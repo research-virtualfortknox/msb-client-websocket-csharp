@@ -18,6 +18,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
+    using Fraunhofer.IPA.MSB.Client.API.Utils;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using NJsonSchema;
@@ -61,7 +62,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
         /// <summary>Gets or sets timestamp when the data was published.</summary>
         [JsonSchema(JsonObjectType.String, Format = "date-time")]
-        [JsonProperty("postDate", ItemConverterType = typeof(IsoDateTimeConverter))]
+        [JsonProperty("postDate", ItemConverterType = typeof(CustomIsoDateTimeConverter))]
         public DateTime PostDate { get; set; }
 
         /// <summary>Gets or sets correlation id of the <see cref="Event"/> that sends the data.</summary>
