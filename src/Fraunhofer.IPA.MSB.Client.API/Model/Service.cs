@@ -291,11 +291,17 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             // Use the generated ids as (JSON) references for response events in the functions of the service
             foreach (var function in this.Functions)
             {
+                var responseEventAtIds = new List<int>();
                 foreach (var responseEventId in function.ResponseEventIds)
                 {
                     Event responseEvent = this.Events.Find(e => e.Id == responseEventId);
-                    function.ResponseEvents.Add(responseEvent.AtId);
+                    if (!function.ResponseEvents.Contains(responseEvent.AtId))
+                    {
+                        responseEventAtIds.Add(responseEvent.AtId);
+                    }
                 }
+
+                function.ResponseEvents = responseEventAtIds;
             }
         }
 
