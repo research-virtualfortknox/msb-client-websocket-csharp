@@ -16,11 +16,9 @@
 
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
-    using System.Text.RegularExpressions;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
@@ -53,20 +51,21 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             this.Description = description;
             this.Uuid = uuid;
             this.Token = token;
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Service"/> class.
+        /// </summary>
+        /// <param name="uuid">The <see cref="Service.Uuid"/> of the <see cref="Service"/>.</param>
+        /// <param name="name">The <see cref="Service.Name"/> of the <see cref="Service"/>.</param>
+        /// <param name="description">The <see cref="Service.Description"/> of the <see cref="Service"/>.</param>
+        /// <param name="token">The <see cref="Service.Token"/> of the <see cref="Service"/>.</param>
+        /// <param name="autoPersistConfiguration">Sets the <see cref="AutoPersistConfiguration"/> option.</param>
+        public Service(string uuid, string name, string description, string token, bool autoPersistConfiguration)
+            : this(uuid, name, description, token)
+        {
             this.ConfigurationPersistencePath = $"config/{this.Uuid}.config";
-
-            if (this.AutoPersistConfiguration)
-            {
-                if (File.Exists(this.ConfigurationPersistencePath))
-                {
-                    this.Configuration.LoadFromFile(this.ConfigurationPersistencePath);
-                }
-                else
-                {
-                    Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
-                }
-            }
+            this.AutoPersistConfiguration = autoPersistConfiguration;
         }
 
         /// <summary>Gets or sets name of the service.</summary>
@@ -91,7 +90,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
         /// <summary>Gets or sets a value indicating whether the configuration of services is automatically persisted into a file.</summary>
         [JsonIgnore]
-        public bool AutoPersistConfiguration {
+        public bool AutoPersistConfiguration
+        {
             get
             {
                 return this.autoPersistConfiguration;
@@ -108,7 +108,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
                     }
                     else
                     {
-                        Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
+                        Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence doesn't exist");
                     }
                 }
             }
