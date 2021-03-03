@@ -390,30 +390,54 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
             if (this.IsConnected())
             {
-                this.receivedIOPublished = false;
-                var publishTask = Task.Run(() =>
+                using (CancellationTokenSource source = new CancellationTokenSource())
                 {
-                    string message = MessageGenerator.GenerateEventMessage(service, eventData, this.UseSockJs);
-                    Log.Debug($"Event published '{message}' for service '{service.Uuid}'");
-                    this.webSocket.Send(message);
-                    CancellationTokenSource source = new CancellationTokenSource();
-                    while (!this.receivedIOPublished && !source.IsCancellationRequested)
-                    {
-                        Thread.Sleep(10);
-                    }
-                });
-
-                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default)) == publishTask)
-                {
-                    await publishTask;
                     this.receivedIOPublished = false;
-                    this.EventPublished?.Invoke(this, EventArgs.Empty);
-                    return true;
-                }
-                else
-                {
-                    this.CacheEvent(service, eventData);
-                    Log.Warn($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' timed out. Event added to cache.");
+                    try
+                    {
+                        var publishTask = Task.Run(() =>
+                        {
+                            string message = MessageGenerator.GenerateEventMessage(service, eventData, this.UseSockJs);
+                            Log.Debug($"Event published '{message}' for service '{service.Uuid}'");
+                            this.webSocket.Send(message);
+                            while (!this.receivedIOPublished && !source.IsCancellationRequested)
+                            {
+                                Thread.Sleep(10);
+                            }
+                        });
+
+                        if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds)) == publishTask)
+                        {
+                            this.receivedIOPublished = false;
+                            this.EventPublished?.Invoke(this, EventArgs.Empty);
+                            return true;
+                        }
+                        else
+                        {
+                            source.Cancel();
+                            return false;
+                        }
+                    }
+                    catch (AggregateException ae)
+                    {
+                        foreach (Exception e in ae.InnerExceptions)
+                        {
+                            if (e is TaskCanceledException)
+                            {
+                                this.CacheEvent(service, eventData);
+                                Log.Warn($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' timed out. Event added to cache.");
+                                return false;
+                            }
+                            else
+                            {
+                                this.CacheEvent(service, eventData);
+                                Log.Error($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' resulted in Error (' { e.Message } '). Event added to cache.");
+                                return false;
+                            }
+                        }
+
+                    }
+                    // Never should get here
                     return false;
                 }
             }
