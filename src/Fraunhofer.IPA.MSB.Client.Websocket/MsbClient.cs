@@ -229,7 +229,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
         /// </summary>
-        public int WaitForRegistrationInMilliseconds { get; set; } = 10000;
+        public int WaitForRegistrationInMilliseconds { get; set; } = 80000;
 
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
@@ -345,28 +345,28 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 Log.Debug("Unable to register service, no connection or connection closed");
                 return false;
             }
-            else
+            else using (CancellationTokenSource source = new CancellationTokenSource()) 
             {
                 this.receivedIORegistered = false;
                 var registerTask = Task.Run(() =>
                 {
                     this.webSocket.Send(messageToSend + "\n");
                     Log.Debug("Register service '{messageToSend}'", messageToSend);
-                    CancellationTokenSource source = new CancellationTokenSource();
+    
                     while (!this.receivedIORegistered && !source.IsCancellationRequested)
                     {
                         Thread.Sleep(10);
                     }
                 });
 
-                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default)) == registerTask)
+                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds)) == registerTask)
                 {
-                    await registerTask;
                     this.receivedIORegistered = false;
                     return true;
                 }
                 else
                 {
+                    source.Cancel(false);
                     Log.Warn($"Registration try for '{serviceToRegister.Uuid}' timed out");
                     return false;
                 }
