@@ -270,26 +270,27 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             this.webSocket.Error += this.OnWebsocketError;
             this.webSocket.Closed += this.OnWebsocketClosed;
 
-            var connectTask = Task.Run(() =>
-            {
-                this.webSocket.Open();
-                CancellationTokenSource source = new CancellationTokenSource();
-                while (!this.IsConnected() && !source.IsCancellationRequested)
+            using (CancellationTokenSource source = new CancellationTokenSource()) {}
+                var connectTask = Task.Run(() =>
                 {
-                    Thread.Sleep(10);
-                }
-            });
+                    this.webSocket.Open();
+                    while (!this.IsConnected() && !source.IsCancellationRequested)
+                    {
+                        Thread.Sleep(10);
+                    }
+                });
 
-            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default)) == connectTask)
-            {
-                await connectTask;
-                return true;
-            }
-            else
-            {
-                Log.Warn($"Connection try to '{this.MsbUrl}' timed out");
-                this.ConnectionFailed?.Invoke(this, EventArgs.Empty);
-                return false;
+                if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds)) == connectTask)
+                {
+                    return true;
+                }
+                else
+                {
+                    source.Cancel(false);
+                    Log.Warn($"Connection try to '{this.MsbUrl}' timed out");
+                    this.ConnectionFailed?.Invoke(this, EventArgs.Empty);
+                    return false;
+                }
             }
         }
 
