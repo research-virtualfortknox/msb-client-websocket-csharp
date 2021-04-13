@@ -26,7 +26,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     /// </summary>
     public class Event
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Event"/> class.
         /// </summary>

@@ -1,4 +1,4 @@
-﻿// <copyright file="ApplicationProperties.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
+﻿// <copyright file="MsbProperties.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
 // Copyright 2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,6 +71,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Configuration
         /// <summary>
         /// Read .properties file.
         /// </summary>
+        /// <param name="path">The path of the properties file.</param>
         /// <returns>The read MSB properties.</returns>
         public static MsbProperties ReadFromPropertiesFile(string path)
         {

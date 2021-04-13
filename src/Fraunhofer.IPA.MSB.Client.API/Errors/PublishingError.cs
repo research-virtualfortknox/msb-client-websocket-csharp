@@ -36,6 +36,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Errors
         /// <summary>
         /// Unexpected error during event publishing.
         /// </summary>
-        NIO_UNEXPECTED_EVENT_FORWARDING_ERROR
+        NIO_UNEXPECTED_EVENT_FORWARDING_ERROR,
     }
 }

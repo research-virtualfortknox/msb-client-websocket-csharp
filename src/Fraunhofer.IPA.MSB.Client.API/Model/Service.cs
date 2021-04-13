@@ -308,7 +308,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>
         /// Gets an event by id.
         /// </summary>
-        /// <param name="eventId">The id of the <see cref="Event"/></param>
+        /// <param name="eventId">The id of the <see cref="Event"/>.</param>
         /// <returns>The event found for the id.</returns>
         public Event GetEventById(string eventId)
         {
@@ -335,7 +335,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 Formatting = Formatting.None,
-                PreserveReferencesHandling = PreserveReferencesHandling.None
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
             };
 
             return JsonConvert.SerializeObject(this, Formatting.None, settings: jsonSerializerSettings);

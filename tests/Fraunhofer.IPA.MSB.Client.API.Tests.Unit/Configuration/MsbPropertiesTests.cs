@@ -1,4 +1,4 @@
-﻿// <copyright file="ApplicationPropertiesTests.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
+﻿// <copyright file="MsbPropertiesTests.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
 // Copyright 2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,11 @@
 
 namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Configuration
 {
-    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using System;
+    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using Xunit;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class MsbPropertiesTests
     {
         public MsbPropertiesTests()

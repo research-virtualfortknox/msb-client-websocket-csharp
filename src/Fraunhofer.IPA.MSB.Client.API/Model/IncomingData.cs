@@ -32,8 +32,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="IncomingData"/> class.
         /// </summary>
-        /// <param name="uuid">The <see cref="IncomingData.Uuid"/> of the <see cref="Service"/></param>
-        /// <param name="eventId">The <see cref="IncomingData.EventId"/> of the <see cref="Event"/></param>
+        /// <param name="uuid">The <see cref="IncomingData.Uuid"/> of the <see cref="Service"/>.</param>
+        /// <param name="eventId">The <see cref="IncomingData.EventId"/> of the <see cref="Event"/>.</param>
         /// <param name="priority">The <see cref="IncomingData.Priority"/> of the data.</param>
         /// <param name="postDate">The <see cref="IncomingData.PostDate"/> when the data was posted.</param>
         /// <param name="dataObject">The <see cref="IncomingData.DataObject"/> of the incoming data.</param>

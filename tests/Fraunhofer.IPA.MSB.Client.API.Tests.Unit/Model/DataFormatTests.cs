@@ -25,6 +25,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using Newtonsoft.Json.Linq;
     using Xunit;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class DataFormatTests
     {
         public class Constructors : DataFormatTests
@@ -74,7 +75,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                 }";
                 JObject expectedDataFormatAsJson = JObject.Parse(jsonString);
 
-
                 DataFormat dataFormat = new DataFormat(jsonString);
                 expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(dataFormat));
             }
@@ -119,7 +119,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                 DataFormat dataFormat = new DataFormat(jsonString);
                 expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(dataFormat));
             }
-
         }
     }
 }

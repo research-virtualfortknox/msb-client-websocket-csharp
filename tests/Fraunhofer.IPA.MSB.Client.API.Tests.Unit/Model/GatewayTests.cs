@@ -1,4 +1,4 @@
-﻿// <copyright file="ApplicationTests.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
+﻿// <copyright file="GatewayTests.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
 // Copyright 2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,22 +23,25 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using Newtonsoft.Json.Linq;
     using Xunit;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class GatewayTests
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<Ausstehend>")]
+        protected Application testApplicationOfGateway = new Application("5c9d7ff2-8fb3-4f5f-af21-f024e96540e4", "ApplicationOfGateway", "Gateway Application Description", "9d1b9de8-18bd-4c49-ae84-2f83a61e9592");
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<Ausstehend>")]
+        protected SmartObject testSmartObjectOfGateway = new SmartObject("afeff37c-1abb-11eb-adc1-0242ac120002", "SmartObjectOfGateway", "Gateway SmartObject Description", "b2d04704-1abb-11eb-adc1-0242ac120002");
+
         public GatewayTests()
         {
             var gatewayServices = new List<Service>();
-            gatewayServices.Add(this.TestApplicationOfGateway);
-            gatewayServices.Add(this.TestSmartObjectOfGateway);
+            gatewayServices.Add(this.testApplicationOfGateway);
+            gatewayServices.Add(this.testSmartObjectOfGateway);
 
             this.TestGateway = new Gateway(this.ExpectedUuid, this.ExpectedName, this.ExpectedDescription, this.ExpectedToken, gatewayServices);
         }
 
         protected Gateway TestGateway { get; }
-
-        protected Application TestApplicationOfGateway = new Application("5c9d7ff2-8fb3-4f5f-af21-f024e96540e4", "ApplicationOfGateway", "Gateway Application Description", "9d1b9de8-18bd-4c49-ae84-2f83a61e9592");
-
-        protected SmartObject TestSmartObjectOfGateway = new SmartObject("afeff37c-1abb-11eb-adc1-0242ac120002", "SmartObjectOfGateway", "Gateway SmartObject Description", "b2d04704-1abb-11eb-adc1-0242ac120002");
 
         protected string ExpectedUuid { get; } = "afdb80ac-1abd-11eb-adc1-0242ac120002";
 
@@ -145,17 +148,17 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             [Fact]
             public void AddAlreadyAddedService()
             {
-                this.TestGateway.AddService(this.TestApplicationOfGateway);
+                this.TestGateway.AddService(this.testApplicationOfGateway);
 
-                this.TestGateway.Services.Should().Contain(this.TestApplicationOfGateway);
+                this.TestGateway.Services.Should().Contain(this.testApplicationOfGateway);
             }
 
             [Fact]
             public void RemoveService()
             {
-                this.TestGateway.RemoveService(this.TestApplicationOfGateway);
+                this.TestGateway.RemoveService(this.testApplicationOfGateway);
 
-                this.TestGateway.Services.Should().NotContain(this.TestApplicationOfGateway);
+                this.TestGateway.Services.Should().NotContain(this.testApplicationOfGateway);
             }
 
             [Fact]

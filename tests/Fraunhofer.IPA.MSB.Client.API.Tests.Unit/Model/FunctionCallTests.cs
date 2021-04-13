@@ -39,7 +39,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             private readonly Dictionary<string, object> expectedFunctionParameters = new Dictionary<string, object>()
                 {
                     { "parameter1", "parameterValue1" },
-                    { "parameter2", "parameterValue2" }
+                    { "parameter2", "parameterValue2" },
                 };
 
             private readonly string serializedFunctionCall = $"{{ \"uuid\" : \"{ExpectedServiceUuid}\", \"functionId\" : \"{ExpectedFunctionId}\", \"correlationId\" : \"{ExpectedCorrelationId}\", \"functionParameters\" : {{ \"parameter1\" : \"parameterValue1\", \"parameter2\" : \"parameterValue2\" }} }}";

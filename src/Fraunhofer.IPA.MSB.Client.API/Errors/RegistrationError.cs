@@ -36,6 +36,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Errors
         /// <summary>
         /// Unexpected error during registration.
         /// </summary>
-        NIO_UNEXPECTED_REGISTRATION_ERROR
+        NIO_UNEXPECTED_REGISTRATION_ERROR,
     }
 }

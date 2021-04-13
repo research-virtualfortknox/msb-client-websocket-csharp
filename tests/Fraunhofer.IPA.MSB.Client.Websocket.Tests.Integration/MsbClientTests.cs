@@ -45,6 +45,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     /// Tests <see cref="MsbClient"/>.
     /// </summary>
     /// <seealso cref="BaseTests" />
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class MsbClientTests : BaseTests
     {
         /// <summary>
@@ -637,7 +638,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 Assert.IsType<EventArgs>(raisedEvent.Arguments);
             }
 
-            [Fact (Skip="unstable")]
+            [Fact(Skip="unstable")]
             public void EventCached()
             {
                 Event testEvent = new Event("Id", "Name", "Description", typeof(string));

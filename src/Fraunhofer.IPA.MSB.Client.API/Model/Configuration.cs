@@ -40,8 +40,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="Configuration"/> class.
         /// </summary>
-        /// <param name="parameters">The parameters of the <see cref="Configuration"/></param>
-        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters) 
+        /// <param name="parameters">The parameters of the <see cref="Configuration"/>.</param>
+        public Configuration(Dictionary<string, ConfigurationParameterValue> parameters)
             : this()
         {
             this.Parameters = parameters;

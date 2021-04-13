@@ -36,7 +36,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Attributes
         public string Description { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets array of event ids which should be declared as response events of the MSB function. When the function is added to a <see cref="Service"/>
+        /// Gets or sets array of event ids which should be declared as response events of the MSB function. When the function is added to a <see cref="Service"/>.
         /// </summary>
         public string[] ResponseEvents { get; set; } = new string[] { };
     }

@@ -85,7 +85,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MsbClient"/> class
+        /// Initializes a new instance of the <see cref="MsbClient"/> class.
         /// </summary>
         /// <param name="msbWebsocketAddress">Adress of MSB (Hostname or IP).</param>
         /// <param name="msbWebsocketPort">Port ob MSB Websocket interface.</param>
@@ -347,30 +347,33 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 Log.Debug("Unable to register service, no connection or connection closed");
                 return false;
             }
-            else using (CancellationTokenSource source = new CancellationTokenSource()) 
+            else
             {
-                this.receivedIORegistered = false;
-                var registerTask = Task.Run(() =>
-                {
-                    this.webSocket.Send(messageToSend + "\n");
-                    Log.Debug("Register service '{messageToSend}'", messageToSend);
-    
-                    while (!this.receivedIORegistered && !source.IsCancellationRequested)
-                    {
-                        Thread.Sleep(10);
-                    }
-                });
-
-                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds)) == registerTask)
+                using (CancellationTokenSource source = new CancellationTokenSource())
                 {
                     this.receivedIORegistered = false;
-                    return true;
-                }
-                else
-                {
-                    source.Cancel(false);
-                    Log.Warn($"Registration try for '{serviceToRegister.Uuid}' timed out");
-                    return false;
+                    var registerTask = Task.Run(() =>
+                    {
+                        this.webSocket.Send(messageToSend + "\n");
+                        Log.Debug("Register service '{messageToSend}'", messageToSend);
+
+                        while (!this.receivedIORegistered && !source.IsCancellationRequested)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    });
+
+                    if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds)) == registerTask)
+                    {
+                        this.receivedIORegistered = false;
+                        return true;
+                    }
+                    else
+                    {
+                        source.Cancel(false);
+                        Log.Warn($"Registration try for '{serviceToRegister.Uuid}' timed out");
+                        return false;
+                    }
                 }
             }
         }
@@ -433,12 +436,12 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                             else
                             {
                                 this.CacheEvent(service, eventData);
-                                Log.Error($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' resulted in Error (' { e.Message } '). Event added to cache.");
+                                Log.Error($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' resulted in Error (' {e.Message} '). Event added to cache.");
                                 return false;
                             }
                         }
-
                     }
+
                     // Never should get here
                     return false;
                 }
@@ -482,7 +485,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             {
                 List<EventData> cachedEvents = new List<EventData>
                 {
-                    eventData
+                    eventData,
                 };
                 this.EventCache.Add(service, cachedEvents);
             }

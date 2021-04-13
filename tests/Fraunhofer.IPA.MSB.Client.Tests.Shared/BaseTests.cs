@@ -20,6 +20,9 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared
     using Xunit.Abstractions;
     using Xunit.Sdk;
 
+    /// <summary>
+    /// Base class for tests.
+    /// </summary>
     public class BaseTests
     {
         private const string LogOutputTemplate = "[{Timestamp:yyyy-MM-dd - HH:mm:ss}] [{SourceContext:s}] [{Level:u3}] {Message:lj}{NewLine}{Exception}";
@@ -47,6 +50,9 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared
                 .CreateLogger();
         }
 
+        /// <summary>
+        /// Gets the helper for test output.
+        /// </summary>
         protected TestOutputHelper Output { get; }
     }
 }

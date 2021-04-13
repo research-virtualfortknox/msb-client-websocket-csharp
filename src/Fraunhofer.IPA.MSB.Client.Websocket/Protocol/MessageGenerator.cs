@@ -30,7 +30,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Protocol
         private static readonly ILog Log = LogProvider.For<MessageGenerator>();
 
         /// <summary>
-        /// Generates a registration message for a <see cref="Service"/>
+        /// Generates a registration message for a <see cref="Service"/>.
         /// </summary>
         /// <param name="serviceToRegister">The <see cref="Service"/> to generate registration message for.</param>
         /// <returns>The registration message as JSON string.</returns>
