@@ -270,7 +270,8 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             this.webSocket.Error += this.OnWebsocketError;
             this.webSocket.Closed += this.OnWebsocketClosed;
 
-            using (CancellationTokenSource source = new CancellationTokenSource()) {}
+            using (CancellationTokenSource source = new CancellationTokenSource())
+            {
                 var connectTask = Task.Run(() =>
                 {
                     this.webSocket.Open();
