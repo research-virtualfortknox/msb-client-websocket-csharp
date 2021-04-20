@@ -809,8 +809,8 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             ConnectionClosedEventArgs connectionClosedEventArg;
             try
             {
-                Log.Error("OnWebsocketClosed called from: " + sender.ToString() + ", Reason:" + eventArgs);
-                ClosedEventArgs closedArgs = (WebSocket4Net.ClosedEventArgs)eventArgs;
+                Log.Error("OnWebsocketClosed called from: " + sender.ToString() + ", Reason:" + JsonConvert.SerializeObject(eventArgs));
+                ClosedEventArgs closedArgs = (ClosedEventArgs)eventArgs;
                 connectionClosedEventArg = new ConnectionClosedEventArgs(closedArgs.Code, closedArgs.Reason);
             }
             catch (System.InvalidCastException ex)
