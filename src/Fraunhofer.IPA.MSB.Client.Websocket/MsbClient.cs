@@ -19,7 +19,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using Fraunhofer.IPA.MSB.Client.API;
@@ -31,6 +30,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using WebSocket4Net;
 
     /// <summary>
     /// Client to connect to MSB via Websocket.
@@ -51,9 +51,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         private bool receivedIOPublished = false;
         private bool reconnectInProgress = false;
 
-        private WebSocket4Net.WebSocket webSocket;
-        private Task reconnectTask;
-        private CancellationToken reconnectTaskCancellationToken;
+        private Task connectTask = null;
+
+        private WebSocket webSocket;
+        private CancellationTokenSource reconnectTaskCanellationTokenSource = new CancellationTokenSource();
+        private System.Timers.Timer reconnectTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MsbClient"/> class.
@@ -82,6 +84,12 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     this.MsbUrl += ":80";
                 }
             }
+
+            this.reconnectTimer = new System.Timers.Timer
+            {
+                Interval = this.AutoReconnectIntervalInMilliseconds,
+            };
+            this.reconnectTimer.Elapsed += this.ReconnectTimer_Elapsed;
         }
 
         /// <summary>
@@ -103,6 +111,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
 
             this.IsSslEnabled = useSSL;
+            this.reconnectTimer = new System.Timers.Timer
+            {
+                Interval = this.AutoReconnectIntervalInMilliseconds,
+            };
+            this.reconnectTimer.Elapsed += this.ReconnectTimer_Elapsed;
         }
 
         /// <summary>Occurs when the client has connected.</summary>
@@ -239,6 +252,22 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <inheritdoc/>
         public override async Task<bool> ConnectAsync()
         {
+            if (!this.reconnectTimer.Enabled)
+            {
+                this.reconnectTimer.Start();
+            }
+
+            if (this.connectTask != null)
+            {
+                return this.IsConnected();
+            }
+
+            if (this.IsConnected())
+            {
+                Log.Error("Request to connect, but I am already connected");
+                return true;
+            }
+
             string msbWebsocketUrlWithPath = this.MsbUrl;
             if (this.UseSockJs)
             {
@@ -272,25 +301,45 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
             using (CancellationTokenSource source = new CancellationTokenSource())
             {
-                var connectTask = Task.Run(() =>
+                this.connectTask = Task.Run(() =>
                 {
-                    this.webSocket.Open();
+                    try
+                    {
+                        this.webSocket.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Connection Error: " + ex.Message);
+                        return;
+                    }
+
                     while (!this.IsConnected() && !source.IsCancellationRequested)
                     {
                         Thread.Sleep(10);
                     }
+
+                    if (source.IsCancellationRequested)
+                    {
+                        Log.Debug($"Connection TASK cancelled.");
+                    }
                 });
 
-                if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds)) == connectTask)
+                if (await Task.WhenAny(this.connectTask, Task.Delay(this.WaitForConnectedInMilliseconds)) == this.connectTask)
                 {
-                    return true;
+                    Log.Debug($"Connection task finished '{this.MsbUrl}'");
+                    this.connectTask = null;
+                    return this.IsConnected();
                 }
                 else
                 {
+                    Log.Debug($"Connection try to '{this.MsbUrl}' timed out. Starting to cancel");
+                    this.webSocket.Close();
                     source.Cancel(false);
-                    Log.Warn($"Connection try to '{this.MsbUrl}' timed out");
+                    this.connectTask.Wait();
+                    Log.Debug($"Connection try to '{this.MsbUrl}' timed out");
                     this.ConnectionFailed?.Invoke(this, EventArgs.Empty);
-                    return false;
+                    this.connectTask = null;
+                    return this.IsConnected();
                 }
             }
         }
@@ -298,6 +347,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <inheritdoc/>
         public override void Disconnect()
         {
+            // Stop all reconnect task(s) (should be only one)
+            this.reconnectTimer.Stop();
+            try
+            {
+                this.reconnectTaskCanellationTokenSource.Cancel(false);
+            }
+            catch (Exception)
+            {
+                // Nothing to do
+            }
+
             if (this.webSocket != null)
             {
                 Log.Debug($"Disconnecting from {this.MsbUrl}");
@@ -381,7 +441,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <inheritdoc/>
         public override async Task<bool> PublishAsync(Service service, EventData eventData)
         {
-            Log.Debug($"Publishing event '{eventData.Event.Id}' for service '{service.Uuid}'");
+            Log.Trace($"Publishing event 'id={eventData.Event.Id}' for service '{service.Uuid}'");
 
             if (!this.RegisteredServices.ContainsKey(service.Uuid))
             {
@@ -403,7 +463,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                         var publishTask = Task.Run(() =>
                         {
                             string message = MessageGenerator.GenerateEventMessage(service, eventData, this.UseSockJs);
-                            Log.Debug($"Event published '{message}' for service '{service.Uuid}'");
+                            Log.Trace($"Event published (id= '{eventData.Event.Id}') for service '{service.Uuid}': {message}");
                             this.webSocket.Send(message);
                             while (!this.receivedIOPublished && !source.IsCancellationRequested)
                             {
@@ -419,6 +479,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                         }
                         else
                         {
+                            Log.Error($"Event TIMEOUT for service '{service.Uuid}'");
                             source.Cancel();
                             return false;
                         }
@@ -474,11 +535,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 if (this.EventCache[service].Count < this.EventCacheSizePerService)
                 {
                     this.EventCache[service].Add(eventData);
-                    Log.Debug("Client not connected, event has been cached");
+                    Log.Trace("Client not connected, event has been cached");
                 }
                 else
                 {
-                    Log.Warn($"Cache for service '{service.Uuid}' full, event was discarded");
+                    Log.Trace($"Cache for service '{service.Uuid}' full, event was discarded");
                 }
             }
             else
@@ -514,6 +575,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
 
             string messageType = MessageType.GetTypeOfMessage(receivedMessage);
+
             Log.Debug($"WebsocketMessage [{messageType}]: {receivedMessage}");
             switch (messageType)
             {
@@ -529,7 +591,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     {
                         foreach (var registeredService in this.RegisteredServices.Values)
                         {
-                            Log.Debug($"Re-registering service '{registeredService.Uuid}'");
+                            Log.Debug($"Re-registering service '{registeredService.Uuid}' after IO_CONNECTED");
                             this.RegisterAsync(registeredService).Wait();
                         }
 
@@ -639,7 +701,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
         private void OnWebsocketOpend(object sender, EventArgs e)
         {
-            Log.Trace("Websocket_Opened");
+            Log.Debug("Websocket_Opened");
         }
 
         private void HandleFunctionCall(FunctionCall functionCall)
@@ -729,14 +791,27 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
         }
 
+        private async void ReconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (this.AutoReconnect)
+            {
+                if (this.webSocket.State != WebSocketState.Connecting && this.webSocket.State != WebSocketState.Open)
+                {
+                    Log.Debug("Reconnect active");
+                    await this.ConnectAsync();
+                }
+            }
+        }
+
         private void OnWebsocketClosed(object sender, EventArgs eventArgs)
         {
+            Log.Debug("OnWebsocketClosed called");
             ConnectionClosedEventArgs connectionClosedEventArg;
             try
             {
-                WebSocket4Net.ClosedEventArgs closedArgs = (WebSocket4Net.ClosedEventArgs)eventArgs;
+                Log.Error("OnWebsocketClosed called from: " + sender.ToString() + ", Reason:" + eventArgs);
+                ClosedEventArgs closedArgs = (WebSocket4Net.ClosedEventArgs)eventArgs;
                 connectionClosedEventArg = new ConnectionClosedEventArgs(closedArgs.Code, closedArgs.Reason);
-                Log.Debug("WebSocket_Closed: Code: " + closedArgs.Code + ", Reason: " + closedArgs.Reason);
             }
             catch (System.InvalidCastException ex)
             {
@@ -746,24 +821,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
             this.receivedIOConnected = false;
             this.ConnectionClosed?.Invoke(this, connectionClosedEventArg);
-
-            if (this.AutoReconnect && !this.reconnectInProgress)
-            {
-                this.reconnectInProgress = true;
-                CancellationTokenSource tokenSource = new CancellationTokenSource();
-                this.reconnectTaskCancellationToken = tokenSource.Token;
-                this.reconnectTask = Task.Run(
-                    () =>
-                    {
-                        CancellationTokenSource source = new CancellationTokenSource();
-                        while (!this.IsConnected() && !source.IsCancellationRequested)
-                        {
-                            Log.Info($"Trying to reconnect to '{this.MsbUrl}'");
-                            bool connected = this.ConnectAsync().Result;
-                            Thread.Sleep(this.AutoReconnectIntervalInMilliseconds);
-                        }
-                    }, this.reconnectTaskCancellationToken);
-            }
         }
     }
 }

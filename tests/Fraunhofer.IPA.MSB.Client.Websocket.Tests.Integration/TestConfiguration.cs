@@ -17,7 +17,6 @@
 namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 {
     using System;
-    using System.Collections;
     using System.IO;
     using System.Linq;
     using Newtonsoft.Json;
