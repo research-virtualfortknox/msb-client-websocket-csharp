@@ -130,7 +130,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         private void Init(string id, string name, string description, MethodInfo methodInfo, object callableObjectForMethod)
         {
             List<string> responseEvents = this.GetResponseEventsFromMethodInfo(methodInfo);
-             this.Init(id, name, description, responseEvents, methodInfo, callableObjectForMethod);
+            this.Init(id, name, description, responseEvents, methodInfo, callableObjectForMethod);
         }
 
         private void Init(string id, string name, string description, List<string> responseEvents, MethodInfo methodInfo, object callableObjectForMethod)

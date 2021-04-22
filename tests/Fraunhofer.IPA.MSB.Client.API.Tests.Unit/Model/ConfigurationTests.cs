@@ -37,7 +37,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                 Dictionary<string, ConfigurationParameterValue> configurationParameters = new Dictionary<string, ConfigurationParameterValue>
                 {
                     { "parameter1", new ConfigurationParameterValue("TestValue") },
-                    { "parameter2", new ConfigurationParameterValue(100) }
+                    { "parameter2", new ConfigurationParameterValue(100) },
                 };
 
                 var configuration = new Configuration(configurationParameters);
@@ -56,7 +56,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                     Dictionary<string, ConfigurationParameterValue> configurationParameters = new Dictionary<string, ConfigurationParameterValue>
                     {
                         { "parameter1", new ConfigurationParameterValue("TestValue") },
-                        { "parameter2", new ConfigurationParameterValue(100) }
+                        { "parameter2", new ConfigurationParameterValue(100) },
                     };
 
                     var configuration = new Configuration(configurationParameters);
@@ -91,7 +91,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                     Dictionary<string, ConfigurationParameterValue> configurationParameters = new Dictionary<string, ConfigurationParameterValue>
                     {
                         { "parameter1", new ConfigurationParameterValue("TestValue") },
-                        { "parameter2", new ConfigurationParameterValue(100) }
+                        { "parameter2", new ConfigurationParameterValue(100) },
                     };
 
                     var configuration = new Configuration(configurationParameters);
@@ -126,7 +126,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                     Dictionary<string, ConfigurationParameterValue> configurationParameters = new Dictionary<string, ConfigurationParameterValue>
                     {
                         { "parameter1", new ConfigurationParameterValue("TestValue") },
-                        { "parameter2", new ConfigurationParameterValue(100) }
+                        { "parameter2", new ConfigurationParameterValue(100) },
                     };
 
                     var configuration = new Configuration(configurationParameters);

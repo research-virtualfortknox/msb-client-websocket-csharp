@@ -29,6 +29,6 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>
         /// Connection to MSB via REST.
         /// </summary>
-        REST
+        REST,
     }
 }

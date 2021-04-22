@@ -18,6 +18,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
     using System;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
+    using Fraunhofer.IPA.MSB.Client.API.Utils;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using NJsonSchema;
@@ -31,8 +32,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="IncomingData"/> class.
         /// </summary>
-        /// <param name="uuid">The <see cref="IncomingData.Uuid"/> of the <see cref="Service"/></param>
-        /// <param name="eventId">The <see cref="IncomingData.EventId"/> of the <see cref="Event"/></param>
+        /// <param name="uuid">The <see cref="IncomingData.Uuid"/> of the <see cref="Service"/>.</param>
+        /// <param name="eventId">The <see cref="IncomingData.EventId"/> of the <see cref="Event"/>.</param>
         /// <param name="priority">The <see cref="IncomingData.Priority"/> of the data.</param>
         /// <param name="postDate">The <see cref="IncomingData.PostDate"/> when the data was posted.</param>
         /// <param name="dataObject">The <see cref="IncomingData.DataObject"/> of the incoming data.</param>
@@ -61,7 +62,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
         /// <summary>Gets or sets timestamp when the data was published.</summary>
         [JsonSchema(JsonObjectType.String, Format = "date-time")]
-        [JsonProperty("postDate", ItemConverterType = typeof(IsoDateTimeConverter))]
+        [JsonProperty("postDate", ItemConverterType = typeof(CustomIsoDateTimeConverter))]
         public DateTime PostDate { get; set; }
 
         /// <summary>Gets or sets correlation id of the <see cref="Event"/> that sends the data.</summary>

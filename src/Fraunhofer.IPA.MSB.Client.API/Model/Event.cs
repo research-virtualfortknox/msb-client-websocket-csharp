@@ -26,8 +26,17 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     /// </summary>
     public class Event
     {
-        /// <summary>Gets or sets type on which the <see cref="Event.DataFormat"/>is based.</summary>
-        private Type dataFormatType;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Event"/> class.
+        /// </summary>
+        /// <param name="id">The <see cref="Event.Id"/> of the <see cref="Event"/>.</param>
+        /// <param name="name">The <see cref="Event.Name"/> of the <see cref="Event"/>.</param>
+        /// <param name="description">The <see cref="Event.Description"/> of the <see cref="Event"/>.</param>
+        /// <param name="dataFormatType">The Type used to generate <see cref="Event.DataFormat"/> of the <see cref="Event"/>.</param>
+        public Event(string id, string name, string description, Type dataFormatType)
+            : this(id, name, description, new DataFormat("dataObject", dataFormatType))
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Event"/> class.
@@ -35,14 +44,13 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <param name="id">The <see cref="Event.Id"/> of the <see cref="Event"/>.</param>
         /// <param name="name">The <see cref="Event.Name"/> of the <see cref="Event"/>.</param>
         /// <param name="description">The <see cref="Event.Description"/> of the <see cref="Event"/>.</param>
-        /// <param name="dataFormatType">The <see cref="Event.dataFormatType"/> used to generate <see cref="Event.DataFormat"/>.</param>
-        public Event(string id, string name, string description, Type dataFormatType)
+        /// <param name="dataFormat">The <see cref="Event.DataFormat"/> of the <see cref="Event"/>.</param>
+        public Event(string id, string name, string description, DataFormat dataFormat)
         {
             this.Id = id;
             this.Name = name;
             this.Description = description;
-            this.dataFormatType = dataFormatType;
-            this.DataFormat = new DataFormat("dataObject", dataFormatType);
+            this.DataFormat = dataFormat;
         }
 
         /// <summary>Gets or sets id for referencing in JSON.</summary>

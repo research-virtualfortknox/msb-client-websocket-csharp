@@ -25,6 +25,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using Newtonsoft.Json.Linq;
     using Xunit;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class DataFormatTests
     {
         public class Constructors : DataFormatTests
@@ -32,10 +33,91 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             [Fact]
             public void DataFormatGenerationFromType()
             {
-                DataFormat dataFormat = new DataFormat("dataFormat", typeof(string));
-                JObject dataFormatAsJson = JObject.Parse(JsonConvert.SerializeObject(dataFormat));
+                var jsonString = @" { 
+                    'dataObject' : { 
+                        'type' : 'string' 
+                    } 
+                }";
+                JObject expectedDataFormatAsJson = JObject.Parse(jsonString);
 
-                dataFormatAsJson.Should().HaveElement("dataFormat");
+                DataFormat dataFormat = new DataFormat("dataObject", typeof(string));
+
+                expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(JsonConvert.SerializeObject(dataFormat)));
+            }
+
+            [Fact]
+            public void DataFormatGenerationFromDictionary()
+            {
+                var jsonString = @" { 
+                    'dataObject' : { 
+                        'type' : 'string' 
+                    } 
+                }";
+                JObject expectedDataFormatAsJson = JObject.Parse(jsonString);
+
+                Dictionary<string, string> typeString = new Dictionary<string, string>();
+                typeString.Add("type", "string");
+                Dictionary<string, object> dataFormatAsDictionary = new Dictionary<string, object>();
+                dataFormatAsDictionary.Add("dataObject", typeString);
+
+                DataFormat dataFormat = new DataFormat(dataFormatAsDictionary);
+
+                expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(dataFormat));
+            }
+
+            [Fact]
+            public void SimpleDataFormatGenerationFromString()
+            {
+                var jsonString = @" { 
+                    'dataObject' : { 
+                        'type' : 'string' 
+                    } 
+                }";
+                JObject expectedDataFormatAsJson = JObject.Parse(jsonString);
+
+                DataFormat dataFormat = new DataFormat(jsonString);
+                expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(dataFormat));
+            }
+
+            [Fact]
+            public void FlatDataFormatGenerationFromString()
+            {
+                var jsonString = @"{
+                    'dataObject' : {
+                        '$ref' : '#/definitions/SimpleEvent'
+                    },
+                    'SimpleEvent' : {
+                        'type' : 'object',
+                        'properties' : {
+                            'MyInteger' : {
+                            'type' : 'integer',
+                            'format' : 'int32'
+                            },
+                            'MyFloat' : {
+                            'type' : 'number',
+                            'format' : 'float'
+                            },
+                            'MyDouble' : {
+                            'type' : 'number',
+                            'format' : 'double'
+                            },
+                            'MyString' : {
+                            'type' : 'string'
+                            },
+                            'MyStringArray' : {
+                            'type' : 'array',
+                            'items' : {
+                                'type' : 'string'
+                            }
+                        }
+                      }
+                    }
+                }";
+
+                JObject expectedDataFormatAsJson = JObject.Parse(jsonString);
+
+                DataFormat dataFormat = new DataFormat(jsonString);
+                expectedDataFormatAsJson.Equals(JsonConvert.SerializeObject(dataFormat));
             }
         }
     }

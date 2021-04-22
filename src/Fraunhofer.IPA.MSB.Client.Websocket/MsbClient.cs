@@ -19,7 +19,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
     using Fraunhofer.IPA.MSB.Client.API;
@@ -31,6 +30,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
     using Fraunhofer.IPA.MSB.Client.Websocket.Protocol;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
+    using WebSocket4Net;
 
     /// <summary>
     /// Client to connect to MSB via Websocket.
@@ -51,9 +51,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         private bool receivedIOPublished = false;
         private bool reconnectInProgress = false;
 
-        private WebSocket4Net.WebSocket webSocket;
-        private Task reconnectTask;
-        private CancellationToken reconnectTaskCancellationToken;
+        private Task connectTask = null;
+
+        private WebSocket webSocket;
+        private CancellationTokenSource reconnectTaskCanellationTokenSource = new CancellationTokenSource();
+        private System.Timers.Timer reconnectTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MsbClient"/> class.
@@ -82,10 +84,16 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     this.MsbUrl += ":80";
                 }
             }
+
+            this.reconnectTimer = new System.Timers.Timer
+            {
+                Interval = this.AutoReconnectIntervalInMilliseconds,
+            };
+            this.reconnectTimer.Elapsed += this.ReconnectTimer_Elapsed;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MsbClient"/> class
+        /// Initializes a new instance of the <see cref="MsbClient"/> class.
         /// </summary>
         /// <param name="msbWebsocketAddress">Adress of MSB (Hostname or IP).</param>
         /// <param name="msbWebsocketPort">Port ob MSB Websocket interface.</param>
@@ -103,6 +111,11 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
 
             this.IsSslEnabled = useSSL;
+            this.reconnectTimer = new System.Timers.Timer
+            {
+                Interval = this.AutoReconnectIntervalInMilliseconds,
+            };
+            this.reconnectTimer.Elapsed += this.ReconnectTimer_Elapsed;
         }
 
         /// <summary>Occurs when the client has connected.</summary>
@@ -229,7 +242,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
         /// </summary>
-        public int WaitForRegistrationInMilliseconds { get; set; } = 10000;
+        public int WaitForRegistrationInMilliseconds { get; set; } = 80000;
 
         /// <summary>
         /// Gets or sets the timeout to wait for registration response of MSB.
@@ -239,6 +252,22 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <inheritdoc/>
         public override async Task<bool> ConnectAsync()
         {
+            if (!this.reconnectTimer.Enabled)
+            {
+                this.reconnectTimer.Start();
+            }
+
+            if (this.connectTask != null)
+            {
+                return this.IsConnected();
+            }
+
+            if (this.IsConnected())
+            {
+                Log.Error("Request to connect, but I am already connected");
+                return true;
+            }
+
             string msbWebsocketUrlWithPath = this.MsbUrl;
             if (this.UseSockJs)
             {
@@ -270,32 +299,65 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             this.webSocket.Error += this.OnWebsocketError;
             this.webSocket.Closed += this.OnWebsocketClosed;
 
-            var connectTask = Task.Run(() =>
+            using (CancellationTokenSource source = new CancellationTokenSource())
             {
-                this.webSocket.Open();
-                CancellationTokenSource source = new CancellationTokenSource();
-                while (!this.IsConnected() && !source.IsCancellationRequested)
+                this.connectTask = Task.Run(() =>
                 {
-                    Thread.Sleep(10);
-                }
-            });
+                    try
+                    {
+                        this.webSocket.Open();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("Connection Error: " + ex.Message);
+                        return;
+                    }
 
-            if (await Task.WhenAny(connectTask, Task.Delay(this.WaitForConnectedInMilliseconds, default)) == connectTask)
-            {
-                await connectTask;
-                return true;
-            }
-            else
-            {
-                Log.Warn($"Connection try to '{this.MsbUrl}' timed out");
-                this.ConnectionFailed?.Invoke(this, EventArgs.Empty);
-                return false;
+                    while (!this.IsConnected() && !source.IsCancellationRequested)
+                    {
+                        Thread.Sleep(10);
+                    }
+
+                    if (source.IsCancellationRequested)
+                    {
+                        Log.Debug($"Connection TASK cancelled.");
+                    }
+                });
+
+                if (await Task.WhenAny(this.connectTask, Task.Delay(this.WaitForConnectedInMilliseconds)) == this.connectTask)
+                {
+                    Log.Debug($"Connection task finished '{this.MsbUrl}'");
+                    this.connectTask = null;
+                    return this.IsConnected();
+                }
+                else
+                {
+                    Log.Debug($"Connection try to '{this.MsbUrl}' timed out. Starting to cancel");
+                    this.webSocket.Close();
+                    source.Cancel(false);
+                    this.connectTask.Wait();
+                    Log.Debug($"Connection try to '{this.MsbUrl}' timed out");
+                    this.ConnectionFailed?.Invoke(this, EventArgs.Empty);
+                    this.connectTask = null;
+                    return this.IsConnected();
+                }
             }
         }
 
         /// <inheritdoc/>
         public override void Disconnect()
         {
+            // Stop all reconnect task(s) (should be only one)
+            this.reconnectTimer.Stop();
+            try
+            {
+                this.reconnectTaskCanellationTokenSource.Cancel(false);
+            }
+            catch (Exception)
+            {
+                // Nothing to do
+            }
+
             if (this.webSocket != null)
             {
                 Log.Debug($"Disconnecting from {this.MsbUrl}");
@@ -326,6 +388,13 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         {
             string messageToSend = MessageGenerator.GenerateRegistrationMessage(serviceToRegister);
             this.RegisteredServices[serviceToRegister.Uuid] = serviceToRegister;
+            if (serviceToRegister.Class.Equals("Gateway"))
+            {
+                foreach (var serviceOfGateway in ((Gateway)serviceToRegister).Services)
+                {
+                    this.RegisteredServices[serviceOfGateway.Uuid] = serviceOfGateway;
+                }
+            }
 
             if (this.UseSockJs)
             {
@@ -340,28 +409,31 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
             else
             {
-                this.receivedIORegistered = false;
-                var registerTask = Task.Run(() =>
+                using (CancellationTokenSource source = new CancellationTokenSource())
                 {
-                    this.webSocket.Send(messageToSend + "\n");
-                    Log.Debug("Register service '{messageToSend}'", messageToSend);
-                    CancellationTokenSource source = new CancellationTokenSource();
-                    while (!this.receivedIORegistered && !source.IsCancellationRequested)
-                    {
-                        Thread.Sleep(10);
-                    }
-                });
-
-                if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds, default)) == registerTask)
-                {
-                    await registerTask;
                     this.receivedIORegistered = false;
-                    return true;
-                }
-                else
-                {
-                    Log.Warn($"Registration try for '{serviceToRegister.Uuid}' timed out");
-                    return false;
+                    var registerTask = Task.Run(() =>
+                    {
+                        this.webSocket.Send(messageToSend + "\n");
+                        Log.Debug("Register service '{messageToSend}'", messageToSend);
+
+                        while (!this.receivedIORegistered && !source.IsCancellationRequested)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    });
+
+                    if (await Task.WhenAny(registerTask, Task.Delay(this.WaitForRegistrationInMilliseconds)) == registerTask)
+                    {
+                        this.receivedIORegistered = false;
+                        return true;
+                    }
+                    else
+                    {
+                        source.Cancel(false);
+                        Log.Warn($"Registration try for '{serviceToRegister.Uuid}' timed out");
+                        return false;
+                    }
                 }
             }
         }
@@ -369,7 +441,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
         /// <inheritdoc/>
         public override async Task<bool> PublishAsync(Service service, EventData eventData)
         {
-            Log.Debug($"Publishing event '{eventData.Event.Id}' for service '{service.Uuid}'");
+            Log.Trace($"Publishing event 'id={eventData.Event.Id}' for service '{service.Uuid}'");
 
             if (!this.RegisteredServices.ContainsKey(service.Uuid))
             {
@@ -383,30 +455,55 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
             if (this.IsConnected())
             {
-                this.receivedIOPublished = false;
-                var publishTask = Task.Run(() =>
+                using (CancellationTokenSource source = new CancellationTokenSource())
                 {
-                    string message = MessageGenerator.GenerateEventMessage(service, eventData, this.UseSockJs);
-                    Log.Debug($"Event published '{message}' for service '{service.Uuid}'");
-                    this.webSocket.Send(message);
-                    CancellationTokenSource source = new CancellationTokenSource();
-                    while (!this.receivedIOPublished && !source.IsCancellationRequested)
-                    {
-                        Thread.Sleep(10);
-                    }
-                });
-
-                if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds, default)) == publishTask)
-                {
-                    await publishTask;
                     this.receivedIOPublished = false;
-                    this.EventPublished?.Invoke(this, EventArgs.Empty);
-                    return true;
-                }
-                else
-                {
-                    this.CacheEvent(service, eventData);
-                    Log.Warn($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' timed out. Event added to cache.");
+                    try
+                    {
+                        var publishTask = Task.Run(() =>
+                        {
+                            string message = MessageGenerator.GenerateEventMessage(service, eventData, this.UseSockJs);
+                            Log.Trace($"Event published (id= '{eventData.Event.Id}') for service '{service.Uuid}': {message}");
+                            this.webSocket.Send(message);
+                            while (!this.receivedIOPublished && !source.IsCancellationRequested)
+                            {
+                                Thread.Sleep(10);
+                            }
+                        });
+
+                        if (await Task.WhenAny(publishTask, Task.Delay(this.WaitForPublishInMilliseconds)) == publishTask)
+                        {
+                            this.receivedIOPublished = false;
+                            this.EventPublished?.Invoke(this, EventArgs.Empty);
+                            return true;
+                        }
+                        else
+                        {
+                            Log.Error($"Event TIMEOUT for service '{service.Uuid}'");
+                            source.Cancel();
+                            return false;
+                        }
+                    }
+                    catch (AggregateException ae)
+                    {
+                        foreach (Exception e in ae.InnerExceptions)
+                        {
+                            if (e is TaskCanceledException)
+                            {
+                                this.CacheEvent(service, eventData);
+                                Log.Warn($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' timed out. Event added to cache.");
+                                return false;
+                            }
+                            else
+                            {
+                                this.CacheEvent(service, eventData);
+                                Log.Error($"Publish try for event '{eventData.Event.Id}' of service ' {service.Uuid}' resulted in Error (' {e.Message} '). Event added to cache.");
+                                return false;
+                            }
+                        }
+                    }
+
+                    // Never should get here
                     return false;
                 }
             }
@@ -438,18 +535,18 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                 if (this.EventCache[service].Count < this.EventCacheSizePerService)
                 {
                     this.EventCache[service].Add(eventData);
-                    Log.Debug("Client not connected, event has been cached");
+                    Log.Trace("Client not connected, event has been cached");
                 }
                 else
                 {
-                    Log.Warn($"Cache for service '{service.Uuid}' full, event was discarded");
+                    Log.Trace($"Cache for service '{service.Uuid}' full, event was discarded");
                 }
             }
             else
             {
                 List<EventData> cachedEvents = new List<EventData>
                 {
-                    eventData
+                    eventData,
                 };
                 this.EventCache.Add(service, cachedEvents);
             }
@@ -478,6 +575,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
 
             string messageType = MessageType.GetTypeOfMessage(receivedMessage);
+
             Log.Debug($"WebsocketMessage [{messageType}]: {receivedMessage}");
             switch (messageType)
             {
@@ -493,7 +591,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
                     {
                         foreach (var registeredService in this.RegisteredServices.Values)
                         {
-                            Log.Debug($"Re-registering service '{registeredService.Uuid}'");
+                            Log.Debug($"Re-registering service '{registeredService.Uuid}' after IO_CONNECTED");
                             this.RegisterAsync(registeredService).Wait();
                         }
 
@@ -603,12 +701,12 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
         private void OnWebsocketOpend(object sender, EventArgs e)
         {
-            Log.Trace("Websocket_Opened");
+            Log.Debug("Websocket_Opened");
         }
 
         private void HandleFunctionCall(FunctionCall functionCall)
         {
-            Log.Debug($"Callback for function '{functionCall.FunctionId}' of service '{functionCall.ServiceUuid}' received with parameters: {functionCall.FunctionParameters}");
+            Log.Debug($"Callback for function '{functionCall.FunctionId}' of service '{functionCall.ServiceUuid}' received with parameters: {JsonConvert.SerializeObject(functionCall.FunctionParameters)}");
             if (this.RegisteredServices.ContainsKey(functionCall.ServiceUuid))
             {
                 var serviceOfFunctionCall = this.RegisteredServices[functionCall.ServiceUuid];
@@ -693,14 +791,27 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
             }
         }
 
+        private async void ReconnectTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            if (this.AutoReconnect)
+            {
+                if (this.webSocket.State != WebSocketState.Connecting && this.webSocket.State != WebSocketState.Open)
+                {
+                    Log.Debug("Reconnect active");
+                    await this.ConnectAsync();
+                }
+            }
+        }
+
         private void OnWebsocketClosed(object sender, EventArgs eventArgs)
         {
+            Log.Debug("OnWebsocketClosed called");
             ConnectionClosedEventArgs connectionClosedEventArg;
             try
             {
-                WebSocket4Net.ClosedEventArgs closedArgs = (WebSocket4Net.ClosedEventArgs)eventArgs;
+                Log.Error("OnWebsocketClosed called from: " + sender.ToString() + ", Reason:" + JsonConvert.SerializeObject(eventArgs));
+                ClosedEventArgs closedArgs = (ClosedEventArgs)eventArgs;
                 connectionClosedEventArg = new ConnectionClosedEventArgs(closedArgs.Code, closedArgs.Reason);
-                Log.Debug("WebSocket_Closed: Code: " + closedArgs.Code + ", Reason: " + closedArgs.Reason);
             }
             catch (System.InvalidCastException ex)
             {
@@ -710,24 +821,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket
 
             this.receivedIOConnected = false;
             this.ConnectionClosed?.Invoke(this, connectionClosedEventArg);
-
-            if (this.AutoReconnect && !this.reconnectInProgress)
-            {
-                this.reconnectInProgress = true;
-                CancellationTokenSource tokenSource = new CancellationTokenSource();
-                this.reconnectTaskCancellationToken = tokenSource.Token;
-                this.reconnectTask = Task.Run(
-                    () =>
-                    {
-                        CancellationTokenSource source = new CancellationTokenSource();
-                        while (!this.IsConnected() && !source.IsCancellationRequested)
-                        {
-                            Log.Info($"Trying to reconnect to '{this.MsbUrl}'");
-                            bool connected = this.ConnectAsync().Result;
-                            Thread.Sleep(this.AutoReconnectIntervalInMilliseconds);
-                        }
-                    }, this.reconnectTaskCancellationToken);
-            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// <copyright file="RegistrationError.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
+﻿// <copyright file="CustomIsoDateTimeConverter.cs" company="Fraunhofer Institute for Manufacturing Engineering and Automation IPA">
 // Copyright 2019 Fraunhofer Institute for Manufacturing Engineering and Automation IPA
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,28 +14,21 @@
 // limitations under the License.
 // </copyright>
 
-namespace Fraunhofer.IPA.MSB.Client.API.Errors
+namespace Fraunhofer.IPA.MSB.Client.API.Utils
 {
-    using Fraunhofer.IPA.MSB.Client.API.Model;
+    using Newtonsoft.Json.Converters;
 
     /// <summary>
-    /// Defines error types which can occur during registration.
+    /// Custom converter for DateTime in ISO format.
     /// </summary>
-    public enum RegistrationError
+    public class CustomIsoDateTimeConverter : IsoDateTimeConverter
     {
         /// <summary>
-        /// Service already connected to MSB.
+        /// Initializes a new instance of the <see cref="CustomIsoDateTimeConverter"/> class.
         /// </summary>
-        NIO_ALREADY_CONNECTED,
-
-        /// <summary>
-        /// Self-description of <see cref="Service"/> invalid or <see cref="Service.Token"/> already used by other <see cref="Service"/>.
-        /// </summary>
-        NIO_REGISTRATION_ERROR,
-
-        /// <summary>
-        /// Unexpected error during registration.
-        /// </summary>
-        NIO_UNEXPECTED_REGISTRATION_ERROR,
+        public CustomIsoDateTimeConverter()
+        {
+            this.DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'";
+        }
     }
 }

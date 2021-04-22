@@ -113,7 +113,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.OpenApi
                             s.Type = JsonObjectType.Number;
                             s.Format = JsonFormatStrings.Double;
                         }),
-                }
+                },
             };
 
             var schema = JsonSchema.FromType(type, settings);

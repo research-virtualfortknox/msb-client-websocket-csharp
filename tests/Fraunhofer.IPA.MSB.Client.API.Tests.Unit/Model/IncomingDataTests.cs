@@ -99,7 +99,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
                 actualJsonObject.GetValue("priority").Should().HaveValue(JsonConvert.SerializeObject(this.ExpectedPriority));
                 JsonSerializerSettings dateFormatSettings = new JsonSerializerSettings
                 {
-                    DateFormatHandling = DateFormatHandling.IsoDateFormat
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 };
                 actualJsonObject.Should().HaveElement("postDate");
                 actualJsonObject.GetValue("postDate").ToString(Formatting.None, new IsoDateTimeConverter()).Should().Equals(JsonConvert.SerializeObject(this.ExpectedPostDate, dateFormatSettings));

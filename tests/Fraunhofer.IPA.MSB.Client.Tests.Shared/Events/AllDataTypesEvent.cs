@@ -19,6 +19,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.IntegrationTest.Events
     using System;
     using System.Collections.Generic;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class AllDataTypesEvent
     {
         public bool SimpleBool { get; } = false;
@@ -57,6 +58,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.IntegrationTest.Events
 
         public List<string> StringList { get; } = new List<string>() { "simpleStringListEntry " };
 
-    public Dictionary<string, double> DictionaryStringDouble { get; } = new Dictionary<string, double>() { { "simpleDictKey", 1337.0f } };
+        public Dictionary<string, double> DictionaryStringDouble { get; } = new Dictionary<string, double>() { { "simpleDictKey", 1337.0f } };
     }
 }

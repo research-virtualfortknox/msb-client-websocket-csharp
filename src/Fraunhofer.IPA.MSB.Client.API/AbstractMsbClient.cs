@@ -65,7 +65,7 @@ namespace Fraunhofer.IPA.MSB.Client.API
         /// <summary>
         /// Registers a <see cref="Service"/> at the MSB.
         /// </summary>
-        /// <param name="serviceToRegister">The <see cref="Service"/> to be registered</param>
+        /// <param name="serviceToRegister">The <see cref="Service"/> to be registered.</param>
         /// <returns>True, if the registration was successful.</returns>
         public abstract Task<bool> RegisterAsync(Service serviceToRegister);
 
@@ -73,7 +73,7 @@ namespace Fraunhofer.IPA.MSB.Client.API
         /// Publishes <see cref="EventData"/> for an <see cref="Event"/>.
         /// </summary>
         /// <param name="service">The <see cref="Service"/> to publish <see cref="EventData"/> for.</param>
-        /// <param name="eventData">The <see cref="EventData"/> to be published</param>
+        /// <param name="eventData">The <see cref="EventData"/> to be published.</param>
         /// /// <returns>True, if publish was successful.</returns>
         public abstract Task<bool> PublishAsync(Service service, EventData eventData);
     }

@@ -17,9 +17,6 @@
 namespace Fraunhofer.IPA.MSB.Client.Websocket.Sample
 {
     using System;
-    using System.Threading;
-    using Fraunhofer.IPA.MSB.Client.API.Model;
-    using Fraunhofer.IPA.MSB.Client.Websocket.Sample.Functions;
     using Serilog;
 
     public class Program

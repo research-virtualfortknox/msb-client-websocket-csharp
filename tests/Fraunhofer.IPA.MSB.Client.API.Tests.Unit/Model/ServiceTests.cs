@@ -21,10 +21,10 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
     using FluentAssertions;
     using FluentAssertions.Json;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
-    using Fraunhofer.IPA.MSB.Client.API.Configuration;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Model;
     using Fraunhofer.IPA.MSB.Client.Tests.Shared;
+    using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Xunit;
     using Xunit.Abstractions;
@@ -102,7 +102,19 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             [Fact]
             public void CheckSerialization()
             {
-                JObject expectedJsonObject = JObject.Parse("{\"@class\":\"TestImplementationOfServiceClass\",\"name\":\"Test Application\",\"description\":\"Description of Test Application\",\"token\":\"31f7bcaff-2753-4cd6-811d-30397a45318f\",\"uuid\":\"df00ce10-9443-416f-8a42-e388a7d76dbe\",\"configuration\":{\"parameters\":{}},\"events\":[],\"functions\":[]}");
+                var serviceJson = @"{
+                    '@class':'TestImplementationOfServiceClass',
+                    'name':'Test Application',
+                    'description':'Description of Test Application',
+                    'token':'31f7bcaff-2753-4cd6-811d-30397a45318f',
+                    'uuid':'df00ce10-9443-416f-8a42-e388a7d76dbe',
+                    'configuration':{
+                        'parameters':{}
+                    },
+                    'events':[],
+                    'functions':[]
+                }";
+                JObject expectedJsonObject = JObject.Parse(serviceJson);
                 JObject actualJsonObject = JObject.Parse(this.TestService.ToJson());
                 actualJsonObject.Should().BeEquivalentTo(expectedJsonObject);
             }
@@ -126,18 +138,35 @@ namespace Fraunhofer.IPA.MSB.Client.API.Tests.Unit.Model
             }
 
             [Fact]
+            public void AddEventRaw()
+            {
+                this.TestService = new TestImplementationOfServiceClass(Uuid, Name, Description, Token);
+                Event expectedEvent = new Event("EventId", "EventName", "Description", typeof(string));
+
+                var eventAsJsonString = @"{
+                    'eventId': 'EventId',
+                    'name': 'EventName',
+                    'description': 'Description',
+                    'dataFormat': {
+                        'dataObject': {
+                          'type': 'string'
+                        }
+                    }
+                }";
+                this.TestService.AddEventRaw(eventAsJsonString);
+
+                var actualEventString = JsonConvert.SerializeObject(this.TestService.Events[0]);
+                var expectedEventString = JsonConvert.SerializeObject(expectedEvent);
+
+                Assert.Equal(expectedEventString, actualEventString);
+            }
+
+            [Fact]
             public void RemoveEvent()
             {
                 this.AddEvent();
                 this.TestService.RemoveEvent(this.testEvent);
                 Assert.DoesNotContain(this.testEvent, this.TestService.Events);
-            }
-
-            [Fact]
-            public void AddEventRaw()
-            {
-                this.TestService = new TestImplementationOfServiceClass(Uuid, Name, Description, Token);
-                Exception ex = Assert.Throws<NotImplementedException>(() => this.TestService.AddEventRaw(string.Empty));
             }
         }
 

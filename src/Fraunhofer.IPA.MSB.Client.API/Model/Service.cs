@@ -16,14 +16,16 @@
 
 namespace Fraunhofer.IPA.MSB.Client.API.Model
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using Fraunhofer.IPA.MSB.Client.API.Attributes;
     using Fraunhofer.IPA.MSB.Client.API.Exceptions;
     using Fraunhofer.IPA.MSB.Client.API.Logging;
+    using Fraunhofer.IPA.MSB.Client.API.Utils;
+    using Fraunhofer.IPA.MSB.Client.Websocket.Model;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
 
     /// <summary>
     /// Represents an MSB service.
@@ -32,7 +34,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
     {
         private static readonly ILog Log = LogProvider.For<Service>();
 
-        private Dictionary<AbstractFunctionHandler, List<Function>> registeredFunctionHandlerAndRelatedFunctions = new Dictionary<AbstractFunctionHandler, List<Function>>();
+        private readonly Dictionary<AbstractFunctionHandler, List<Function>> registeredFunctionHandlerAndRelatedFunctions = new Dictionary<AbstractFunctionHandler, List<Function>>();
 
         private bool autoPersistConfiguration = false;
 
@@ -49,20 +51,21 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             this.Description = description;
             this.Uuid = uuid;
             this.Token = token;
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Service"/> class.
+        /// </summary>
+        /// <param name="uuid">The <see cref="Service.Uuid"/> of the <see cref="Service"/>.</param>
+        /// <param name="name">The <see cref="Service.Name"/> of the <see cref="Service"/>.</param>
+        /// <param name="description">The <see cref="Service.Description"/> of the <see cref="Service"/>.</param>
+        /// <param name="token">The <see cref="Service.Token"/> of the <see cref="Service"/>.</param>
+        /// <param name="autoPersistConfiguration">Sets the <see cref="AutoPersistConfiguration"/> option.</param>
+        public Service(string uuid, string name, string description, string token, bool autoPersistConfiguration)
+            : this(uuid, name, description, token)
+        {
             this.ConfigurationPersistencePath = $"config/{this.Uuid}.config";
-
-            if (this.AutoPersistConfiguration)
-            {
-                if (File.Exists(this.ConfigurationPersistencePath))
-                {
-                    this.Configuration.LoadFromFile(this.ConfigurationPersistencePath);
-                }
-                else
-                {
-                    Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
-                }
-            }
+            this.AutoPersistConfiguration = autoPersistConfiguration;
         }
 
         /// <summary>Gets or sets name of the service.</summary>
@@ -87,7 +90,8 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
         /// <summary>Gets or sets a value indicating whether the configuration of services is automatically persisted into a file.</summary>
         [JsonIgnore]
-        public bool AutoPersistConfiguration {
+        public bool AutoPersistConfiguration
+        {
             get
             {
                 return this.autoPersistConfiguration;
@@ -104,7 +108,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
                     }
                     else
                     {
-                        Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence dosn't exist");
+                        Log.Info($"File {this.ConfigurationPersistencePath} for configuration persistence doesn't exist");
                     }
                 }
             }
@@ -157,7 +161,17 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
         /// <param name="eventDescription">The event description as JSON.</param>
         public void AddEventRaw(string eventDescription)
         {
-            throw new NotImplementedException();
+            JObject eventAsJson = JObject.Parse(eventDescription);
+
+            var id = eventAsJson.Value<string>("eventId");
+            var name = eventAsJson.Value<string>("name");
+            var description = eventAsJson.Value<string>("description");
+            var eventAsDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(eventDescription, new DictionaryConverter());
+            var dataFormatDictionary = (Dictionary<string, object>)eventAsDictionary["dataFormat"];
+            var dataFormat = new DataFormat(dataFormatDictionary);
+
+            var newEvent = new Event(id, name, description, dataFormat);
+            this.AddEvent(newEvent);
         }
 
         /// <summary>
@@ -277,18 +291,24 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             // Use the generated ids as (JSON) references for response events in the functions of the service
             foreach (var function in this.Functions)
             {
+                var responseEventAtIds = new List<int>();
                 foreach (var responseEventId in function.ResponseEventIds)
                 {
                     Event responseEvent = this.Events.Find(e => e.Id == responseEventId);
-                    function.ResponseEvents.Add(responseEvent.AtId);
+                    if (!function.ResponseEvents.Contains(responseEvent.AtId))
+                    {
+                        responseEventAtIds.Add(responseEvent.AtId);
+                    }
                 }
+
+                function.ResponseEvents = responseEventAtIds;
             }
         }
 
         /// <summary>
         /// Gets an event by id.
         /// </summary>
-        /// <param name="eventId">The id of the <see cref="Event"/></param>
+        /// <param name="eventId">The id of the <see cref="Event"/>.</param>
         /// <returns>The event found for the id.</returns>
         public Event GetEventById(string eventId)
         {
@@ -315,7 +335,7 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 Formatting = Formatting.None,
-                PreserveReferencesHandling = PreserveReferencesHandling.None
+                PreserveReferencesHandling = PreserveReferencesHandling.None,
             };
 
             return JsonConvert.SerializeObject(this, Formatting.None, settings: jsonSerializerSettings);
