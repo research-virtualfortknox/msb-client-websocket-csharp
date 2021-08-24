@@ -6,7 +6,7 @@
 
 # MSB websocket client library for C#
 
-[![Build Status](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://travis-ci.org/research-virtualfortknox/msb-client-websocket-csharp)
+[![Build Status](https://app.travis-ci.com/research-virtualfortknox/msb-client-websocket-csharp.svg?branch=master)](https://app.travis-ci.com/github/research-virtualfortknox/msb-client-websocket-csharp)
 [![Nuget](https://img.shields.io/nuget/v/Fraunhofer.IPA.MSB.Client.Websocket.svg)](https://www.nuget.org/packages/Fraunhofer.IPA.MSB.Client.Websocket/)
 [![Coverage Status](https://coveralls.io/repos/github/research-virtualfortknox/msb-client-websocket-csharp/badge.svg?branch=master&service=github&kill_cache=1)](https://coveralls.io/github/research-virtualfortknox/msb-client-websocket-csharp?branch=master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fresearch-virtualfortknox%2Fmsb-client-websocket-csharp?ref=badge_shield)
