@@ -34,6 +34,8 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
         private const string MsbIntegrationDesignMgmtUrlEnvKey = "MSB_INTEGRATIONDESIGNMGMT_URL";
 
+        private const string MsbOwnerUuidEnvKey = "MSB_OWNER_UUID";
+
         static TestConfiguration()
         {
             var envVars = Environment.GetEnvironmentVariables();
@@ -80,6 +82,13 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 MsbIntegrationDesignMgmtUrl = integrationDesignMgmtEnvVarValue;
                 Log.Debug($"{MsbIntegrationDesignMgmtUrlEnvKey}={MsbIntegrationDesignMgmtUrl}");
             }
+
+            
+            if (Environment.GetEnvironmentVariable(MsbOwnerUuidEnvKey) is string ownerUuidEnvVarValue)
+            {
+                MsbOwnerUuid = ownerUuidEnvVarValue;
+                Log.Debug($"{MsbOwnerUuidEnvKey}={MsbOwnerUuid}");
+            }
         }
 
         public static string MsbWebsocketInterfaceUrl { get; private set; } = "ws://localhost:8085";
@@ -87,5 +96,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
         public static string MsbSmartObjectMgmtUrl { get; private set; } = "http://localhost:8081";
 
         public static string MsbIntegrationDesignMgmtUrl { get; private set; } = "http://localhost:8082";
+
+        public static string MsbOwnerUuid { get; private set; } = "7c328ad1-cea5-410e-8dd8-6c7ca5a2e4f5";
     }
 }

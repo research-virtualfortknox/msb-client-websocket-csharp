@@ -48,11 +48,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
     [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1600:Elements should be documented", Justification = "<Ausstehend>")]
     public class MsbClientTests : BaseTests
     {
-        /// <summary>
-        /// The owner UUID to verify <see cref="Service"/>s at MSB.
-        /// </summary>
-        protected const string OwnerUuid = "7c328ad1-cea5-410e-8dd8-6c7ca5a2e4f5";
-
         protected static readonly string ResourcesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         protected static readonly string IntegrationFlowsDirectory = Path.Combine(ResourcesDirectory, "IntegrationFlows");
 
@@ -230,7 +225,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             {
                 this.RegisterServiceWithEventsAndFunctions();
 
-                var responseVerify = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(OwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
+                var responseVerify = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
                 Assert.Equal(201, responseVerify.StatusCode);
 
                 this.MsbClient.Disconnect();
@@ -308,7 +303,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             {
                 string integrationFlowJson = File.ReadAllText($@"{IntegrationFlowsDirectory}/IntegrationFlow_PublishReceive.json");
                 integrationFlowJson = integrationFlowJson.Replace("%%%FlowName%%%", "PublishEventAndReceiveViaSecondClient");
-                integrationFlowJson = integrationFlowJson.Replace("%%%OwnerUUID%%%", OwnerUuid);
+                integrationFlowJson = integrationFlowJson.Replace("%%%OwnerUUID%%%", TestConfiguration.MsbOwnerUuid);
                 integrationFlowJson = integrationFlowJson.Replace("%%%Service1UUID%%%", this.MySmartObject.Uuid);
                 integrationFlowJson = integrationFlowJson.Replace("%%%Service2UUID%%%", this.MyApplication.Uuid);
                 this.MySmartObject.AddEvent(this.testEvent);
@@ -316,10 +311,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
                 Assert.True(this.MsbClient.ConnectAsync().Result);
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
-                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(OwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
+                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
                 Assert.Equal(201, responseSmartObjectVerification.StatusCode);
                 Assert.True(this.MsbClient.RegisterAsync(this.MyApplication).Result);
-                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(OwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
+                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
                 Assert.Equal(201, responseApplicationVerification.StatusCode);
 
                 var integrationFlowId = this.IntegrationDesignMgmtClient.CreateAndDeployUsingPOSTAsync(integrationFlowJson).Result;
@@ -356,7 +351,7 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             {
                 string integrationFlowJson = File.ReadAllText($@"{IntegrationFlowsDirectory}/IntegrationFlow_PublishReceiveWithResponseEvent.json");
                 integrationFlowJson = integrationFlowJson.Replace("%%%FlowName%%%", "PublishEventAndReceiveWithFunctionWithResponseEvent");
-                integrationFlowJson = integrationFlowJson.Replace("%%%OwnerUUID%%%", OwnerUuid);
+                integrationFlowJson = integrationFlowJson.Replace("%%%OwnerUUID%%%", TestConfiguration.MsbOwnerUuid);
                 integrationFlowJson = integrationFlowJson.Replace("%%%Service1UUID%%%", this.MySmartObject.Uuid);
                 integrationFlowJson = integrationFlowJson.Replace("%%%Service2UUID%%%", this.MyApplication.Uuid);
                 this.MySmartObject.AddEvent(this.testEvent);
@@ -366,10 +361,10 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
 
                 Assert.True(this.MsbClient.ConnectAsync().Result);
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
-                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(OwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
+                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
                 Assert.Equal(201, responseSmartObjectVerification.StatusCode);
                 Assert.True(this.MsbClient.RegisterAsync(this.MyApplication).Result);
-                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(OwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
+                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
                 Assert.Equal(201, responseApplicationVerification.StatusCode);
 
                 var integrationFlowId = this.IntegrationDesignMgmtClient.CreateAndDeployUsingPOSTAsync(integrationFlowJson).Result;
