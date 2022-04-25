@@ -248,7 +248,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <param name="ownerUUId">ownerUUId</param>
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task ApplicationTokenAsync(string ownerUUId)
+        public System.Threading.Tasks.Task<VerificationToken> ApplicationTokenAsync(string ownerUUId)
         {
             return ApplicationTokenAsync(ownerUUId, System.Threading.CancellationToken.None);
         }
@@ -258,7 +258,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async System.Threading.Tasks.Task ApplicationTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<VerificationToken> ApplicationTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
         {
             if (ownerUUId == null)
                 throw new System.ArgumentNullException("ownerUUId");
@@ -292,11 +292,6 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                         ProcessResponse(client_, response_);
 
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200")
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "201")
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -304,12 +299,12 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             try
                             {
                                 result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<VerificationToken>(responseData_, _settings.Value);
+                                return result_;
                             }
                             catch (System.Exception exception_)
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<VerificationToken>("Created", (int)response_.StatusCode, responseData_, headers_, result_, null);
                         }
                         else
                         if (status_ == "401")
@@ -335,6 +330,8 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new SwaggerException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+
+                        return default(VerificationToken);
                     }
                     finally
                     {
@@ -947,7 +944,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <param name="ownerUUId">ownerUUId</param>
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task GatewayTokenAsync(string ownerUUId)
+        public System.Threading.Tasks.Task<VerificationToken> GatewayTokenAsync(string ownerUUId)
         {
             return GatewayTokenAsync(ownerUUId, System.Threading.CancellationToken.None);
         }
@@ -957,7 +954,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async System.Threading.Tasks.Task GatewayTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<VerificationToken> GatewayTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
         {
             if (ownerUUId == null)
                 throw new System.ArgumentNullException("ownerUUId");
@@ -991,11 +988,6 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                         ProcessResponse(client_, response_);
 
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200")
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "201")
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -1003,12 +995,12 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             try
                             {
                                 result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<VerificationToken>(responseData_, _settings.Value);
+                                return result_;
                             }
                             catch (System.Exception exception_)
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<VerificationToken>("Created", (int)response_.StatusCode, responseData_, headers_, result_, null);
                         }
                         else
                         if (status_ == "401")
@@ -1034,6 +1026,8 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new SwaggerException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+
+                        return default(VerificationToken);
                     }
                     finally
                     {
@@ -1644,7 +1638,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <param name="ownerUUId">ownerUUId</param>
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task ServiceTokenAsync(string ownerUUId)
+        public System.Threading.Tasks.Task<VerificationToken> ServiceTokenAsync(string ownerUUId)
         {
             return ServiceTokenAsync(ownerUUId, System.Threading.CancellationToken.None);
         }
@@ -1654,7 +1648,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async System.Threading.Tasks.Task ServiceTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<VerificationToken> ServiceTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
         {
             if (ownerUUId == null)
                 throw new System.ArgumentNullException("ownerUUId");
@@ -1688,11 +1682,6 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                         ProcessResponse(client_, response_);
 
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200")
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "201")
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -1700,12 +1689,12 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             try
                             {
                                 result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<VerificationToken>(responseData_, _settings.Value);
+                                return result_;
                             }
                             catch (System.Exception exception_)
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<VerificationToken>("Created", (int)response_.StatusCode, responseData_, headers_, result_, null);
                         }
                         else
                         if (status_ == "401")
@@ -1731,6 +1720,8 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new SwaggerException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+
+                        return default(VerificationToken);
                     }
                     finally
                     {
@@ -2443,7 +2434,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <param name="ownerUUId">ownerUUId</param>
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task SmartobjectTokenAsync(string ownerUUId)
+        public System.Threading.Tasks.Task<VerificationToken> SmartobjectTokenAsync(string ownerUUId)
         {
             return SmartobjectTokenAsync(ownerUUId, System.Threading.CancellationToken.None);
         }
@@ -2453,7 +2444,7 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
         /// <returns>OK</returns>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async System.Threading.Tasks.Task SmartobjectTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<VerificationToken> SmartobjectTokenAsync(string ownerUUId, System.Threading.CancellationToken cancellationToken)
         {
             if (ownerUUId == null)
                 throw new System.ArgumentNullException("ownerUUId");
@@ -2487,11 +2478,6 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                         ProcessResponse(client_, response_);
 
                         var status_ = ((int)response_.StatusCode).ToString();
-                        if (status_ == "200")
-                        {
-                            return;
-                        }
-                        else
                         if (status_ == "201")
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -2499,12 +2485,12 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             try
                             {
                                 result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<VerificationToken>(responseData_, _settings.Value);
+                                return result_;
                             }
                             catch (System.Exception exception_)
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<VerificationToken>("Created", (int)response_.StatusCode, responseData_, headers_, result_, null);
                         }
                         else
                         if (status_ == "401")
@@ -2530,6 +2516,8 @@ namespace Fraunhofer.IPA.MSB.Client.Tests.Shared.SmartObjectMgmt
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new SwaggerException("The HTTP status code of the response was not expected (" + (int)response_.StatusCode + ").", (int)response_.StatusCode, responseData_, headers_, null);
                         }
+
+                        return default(VerificationToken);
                     }
                     finally
                     {

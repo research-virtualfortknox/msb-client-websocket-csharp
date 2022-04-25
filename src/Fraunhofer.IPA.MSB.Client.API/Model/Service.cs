@@ -70,15 +70,15 @@ namespace Fraunhofer.IPA.MSB.Client.API.Model
 
         /// <summary>Gets or sets name of the service.</summary>
         [JsonProperty("name")]
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
         /// <summary>Gets or sets description of the service.</summary>
         [JsonProperty("description")]
-        public string Description { get; protected set; }
+        public string Description { get; set; }
 
         /// <summary>Gets or sets token to verify the service in the MSB GUI.</summary>
         [JsonProperty("token")]
-        public string Token { get; protected set; }
+        public string Token { get; set; }
 
         /// <summary>Gets or sets UUID of the service.</summary>
         [JsonProperty("uuid")]

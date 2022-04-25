@@ -19,7 +19,7 @@
     "TestPipeline": {
       "commandName": "Project",
       "environmentVariables": {
-        "MSB_SMARTOBJECTMGMT_URL": "http://localhost:8081",
+        "MSB_SMARTOBJECTMGMT_URL": "http://localhost:8100/vfk.msb.smartobjectmgmt.rest",
         "MSB_INTEGRATIONDESIGNMGMT_URL": "http://localhost:8100/vfk.msb.integration-design-mgmt.rest",
         "MSB_WEBSOCKET_INTERFACE_URL": "ws://localhost:8085",
         "MSB_OWNER_UUID": "f10cfa25-58d4-41ba-8ecf-60ced3d60677"

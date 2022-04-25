@@ -199,12 +199,17 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
             }
 
             [Fact]
-            public void RegisterServiceWithEventsAndFunctions()
+            public void RegisterAndVerifyServiceWithEventsAndFunctions()
             {
                 this.MySmartObject.AddEvent(new Event("SimpleEvent", "Simple Event", "Description of SimpleEvent", typeof(SimpleEvent)));
                 this.MySmartObject.AddEvent(new Event("AllDataTypesEvent", "All Data Types Event", "Description of AllDataTypesEvent", typeof(AllDataTypesEvent)));
                 this.MySmartObject.AddEvent(new Event("ComplexEvent", "Complex Event", "Description of ComplexEvent", typeof(ComplexEvent)));
                 this.MySmartObject.AddFunctionHandler(new SimpleFunctionHandler());
+
+                var responseToken = this.SmartObjectMgmtClient.ServiceTokenAsync(TestConfiguration.MsbOwnerUuid).Result;
+                Assert.NotNull(responseToken.Token);
+                this.MySmartObject.Token = responseToken.Token;
+
                 this.RegisterService(this.MySmartObject);
 
                 this.MsbClient.Disconnect();
@@ -218,19 +223,6 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
 
                 this.MsbClient.Disconnect();
-            }
-
-            [Fact]
-            public void RegisterAndVerify()
-            {
-                this.RegisterServiceWithEventsAndFunctions();
-
-                var responseVerify = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
-                Assert.Equal(201, responseVerify.StatusCode);
-
-                this.MsbClient.Disconnect();
-                var responseDelete = this.SmartObjectMgmtClient.SmartobjectDeleteAsync(this.MySmartObject.Uuid).Result;
-                Assert.Equal(201, responseDelete.StatusCode);
             }
 
             [Fact]
@@ -310,12 +302,16 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 this.MyApplication.AddFunction(this.testReceiveFunction);
 
                 Assert.True(this.MsbClient.ConnectAsync().Result);
+
+                var responseTokenSmartObject = this.SmartObjectMgmtClient.ServiceTokenAsync(TestConfiguration.MsbOwnerUuid).Result;
+                Assert.NotNull(responseTokenSmartObject.Token);
+                this.MySmartObject.Token = responseTokenSmartObject.Token;
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
-                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
-                Assert.Equal(201, responseSmartObjectVerification.StatusCode);
+
+                var responseTokenApplication = this.SmartObjectMgmtClient.ServiceTokenAsync(TestConfiguration.MsbOwnerUuid).Result;
+                Assert.NotNull(responseTokenApplication.Token);
+                this.MyApplication.Token = responseTokenApplication.Token;
                 Assert.True(this.MsbClient.RegisterAsync(this.MyApplication).Result);
-                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
-                Assert.Equal(201, responseApplicationVerification.StatusCode);
 
                 var integrationFlowId = this.IntegrationDesignMgmtClient.CreateAndDeployUsingPOSTAsync(integrationFlowJson).Result;
 
@@ -360,12 +356,16 @@ namespace Fraunhofer.IPA.MSB.Client.Websocket.Tests.Integration
                 this.MyApplication.AddFunction(this.testReceiveFunctionWithResponseEvent);
 
                 Assert.True(this.MsbClient.ConnectAsync().Result);
+
+                var responseTokenSmartObject = this.SmartObjectMgmtClient.ServiceTokenAsync(TestConfiguration.MsbOwnerUuid).Result;
+                Assert.NotNull(responseTokenSmartObject.Token);
+                this.MySmartObject.Token = responseTokenSmartObject.Token;
                 Assert.True(this.MsbClient.RegisterAsync(this.MySmartObject).Result);
-                var responseSmartObjectVerification = this.SmartObjectMgmtClient.SmartobjectVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MySmartObject.Token))).Result;
-                Assert.Equal(201, responseSmartObjectVerification.StatusCode);
+
+                var responseTokenApplication = this.SmartObjectMgmtClient.ServiceTokenAsync(TestConfiguration.MsbOwnerUuid).Result;
+                Assert.NotNull(responseTokenApplication.Token);
+                this.MyApplication.Token = responseTokenApplication.Token;
                 Assert.True(this.MsbClient.RegisterAsync(this.MyApplication).Result);
-                var responseApplicationVerification = this.SmartObjectMgmtClient.ApplicationVerifyAsync(TestConfiguration.MsbOwnerUuid, new MemoryStream(Encoding.ASCII.GetBytes(this.MyApplication.Token))).Result;
-                Assert.Equal(201, responseApplicationVerification.StatusCode);
 
                 var integrationFlowId = this.IntegrationDesignMgmtClient.CreateAndDeployUsingPOSTAsync(integrationFlowJson).Result;
 
